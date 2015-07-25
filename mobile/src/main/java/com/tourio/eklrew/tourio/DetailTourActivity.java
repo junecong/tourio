@@ -4,37 +4,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
-public class TourListActivity extends ActionBarActivity {
-
-    ListView tourListView;
-    TourListAdapter tourAdapter;
+public class DetailTourActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tour_list);
-        tourListView = (ListView) findViewById(R.id.tour_list);
-
-        //Hardcoded tour list
-        TourListItem tour = new TourListItem("SanFrancisco","Fun day in SF",2);
-        List<TourListItem> tourList = new ArrayList<TourListItem>();
-        for (int i=0;i<10;i++) {
-            tourList.add(tour);
-        }
-        tourAdapter = new TourListAdapter(this,tourList);
-        tourListView.setAdapter(tourAdapter);
+        setContentView(R.layout.activity_detail_tour);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tour_list, menu);
+        getMenuInflater().inflate(R.menu.menu_detail_tour, menu);
         return true;
     }
 
