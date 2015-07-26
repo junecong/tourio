@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
+/**
+ * Created by Prud on 7/24/2015.
+ */
 public class DetailTourActivity extends ActionBarActivity {
 
     @Override

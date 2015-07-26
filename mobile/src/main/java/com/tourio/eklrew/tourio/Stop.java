@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by hanumal on 7/25/2015.
+ * Created by Prud on 7/25/2015.
  */
 public class Stop /*implements Parcelable*/ {
     private int stopId;

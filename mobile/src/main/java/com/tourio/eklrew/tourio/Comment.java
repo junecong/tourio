@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Created by hanumal on 7/25/2015.
+ * Created by Prud on 7/25/2015.
  */
 public class Comment {
 

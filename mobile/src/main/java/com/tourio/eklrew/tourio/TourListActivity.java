@@ -12,7 +12,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Created by Prud on 7/24/2015.
+ */
 public class TourListActivity extends ActionBarActivity {
 
     ListView tourListView;

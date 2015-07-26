@@ -3,7 +3,7 @@ package com.tourio.eklrew.tourio;
 import java.util.ArrayList;
 
 /**
- * Created by hanumal on 7/24/2015.
+ * Created by Prud on 7/24/2015.
  */
 public class TourListItem {
     private int tourId;

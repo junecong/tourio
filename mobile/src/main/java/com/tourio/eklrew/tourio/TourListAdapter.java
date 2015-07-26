@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by hanumal on 7/24/2015.
+ * Created by Prud on 7/24/2015.
  */
 public class TourListAdapter extends BaseAdapter {
     private Context context;
