@@ -1,9 +1,12 @@
 package com.tourio.eklrew.tourio;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -22,13 +25,32 @@ public class TourListActivity extends ActionBarActivity {
         tourListView = (ListView) findViewById(R.id.tour_list);
 
         //Hardcoded tour list
-        TourListItem tour = new TourListItem("SanFrancisco","Fun day in SF",2);
+        TourListItem tour = new TourListItem(1,"Fun day in Berkeley","Berkeley",2,4,hardCodedStops());
         List<TourListItem> tourList = new ArrayList<TourListItem>();
         for (int i=0;i<10;i++) {
             tourList.add(tour);
         }
         tourAdapter = new TourListAdapter(this,tourList);
         tourListView.setAdapter(tourAdapter);
+
+        tourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                TourListItem item = (TourListItem) tourAdapter.getItem(position);
+                Intent detailIntent = new Intent(TourListActivity.this, DetailTourActivity.class)
+                        .putExtra("tour_id", item.getTourId());
+                startActivity(detailIntent);
+            }
+        });
+    }
+
+    private static ArrayList<Stop> hardCodedStops() {
+        ArrayList<Stop> stops = new ArrayList<Stop>();
+        stops.add(new Stop(1,"Indian Rock Park","a big rock",37.892537, -122.272594));
+        stops.add(new Stop(2,"Ici Ice Cream","hippie ice cream place",37.857598, -122.253266));
+        stops.add(new Stop(3,"Sather Tower","biggest watchtower in the world",37.872320, -122.257791));
+
+        return stops;
     }
 
     @Override
