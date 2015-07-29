@@ -27,7 +27,7 @@ public class TourListActivity extends ActionBarActivity {
         tourListView = (ListView) findViewById(R.id.tour_list);
 
         //Hardcoded tour list
-        TourListItem tour = new TourListItem(1,"Fun day in Berkeley","Berkeley",2,4,hardCodedStops());
+        TourListItem tour = TourHelper.hardCodedTour();
         List<TourListItem> tourList = new ArrayList<TourListItem>();
         for (int i=0;i<10;i++) {
             tourList.add(tour);
@@ -44,15 +44,6 @@ public class TourListActivity extends ActionBarActivity {
                 startActivity(detailIntent);
             }
         });
-    }
-
-    private static ArrayList<Stop> hardCodedStops() {
-        ArrayList<Stop> stops = new ArrayList<Stop>();
-        stops.add(new Stop(1,"Indian Rock Park","a big rock",37.892537, -122.272594));
-        stops.add(new Stop(2,"Ici Ice Cream","hippie ice cream place",37.857598, -122.253266));
-        stops.add(new Stop(3,"Sather Tower","biggest watchtower in the world",37.872320, -122.257791));
-
-        return stops;
     }
 
     @Override

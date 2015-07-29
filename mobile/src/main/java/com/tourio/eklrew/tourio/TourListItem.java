@@ -44,4 +44,6 @@ public class TourListItem {
     public ArrayList<Stop> getStops() {
         return stops;
     }
+
+
 }

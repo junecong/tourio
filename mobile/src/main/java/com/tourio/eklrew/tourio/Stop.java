@@ -3,6 +3,8 @@ package com.tourio.eklrew.tourio;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Prud on 7/25/2015.
  */
@@ -10,26 +12,24 @@ public class Stop /*implements Parcelable*/ {
     private int stopId;
     private String name;
     private String description;
-    private double latitude;
-    private double longitude;
+    private LatLng location;
 
 
     public Stop(int stopId,String name,String description,double latitude,double longitude) {
         this.stopId = stopId;
         this.name = name;
         this.description = description;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.location = new LatLng(latitude,longitude);
     }
 
     public String getName() {
         return name;
     }
     public double getLatitude() {
-        return latitude;
+        return location.latitude;
     }
     public double getLongitude() {
-        return longitude;
+        return location.longitude;
     }
     public String getDescription() {
         return description;
@@ -38,6 +38,9 @@ public class Stop /*implements Parcelable*/ {
         return stopId;
     }
 
+    public LatLng getLocation() {
+        return location;
+    }
     /*
     public static final Parcelable.Creator<Stop> CREATOR = new Parcelable.Creator<Stop>() {
         public Stop createFromParcel(Parcel in) {
