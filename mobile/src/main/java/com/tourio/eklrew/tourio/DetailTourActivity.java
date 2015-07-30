@@ -3,8 +3,12 @@ package com.tourio.eklrew.tourio;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
@@ -27,16 +31,18 @@ import java.util.ArrayList;
 /**
  * Created by Prud on 7/24/2015.
  */
-public class DetailTourActivity extends ActionBarActivity {
+public class DetailTourActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
 
     GoogleMap map;
+    boolean mapExpanded = false;
+    int mapFragmentHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_tour);
 
-        TourListItem tour = TourHelper.hardCodedTour();
+        Tour tour = TourHelper.hardCodedTour();
         ArrayList<Stop> stops = tour.getStops();
         int numStops = stops.size();
 
@@ -62,14 +68,47 @@ public class DetailTourActivity extends ActionBarActivity {
                 .add(locations)
                 .width(5));
 
-        int padding = 150; // offset from edges of the map in pixels
+        int padding = 50; // offset from edges of the map in pixels
         final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 
         map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override public void onMapLoaded() { map.moveCamera(cu); } });
+        map.setOnMapClickListener(this);
     }
 
+    @Override
+    public void onMapClick(LatLng point) {
+        if (!mapExpanded) {
+            mapExpanded = true;
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.hide_this);
+            linearLayout.setVisibility(LinearLayout.GONE);
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            View view = mapFragment.getView();
+            mapFragmentHeight = view.getHeight();
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1,-1);
+            view.setLayoutParams(p);
+            view.requestLayout();
+            map.moveCamera(CameraUpdateFactory.zoomIn());
+        }
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (!mapExpanded) {
+            super.onBackPressed();
+        }
+        else {
+            mapExpanded = false;
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.hide_this);
+            linearLayout.setVisibility(LinearLayout.VISIBLE);
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            View view = mapFragment.getView();
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1,mapFragmentHeight);
+            view.setLayoutParams(p);
+            view.requestLayout();
+            map.moveCamera(CameraUpdateFactory.zoomOut());
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

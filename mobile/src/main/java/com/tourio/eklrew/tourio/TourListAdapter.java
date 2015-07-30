@@ -1,12 +1,16 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -60,7 +64,8 @@ public class TourListAdapter extends BaseAdapter {
         TextView durationView = (TextView) tourView.findViewById(R.id.tour_duration);
         TextView cityView = (TextView) tourView.findViewById(R.id.tour_city);
 
-        String mapUrl = BASE_STATIC_MAPS_API_URL + "&markers=";
+        //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
+        String mapUrl = BASE_STATIC_MAPS_API_URL +"&markers=";
         for (int i=0;i<stops.size();i++) {
             Stop stop = stops.get(i);
             mapUrl += stop.getLatitude()+","+stop.getLongitude()+"|";

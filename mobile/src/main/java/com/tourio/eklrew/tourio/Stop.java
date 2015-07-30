@@ -9,14 +9,14 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by Prud on 7/25/2015.
  */
 public class Stop /*implements Parcelable*/ {
-    private int stopId;
+    private int id;
     private String name;
     private String description;
     private LatLng location;
 
 
-    public Stop(int stopId,String name,String description,double latitude,double longitude) {
-        this.stopId = stopId;
+    public Stop(int id,String name,String description,double latitude,double longitude) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.location = new LatLng(latitude,longitude);
@@ -34,8 +34,8 @@ public class Stop /*implements Parcelable*/ {
     public String getDescription() {
         return description;
     }
-    public int getStopId() {
-        return stopId;
+    public int getId() {
+        return id;
     }
 
     public LatLng getLocation() {

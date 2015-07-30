@@ -6,14 +6,14 @@ import java.util.ArrayList;
  * Created by Prud on 7/24/2015.
  */
 public class TourListItem {
-    private int tourId;
+    private int id;
     private String name, city;
     private double duration, rating;
     private ArrayList<Stop> stops;
 
-    public TourListItem(int tourId, String name, String city, double duration,
+    public TourListItem(int id, String name, String city, double duration,
                         double rating, ArrayList<Stop> stops) {
-        this.tourId = tourId;
+        this.id = id;
         this.name = name;
         this.city = city;
         this.duration = duration;
@@ -22,7 +22,7 @@ public class TourListItem {
     }
 
     public int getTourId() {
-        return tourId;
+        return id;
     }
 
     public String getName() {

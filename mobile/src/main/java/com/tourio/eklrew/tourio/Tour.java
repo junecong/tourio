@@ -1,74 +1,41 @@
 package com.tourio.eklrew.tourio;
 
-import android.graphics.Bitmap;
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 
 /**
- * Created by hanumal on 7/24/2015.
+ * Created by Prud on 7/24/2015.
  */
-public class Tour {
-    private int tourId, guideId;
-    private String tourName, guideName, tourDescription, city;
-    private double duration, rating;
-    private ArrayList<Stop> stops;
+public class Tour extends TourListItem {
+    private String description;
+    private User creator;
     private ArrayList<Comment> comments;
     private int currStopIndex;
 
+    /*
+    //Constructor for list item
+    public Tour(int id, String name, String city, double duration,
+                        double rating, ArrayList<Stop> stops) {
+        super(id,name,city,duration,rating,stops);
+    }
+    */
 
-    public Tour(int tourId, int guideId, String tourName, String guideName, String tourDescription,
-                String city, double duration, double rating, ArrayList<Stop> stops,
-                ArrayList<Comment> comments) {
-        this.tourId = tourId;
-        this.guideId = guideId;
-        this.tourName = tourName;
-        this.guideName = guideName;
-        this.tourDescription = tourDescription;
-        this.city = city;
-        this.duration = duration;
-        this.rating = rating;
-        this.stops = stops;
+    //Constructor for detailed tour
+    public Tour(int id, String name, String description, String city, double duration,double rating,
+                User creator, ArrayList<Stop> stops,ArrayList<Comment> comments) {
+        super(id,name,city,duration,rating,stops);
+
+        this.description = description;
+        this.creator = creator;
         this.comments = comments;
-
         currStopIndex = 0;
     }
 
-    public int getTourId() {
-        return tourId;
+    public String getDescription() {
+        return description;
     }
 
-    public int getGuideId() {
-        return guideId;
-    }
-
-    public String getTourName() {
-        return tourName;
-    }
-
-    public String getGuideName() {
-        return guideName;
-    }
-
-    public String getTourDescription() {
-        return tourDescription;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public double getDuration() {
-        return duration;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public ArrayList<Stop> getStops() {
-        return stops;
+    public User getCreator() {
+        return creator;
     }
 
     public ArrayList<Comment> getComments() {
@@ -80,6 +47,14 @@ public class Tour {
     }
 
     public Stop getCurrentStop() {
-        return stops.get(currStopIndex);
+        return super.getStops().get(currStopIndex);
+    }
+
+    public String getCreatorName() {
+        return creator.getName();
+    }
+
+    public String getCreatorPicUrl() {
+        return creator.getPicUrl();
     }
 }

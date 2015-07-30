@@ -1,8 +1,10 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +29,7 @@ public class TourListActivity extends ActionBarActivity {
         tourListView = (ListView) findViewById(R.id.tour_list);
 
         //Hardcoded tour list
-        TourListItem tour = TourHelper.hardCodedTour();
+        TourListItem tour = TourHelper.hardCodedTourListItem();
         List<TourListItem> tourList = new ArrayList<TourListItem>();
         for (int i=0;i<10;i++) {
             tourList.add(tour);
@@ -44,6 +46,13 @@ public class TourListActivity extends ActionBarActivity {
                 startActivity(detailIntent);
             }
         });
+    }
+
+    private int getScreenWidth() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.x;
     }
 
     @Override

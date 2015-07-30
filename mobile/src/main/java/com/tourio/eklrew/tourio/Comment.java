@@ -8,26 +8,20 @@ import java.util.GregorianCalendar;
  */
 public class Comment {
 
-    private int commenterId; //id of the user who made this comment
-    private String commenterName;
+    private User commenter;
     private String comment;
     private int rating;
     private GregorianCalendar time;
 
-    public Comment(int commenterId,String commenterName,String comment,int rating, GregorianCalendar time) {
-        this.commenterId = commenterId;
-        this.commenterName=commenterName;
+    public Comment(User commenter,String comment,int rating, GregorianCalendar time) {
+        this.commenter = commenter;
         this.comment=comment;
         this.rating=rating;
         this.time=time;
     }
 
-    public int getCommenterId() {
-        return commenterId;
-    }
-
-    public String getCommenterName() {
-        return commenterName;
+    public User getCommenter() {
+        return commenter;
     }
 
     public String getComment() {
