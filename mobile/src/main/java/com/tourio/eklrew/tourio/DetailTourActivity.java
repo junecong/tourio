@@ -31,7 +31,7 @@ import java.util.ArrayList;
 /**
  * Created by Prud on 7/24/2015.
  */
-public class DetailTourActivity extends ActionBarActivity implements GoogleMap.OnMapClickListener {
+public class DetailTourActivity extends NavigationBarActivity implements GoogleMap.OnMapClickListener {
 
     GoogleMap map;
     boolean mapExpanded = false;
@@ -40,7 +40,7 @@ public class DetailTourActivity extends ActionBarActivity implements GoogleMap.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_tour);
+        contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
 
         Tour tour = TourHelper.hardCodedTour();
         ArrayList<Stop> stops = tour.getStops();

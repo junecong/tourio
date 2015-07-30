@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ import java.util.List;
 /**
  * Created by Prud on 7/24/2015.
  */
-public class TourListActivity extends ActionBarActivity {
+public class TourListActivity extends NavigationBarActivity {
 
     ListView tourListView;
     TourListAdapter tourAdapter;
@@ -25,7 +28,9 @@ public class TourListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tour_list);
+
+        contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_tour_list,null));
+
         tourListView = (ListView) findViewById(R.id.tour_list);
 
         //Hardcoded tour list
