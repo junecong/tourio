@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.tourio.eklrew.tourio.ActionBarActivity">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/near_me"
+        android:icon="@drawable/ic_near_me"
+        android:title="@string/near_me" />
+    <item android:id="@+id/rating"
+        android:icon="@drawable/ic_rating"
+        android:title="@string/rating" />
+    <item android:id="@+id/duration"
+        android:icon="@drawable/ic_duration"
+        android:title="@string/duration" />
+</menu>

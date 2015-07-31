@@ -10,27 +10,27 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="30dp">
-    <Button
-        android:id="@+id/near_me"
-        android:text="NEAR ME"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#ff888888"/>
-    <Button
-        android:id="@+id/rating"
-        android:text="RATING"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#ff888888"/>
-    <Button
-        android:id="@+id/duration"
-        android:text="DURATION"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#ff888888"/>
+        <Button
+            android:id="@+id/near_me"
+            android:text="NEAR ME"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ff888888"/>
+        <Button
+            android:id="@+id/rating"
+            android:text="RATING"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ff888888"/>
+        <Button
+            android:id="@+id/duration"
+            android:text="DURATION"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ff888888"/>
     </LinearLayout>
 
     <ListView
