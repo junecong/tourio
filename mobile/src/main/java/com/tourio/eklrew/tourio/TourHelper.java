@@ -6,7 +6,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.widget.Button;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 
 /**
@@ -28,7 +31,30 @@ public class TourHelper {
     }
 
     public static TourListItem hardCodedTourListItem() {
-        return new TourListItem(1,"Fun day in Berkeley","Berkeley",2,4,hardCodedStops());
+        return new TourListItem(1,"Fun day in Berkeley",2,4,new LatLng[] {
+                    new LatLng(37.892537, -122.272594),
+                    new LatLng(37.857598, -122.253266),
+                    new LatLng(37.872320, -122.257791)});
+    }
+
+    public static ArrayList<TourListItem> randomTourListItems() {
+        LatLng[] coordinateList = randomCoordinateList();
+        ArrayList<TourListItem> tours = new ArrayList<TourListItem>();
+        int index = 0;
+        for (int i=0;i<100;i+=4) {
+            index++;
+            tours.add(new TourListItem(index,"Tour "+index,Math.random()*8,Math.random()*5,
+                    Arrays.copyOfRange(coordinateList, i, i+4)));
+        }
+        return tours;
+    }
+
+    public static LatLng[] randomCoordinateList() {
+        LatLng[] coordinateList = new LatLng[100];
+        for (int i=0;i<100;i++) {
+            coordinateList[i] = new LatLng(Math.random()+36,Math.random()-123);
+        }
+        return coordinateList;
     }
 
     public static Tour hardCodedTour() {
@@ -40,8 +66,8 @@ public class TourHelper {
         ArrayList<Comment> comments = new  ArrayList<Comment>();
 
         comments.add(new Comment(june,"great tour!",4,new GregorianCalendar(2015,7,29,2,47)));
-        comments.add(new Comment(shawn,"it was ok",3,new GregorianCalendar(2015,7,28,5,20)));
-        comments.add(new Comment(aim,"best tour ever",5,new GregorianCalendar(2015,6,14,10,1)));
+        comments.add(new Comment(shawn, "it was ok", 3, new GregorianCalendar(2015, 7, 28, 5, 20)));
+        comments.add(new Comment(aim, "best tour ever", 5, new GregorianCalendar(2015, 6, 14, 10, 1)));
 
         return comments;
     }

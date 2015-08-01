@@ -4,7 +4,6 @@ import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -12,15 +11,14 @@ import java.util.Comparator;
  */
 public class TourListItem {
     private int id;
-    private String name, city;
+    private String name;
     private double duration, rating;
-    private ArrayList<Stop> stops;
+    private LatLng[] stops;
 
-    public TourListItem(int id, String name, String city, double duration,
-                        double rating, ArrayList<Stop> stops) {
+    public TourListItem(int id, String name, double duration,
+                        double rating, LatLng[] stops) {
         this.id = id;
         this.name = name;
-        this.city = city;
         this.duration = duration;
         this.rating = rating;
         this.stops = stops;
@@ -34,10 +32,6 @@ public class TourListItem {
         return name;
     }
 
-    public String getCity() {
-        return city;
-    }
-
     public double getDuration() {
         return duration;
     }
@@ -46,7 +40,7 @@ public class TourListItem {
         return rating;
     }
 
-    public ArrayList<Stop> getStops() {
+    public LatLng[] getStops() {
         return stops;
     }
 
@@ -60,8 +54,8 @@ public class TourListItem {
 
         @Override
         public int compare(TourListItem a,TourListItem b) {
-            LatLng locA = a.getStops().get(0).getLocation();
-            LatLng locB = b.getStops().get(0).getLocation();
+            LatLng locA = a.getStops()[0];
+            LatLng locB = b.getStops()[1];
             float[] resultsA = new float[1];
             float[] resultsB = new float[1];
             Location.distanceBetween(currentLocation.getLatitude(),currentLocation.getLongitude(),locA.latitude,locA.longitude,resultsA);
@@ -82,7 +76,7 @@ public class TourListItem {
     public static class DurationComparator implements Comparator<TourListItem> {
         @Override
         public int compare(TourListItem a,TourListItem b) {
-            return Double.compare(a.getRating(),b.getRating());
+            return Double.compare(a.getDuration(),b.getDuration());
         }
     }
 

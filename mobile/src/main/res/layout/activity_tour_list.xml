@@ -1,10 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:paddingBottom="0dp" tools:context=".TourListActivity">
+    android:paddingBottom="0dp" tools:context=".TourListActivity"
+    android:orientation="vertical">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -16,7 +17,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#ff888888"
             android:onClick="sortNearMe"/>
         <Button
             android:id="@+id/rating"
@@ -24,7 +24,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#ff888888"
             android:onClick="sortRating"/>
         <Button
             android:id="@+id/duration"
@@ -32,7 +31,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#ff888888"
             android:onClick="sortDuration"/>
     </LinearLayout>
 
@@ -40,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/tour_list"
-        android:paddingTop="50dp"
         android:divider="#FFCC00"
         android:dividerHeight="5dp"/>
-</RelativeLayout>
+</LinearLayout>

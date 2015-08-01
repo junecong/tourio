@@ -2,15 +2,18 @@ package com.tourio.eklrew.tourio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +39,8 @@ public class TourListActivity extends NavigationBarActivity {
     private ArrayList<TourListItem> tours;
     private TourListAdapter tourAdapter;
 
+    private Location mLocation;
+
     private Button nearMeButton;
     private Button ratingButton;
     private Button durationButton;
@@ -52,21 +57,12 @@ public class TourListActivity extends NavigationBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_tour_list);
-        contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_tour_list,null));
-
-        initButtons();
+        contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_tour_list, null));
 
         tourListView = (ListView) findViewById(R.id.tour_list);
-
-        //Hardcoded tour list
-        TourListItem tour = TourHelper.hardCodedTourListItem();
-        tours = new ArrayList<TourListItem>();
-        for (int i=0;i<10;i++) {
-            tours.add(tour);
-        }
+        tours = TourHelper.randomTourListItems();
         tourAdapter = new TourListAdapter(this,tours);
         tourListView.setAdapter(tourAdapter);
-
         tourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -76,6 +72,8 @@ public class TourListActivity extends NavigationBarActivity {
                 startActivity(detailIntent);
             }
         });
+
+        initButtons();
     }
 
     private void initButtons() {
@@ -87,6 +85,8 @@ public class TourListActivity extends NavigationBarActivity {
         nearMeButton.setBackgroundColor(Color.parseColor("#ffffffff"));
         ratingButton.setBackgroundColor(Color.parseColor("#ffff9800"));
         durationButton.setBackgroundColor(Color.parseColor("#ffff9800"));
+
+        sortNearMe(null);
     }
 
 
@@ -98,6 +98,13 @@ public class TourListActivity extends NavigationBarActivity {
 
         Location location = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
+
+        if (location != null) {
+            return location;
+        }
+        location = new Location("");
+        location.setLatitude(37.0);
+        location.setLongitude(-122.0);
         return location;
     }
 
@@ -106,6 +113,7 @@ public class TourListActivity extends NavigationBarActivity {
         currentSortButton = nearMeButton;
         Collections.sort(tours,new TourListItem.DistanceComparator(getCurrentLocation()));
         refreshList();
+        Log.v("current button","nearMe");
     }
 
     public void sortRating(View view) {
@@ -113,6 +121,7 @@ public class TourListActivity extends NavigationBarActivity {
         currentSortButton = ratingButton;
         Collections.sort(tours,new TourListItem.RatingComparator());
         refreshList();
+        Log.v("current button", "rating");
     }
 
     public void sortDuration(View view) {
@@ -120,33 +129,21 @@ public class TourListActivity extends NavigationBarActivity {
         currentSortButton = durationButton;
         Collections.sort(tours,new TourListItem.DurationComparator());
         refreshList();
+        Log.v("current button", "duration");
     }
 
     private void refreshList() {
-        tourAdapter.refreshAdapter(tours);
+        tourAdapter.addAll(tours);
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tour_list, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public class GetLocationTask extends AsyncTask<Void,Void,Location> {
+        protected Location doInBackground(Void... params) {
+            return new Location("");
         }
 
-        return super.onOptionsItemSelected(item);
+        protected void onPostExecute(Location location) {
+            mLocation = location;
+        }
     }
-    */
 }

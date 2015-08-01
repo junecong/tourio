@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class TourListAdapter extends BaseAdapter {
     @Override
     public View getView(int position,View convertView,ViewGroup parent) {
         TourListItem tour = tours.get(position);
-        ArrayList<Stop> stops = tour.getStops();
+        LatLng[] stops = tour.getStops();
 
         View tourView = convertView;
         if (tourView == null)
@@ -62,28 +63,26 @@ public class TourListAdapter extends BaseAdapter {
         TextView nameView = (TextView) tourView.findViewById(R.id.tour_name);
         TextView ratingView = (TextView) tourView.findViewById(R.id.tour_rating);
         TextView durationView = (TextView) tourView.findViewById(R.id.tour_duration);
-        TextView cityView = (TextView) tourView.findViewById(R.id.tour_city);
 
         //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
-        String mapUrl = BASE_STATIC_MAPS_API_URL +"&markers=";
-        for (int i=0;i<stops.size();i++) {
-            Stop stop = stops.get(i);
-            mapUrl += stop.getLatitude()+","+stop.getLongitude()+"|";
+        String mapUrl = BASE_STATIC_MAPS_API_URL;
+        for (int i=0;i<stops.length;i++) {
+            LatLng stop = stops[i];
+            mapUrl += "&markers=size:mid%7Ccolor:blue%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
         }
 
-        Log.v("map url: ",mapUrl);
+        Log.v("map url: ", mapUrl);
         new DownloadImageTask(mapView).execute(mapUrl);
 
         nameView.setText(tour.getName());
-        ratingView.setText(Double.toString(tour.getRating())+" stars");
-        durationView.setText(Double.toString(tour.getDuration())+" hours");
-        cityView.setText(tour.getCity());
+        ratingView.setText((int) (Math.round(tour.getRating()))+" stars");
+        durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
 
         return tourView;
     }
 
-    public void refreshAdapter(List<TourListItem> newTours) {
-        tours.clear();
+    public void addAll(List<TourListItem> newTours) {
+        tours = new ArrayList<TourListItem>();
         tours.addAll(newTours);
         notifyDataSetChanged();
     }
