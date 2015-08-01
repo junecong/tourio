@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/next_stop_layout_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20sp">
+
+        <TextView
+            android:id="@+id/next_stop_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next_stop"
+            android:textSize="25sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/next_stop_layout_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/next_stop_layout_1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10sp">
+
+        <TextView
+            android:id="@+id/next_stop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_name"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/next_stop_layout_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/next_stop_layout_2"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="10sp">
+
+        <TextView
+            android:id="@+id/next_stop_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_description"
+            android:textSize="12sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/next_stop_layout_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/next_stop_layout_3"
+        android:layout_marginTop="5sp">
+
+        <Button
+            android:id="@+id/skip_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:minWidth="60dp"
+            android:textAllCaps="false"
+            android:text="@string/skip"
+            android:onClick="skipTheStop"/>
+
+        <Button
+            android:id="@+id/go_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/skip_button"
+            android:layout_marginLeft="15sp"
+            android:minHeight="50dp"
+            android:minWidth="60dp"
+            android:textAllCaps="false"
+            android:text="@string/go"
+            android:onClick="goToNextStop"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -135,6 +135,9 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mapsIntent);
+
+        Intent startIntent = new Intent(this, NavigationListener.class);
+        startService(startIntent);
     }
 
     public void showStops(View view) {

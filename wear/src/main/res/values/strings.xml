@@ -2,4 +2,21 @@
     <string name="app_name">Tourio</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
+
+    <string name="ready_to_start">Ready to start your tour?</string>
+    <string name="start">Start!</string>
+
+    <string name="ready_for_next">Ready for the next tour stop?</string>
+    <string name="yes">Yes!</string>
+
+    <string name="next_stop"><u>Next Stop</u></string>
+    <string name="placeholder_name">The Exploratorium</string>
+    <string name="placeholder_description">A hands-on museum of science, art, and human perception
+        in San Francisco.</string>
+    <string name="skip">Skip</string>
+    <string name="go">Go</string>
+
+    <string name="view_map">View map</string>
+    <string name="skip_this_stop">Skip this stop</string>
+    <string name="wear_map_long_press_intro">Long click to exit the map.</string>
 </resources>
