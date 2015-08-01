@@ -62,7 +62,7 @@ public class TourListAdapter extends BaseAdapter {
         TextView nameView = (TextView) tourView.findViewById(R.id.tour_name);
         TextView ratingView = (TextView) tourView.findViewById(R.id.tour_rating);
         TextView durationView = (TextView) tourView.findViewById(R.id.tour_duration);
-        TextView cityView = (TextView) tourView.findViewById(R.id.tour_city);
+
 
         //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
         String mapUrl = BASE_STATIC_MAPS_API_URL +"&markers=";
@@ -77,7 +77,7 @@ public class TourListAdapter extends BaseAdapter {
         nameView.setText(tour.getName());
         ratingView.setText(Double.toString(tour.getRating())+" stars");
         durationView.setText(Double.toString(tour.getDuration())+" hours");
-        cityView.setText(tour.getCity());
+
 
         return tourView;
     }

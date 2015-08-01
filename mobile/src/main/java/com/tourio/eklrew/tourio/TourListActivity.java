@@ -1,5 +1,6 @@
 package com.tourio.eklrew.tourio;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
@@ -34,6 +35,7 @@ public class TourListActivity extends NavigationBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_tour_list,null));
 
         tourListView = (ListView) findViewById(R.id.tour_list);
@@ -56,11 +58,12 @@ public class TourListActivity extends NavigationBarActivity {
                 startActivity(detailIntent);
             }
         });
+
         final Button near_me = (Button) findViewById(R.id.near_me);
         near_me.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //Sort by near me
-                Log.e("button clicked", "response");
+                Log.e("button clicked", "near me clicked");
 
             }
         });
@@ -69,19 +72,18 @@ public class TourListActivity extends NavigationBarActivity {
         rating.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 //Sort by rating
-                Log.e("button clicked", "response");
+                Log.e("button clicked", "rating clicked");
 
             }
         });
 
         final Button duration = (Button) findViewById(R.id.duration);
-        near_me.setOnClickListener(new View.OnClickListener() {
+        duration.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //Sort by duration
-                Log.e("button clicked", "response 1");
+                Log.e("button clicked", "duration clicked");
             }
         });
-
     }
 
     private int getScreenWidth() {
@@ -99,6 +101,7 @@ public class TourListActivity extends NavigationBarActivity {
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.cities_list, android.R.layout.simple_spinner_dropdown_item); //  create the adapter from a StringArray
         s.setAdapter(mSpinnerAdapter);
+
         return true;
     }
 

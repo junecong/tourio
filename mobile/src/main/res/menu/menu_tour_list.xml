@@ -6,7 +6,7 @@
 
     <item android:id="@+id/cities_spinner"
         android:title="Cities"
-        android:layout_alignParentRight="true"
+        android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.Spinner"/>

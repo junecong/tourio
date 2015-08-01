@@ -4,13 +4,6 @@
     android:weightSum="1"
     android:orientation="vertical">
 
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.MapFragment"
-        />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -18,86 +11,144 @@
         android:id="@+id/hide_this">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/user"
+                android:src="@drawable/icon"
+                android:gravity="left"
+                android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp">
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/title_of_tour"
+                    android:id="@+id/title"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_gravity="left"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                    android:textSize="15dp"
                     android:text="@string/created_by_name"
-                    android:id="@+id/textView"
-                    android:gravity="center_horizontal"
-                    />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"/>
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/user"
-                    android:src="@drawable/icon"
-                    android:gravity="left"
-                    android:layout_gravity="center" />
-
+                <TextView
+                    android:textSize="15dp"
+                    android:text="@string/tour_maker_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"/>
+                </LinearLayout>
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="220dp"
-                android:layout_height="wrap_content"
-                android:text="@string/title_of_tour"
-                android:id="@+id/title"
-                android:textStyle="bold"
-                android:textSize="30sp"
-                android:layout_margin="10dp" />
-
-        </LinearLayout>
-
-
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:id="@+id/ratingImage"
-                android:src="@drawable/ic_launcher"
-                android:layout_gravity="top"
-                android:paddingRight="10dp" />
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/duration_of_tour"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:paddingRight="10dp" />
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="right">
 
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/star1"
+                    android:src="@mipmap/ic_star" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/star2"
+                    android:src="@mipmap/ic_star" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/star3"
+                    android:src="@mipmap/ic_star" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/star4"
+                    android:src="@mipmap/ic_star" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/star5"
+                    android:src="@mipmap/ic_star" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="45dp"
+                    android:layout_gravity="right"
+                    android:gravity="right">
+
+                    <ImageView
+                        android:src="@mipmap/clock_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="right"/>
+
+                    <TextView
+                        android:text="@string/duration_of_tour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.MapFragment"
+        />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:text="START"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/stopsViewButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/stops" />
+            android:text="@string/details" />
 
         <Button
             android:id="@+id/commentViewButton"
@@ -110,16 +161,11 @@
 
     </LinearLayout>
 
-
-
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="180dp"
         android:id="@+id/listView"
         android:layout_gravity="center_vertical"
         android:stackFromBottom="false" />
-
-
-
 </LinearLayout>
+
