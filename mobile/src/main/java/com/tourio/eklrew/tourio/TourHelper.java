@@ -1,5 +1,11 @@
 package com.tourio.eklrew.tourio;
 
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.location.LocationManager;
+import android.widget.Button;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -14,9 +20,9 @@ public class TourHelper {
 
     public static ArrayList<Stop> hardCodedStops() {
         ArrayList<Stop> stops = new ArrayList<Stop>();
-        stops.add(new Stop(1,"Indian Rock Park","a big rock",37.892537, -122.272594));
-        stops.add(new Stop(2,"Ici Ice Cream","hippie ice cream place",37.857598, -122.253266));
-        stops.add(new Stop(3,"Sather Tower","biggest watchtower in the world",37.872320, -122.257791));
+        stops.add(new Stop(1,"Indian Rock Park","a big rock",37.892537, -122.272594,"Scenic"));
+        stops.add(new Stop(2,"Ici Ice Cream","hippie ice cream place",37.857598, -122.253266,"Eating"));
+        stops.add(new Stop(3,"Sather Tower","biggest watchtower in the world",37.872320, -122.257791,"Scenic"));
 
         return stops;
     }
@@ -38,5 +44,12 @@ public class TourHelper {
         comments.add(new Comment(aim,"best tour ever",5,new GregorianCalendar(2015,6,14,10,1)));
 
         return comments;
+    }
+
+    public static void swapColors(Button b1,Button b2) {
+        int color1 = ((ColorDrawable) b1.getBackground()).getColor();
+        int color2 = ((ColorDrawable) b2.getBackground()).getColor();
+        b1.setBackgroundColor(color2);
+        b2.setBackgroundColor(color1);
     }
 }

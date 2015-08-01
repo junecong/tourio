@@ -81,4 +81,10 @@ public class TourListAdapter extends BaseAdapter {
 
         return tourView;
     }
+
+    public void refreshAdapter(List<TourListItem> newTours) {
+        tours.clear();
+        tours.addAll(newTours);
+        notifyDataSetChanged();
+    }
 }

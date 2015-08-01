@@ -1,13 +1,21 @@
 package com.tourio.eklrew.tourio;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -33,16 +41,19 @@ import java.util.ArrayList;
  */
 public class DetailTourActivity extends NavigationBarActivity implements GoogleMap.OnMapClickListener {
 
-    GoogleMap map;
-    boolean mapExpanded = false;
-    int mapFragmentHeight;
+    private GoogleMap map;
+    private boolean mapExpanded = false;
+    private int mapFragmentHeight;
+    private Tour tour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int tourId = getIntent().getExtras().getInt("tour_id");
+
         super.onCreate(savedInstanceState);
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
 
-        Tour tour = TourHelper.hardCodedTour();
+        tour = TourHelper.hardCodedTour();
         ArrayList<Stop> stops = tour.getStops();
         int numStops = stops.size();
 
@@ -72,8 +83,14 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 
         map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override public void onMapLoaded() { map.moveCamera(cu); } });
+            @Override
+            public void onMapLoaded() {
+                map.moveCamera(cu);
+            }
+        });
         map.setOnMapClickListener(this);
+
+        showStops(null);
     }
 
     @Override
@@ -110,6 +127,33 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         }
     }
 
+    public void startGPS(View view) {
+        LatLng firstStopLocation = tour.getStops().get(0).getLocation();
+        double latitude = firstStopLocation.latitude;
+        double longitude = firstStopLocation.longitude;
+        String uri = "google.navigation:q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
+        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mapsIntent);
+    }
+
+    public void showStops(View view) {
+        ListView stopListView = (ListView) findViewById(R.id.listView);
+        stopListView.setAdapter(new StopListAdapter(this, tour.getStops()));
+        Button stopsButton = (Button) findViewById(R.id.stops_button);
+        Button commentsButton = (Button) findViewById(R.id.comments_button);
+        TourHelper.swapColors(stopsButton, commentsButton);
+    }
+
+    public void showComments(View view) {
+        ListView commentListView = (ListView) findViewById(R.id.listView);
+        commentListView.setAdapter(new CommentListAdapter(this, tour.getComments()));
+        Button stopsButton = (Button) findViewById(R.id.stops_button);
+        Button commentsButton = (Button) findViewById(R.id.comments_button);
+        TourHelper.swapColors(stopsButton,commentsButton);
+    }
+
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -131,4 +175,5 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
 
         return super.onOptionsItemSelected(item);
     }
+    */
 }

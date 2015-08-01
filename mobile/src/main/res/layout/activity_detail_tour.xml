@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:weightSum="1"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/detail_tour_linear_layout">
 
     <fragment
         android:layout_width="match_parent"
@@ -90,23 +91,33 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@android:color/darker_gray">
 
         <Button
-            android:id="@+id/stopsViewButton"
-            android:layout_width="fill_parent"
+            android:id="@+id/stops_button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/stops" />
-
+            android:text="@string/stops"
+            android:onClick="showStops"
+            android:background="@android:color/white"/>
+        <!--
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"/>
+        -->
         <Button
-            android:id="@+id/commentViewButton"
-            android:layout_width="fill_parent"
+            android:id="@+id/comments_button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:text="@string/comments" />
+            android:text="@string/comments"
+            android:onClick="showComments"
+            android:background="@android:color/darker_gray"/>
 
     </LinearLayout>
 
@@ -121,5 +132,10 @@
         android:stackFromBottom="false" />
 
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:onClick="startGPS"/>
 
 </LinearLayout>

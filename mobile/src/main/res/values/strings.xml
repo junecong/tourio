@@ -1,15 +1,22 @@
 <resources>
     <string name="app_name">Tourio</string>
+    <string name="near_me">Near Me</string>
+    <string name="rating">Rating</string>
+    <string name="duration">Duration</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail_tour">DetailTourActivity</string>
 
 
-    <string name="title_of_tour">San Francisco Basics</string>
-    <string name="duration_of_tour">Approx: 3 Hours</string>
+    <string name="title_of_tour">Fun Day In Berkeley</string>
+    <string name="duration_of_tour">Suggested: 3 Hours</string>
     <string name="guided_by">Tour Guided By:</string>
     <string name="created_by_name">June\'s</string>
+    <string name="tour_description">Fun Day In Berkeley is a quick
+        tour of chill spots that helps you relax.
+        Take a yoga class, play in the water,
+        and do a lot more!</string>
 
     <string name="stops">Stops</string>
     <string name="comments">Comments</string>
@@ -28,4 +35,15 @@
     <string name="title_activity_create_tour">CreateTourActivity</string>
     <string name="title_activity_cashout">CashoutActivity</string>
     <string name="title_activity_about">AboutActivity</string>
+
+    <string-array name="cities_list">
+        <item>Berkeley</item>
+        <item>Palo Alto</item>
+        <item>San Francisco</item>
+        <item>New York City</item>
+        <item>Chicago</item>
+        <item>Los Angeles</item>
+    </string-array>
+    <string name="title_activity_action_bar">ActionBarActivity</string>
+
 </resources>
