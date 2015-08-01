@@ -18,14 +18,15 @@ public class NextStopActivity extends Activity {
 
     /* Called when user presses "Skip" button when user is presented with next stop. */
     public void skipTheStop(View view) {
-//        Intent skipIntent = new Intent(this, NextStopActivity.class);
-//        startActivity(skipIntent);
-        // If NextStopActivity grabs info from database & always grabs info of next indexed stop,
-        // then starting itself should display next stop's info
+        // Intent skipIntent = new Intent(this, NextStopActivity.class);
+        // startActivity(skipIntent);
+
+        // Note: If NextStopActivity grabs info from database & always grabs info of next indexed
+        // stop, then starting itself should display next stop's info
     }
 
     /* Called when user presses "Go" button when user is presented with next stop. */
     public void goToNextStop(View view) {
-        // Starts Google Maps to give user directions from current location to first stop
+        // TODO: Starts Google Maps to give user directions from current location to first stop
     }
 }

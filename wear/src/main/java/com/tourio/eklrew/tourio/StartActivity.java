@@ -1,34 +1,41 @@
 package com.tourio.eklrew.tourio;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class StartActivity extends Activity {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.CapabilityApi;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
 
-    private TextView mTextView;
+import java.util.Collection;
+import java.util.HashSet;
+
+public class StartActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_wear);
-//        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-//        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-//            @Override
-//            public void onLayoutInflated(WatchViewStub stub) {
-//                mTextView = (TextView) stub.findViewById(R.id.start_tour);
-//            }
-//        });
     }
 
     /* Called when user presses "Start!" button when asked if ready to start tour. */
     public void startTour(View view) {
-        // Starts a service on phone that:
-        // 1) Starts Google Maps to give user directions from current location to first stop
-        // 2) Starts listener on phone for arrival confirmation from Google Maps (so can send
-        //    user watch notification when user arrives at stop)
-        // 3) Starts listener on phone that listens for user pressing "go" button on watch
+        Intent navIntent = new Intent(this, StartNavigationService.class);
+        startService(navIntent);
+
+        Intent transitIntent = new Intent(this, TransitActivity.class);
+        startActivity(transitIntent);
+
+        Log.d("Log", ">>>TransitActivity started<<<");
     }
 }

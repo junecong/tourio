@@ -1,7 +1,9 @@
 package com.tourio.eklrew.tourio;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +14,11 @@ public class TourListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour_list);
+
+        /* Starts NavigationListener, a wearable listener service, when mobile app is opened. */
+        Intent startIntent = new Intent(this, NavigationListener.class);
+        startService(startIntent);
+        Log.d("Log", "NavigationListener started");
     }
 
     @Override
