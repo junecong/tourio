@@ -9,8 +9,8 @@
     <string name="start">Start!</string>
 
     <string name="enjoy_text">Enjoy your time\nat Delores Park!</string>
-    <string name="ready_for_next">Let us know when you're\nready for the next stop!</string>
-    <string name="yes">I'm ready!</string>
+    <string name="ready_for_next">Let us know when you\'re\nready for the next stop!</string>
+    <string name="yes">I\'m ready!</string>
 
     <string name="next_stop"><u>Next Stop</u></string>
     <string name="placeholder_name">The Exploratorium</string>

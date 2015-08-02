@@ -74,6 +74,11 @@ public class TourListActivity extends NavigationBarActivity {
         });
 
         initButtons();
+
+        /* Starts NavigationListener, a wearable listener service, when mobile app is opened. */
+        Intent startIntent = new Intent(this, NavigationListener.class);
+        startService(startIntent);
+        Log.d("Log", "NavigationListener started");
     }
 
     private void initButtons() {
