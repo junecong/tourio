@@ -31,7 +31,8 @@
         android:orientation="horizontal">
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_weight=".7"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/rating_frame"
             android:layout_gravity="left"
@@ -39,14 +40,29 @@
             android:divider="#ff444444"
             android:dividerHeight="2dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tour_duration"
-            android:gravity="left"
-            android:textSize="12sp"
-            android:divider="#ff444444"
-            android:dividerHeight="2dp" />
+            android:orientation="horizontal"
+            android:layout_marginLeft="45dp"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:layout_weight=".3"
+            android:dividerHeight="2dp">
+
+            <ImageView
+                android:src="@mipmap/clock_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"/>
+
+            <TextView
+                android:text="@string/duration_of_tour"
+                android:id="@+id/tour_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

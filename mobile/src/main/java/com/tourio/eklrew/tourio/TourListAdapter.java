@@ -28,8 +28,6 @@ public class TourListAdapter extends BaseAdapter {
     private List<TourListItem> tours;
     private static LayoutInflater inflater = null;
 
-    final String BASE_STATIC_MAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap?size=400x200";
-
     public TourListAdapter(Context context,List<TourListItem> tours) {
         this.context = context;
         this.tours = tours;
@@ -52,35 +50,49 @@ public class TourListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position,View convertView,ViewGroup parent) {
+    public View getView(int position,View tourView,ViewGroup parent) {
+        ViewHolder holder;
+
         TourListItem tour = tours.get(position);
         LatLng[] stops = tour.getStops();
 
-        View tourView = convertView;
-        if (tourView == null)
+        if (tourView == null){
             tourView = inflater.inflate(R.layout.tour_list_item, null);
+            holder = new ViewHolder();
+            holder.mapView = (ImageView) tourView.findViewById(R.id.map);
+            holder.nameView = (TextView) tourView.findViewById(R.id.tour_name);
+            holder.durationView = (TextView) tourView.findViewById(R.id.tour_duration);
+            holder.ratingFrame = (FrameLayout) tourView.findViewById(R.id.rating_frame);
 
-        ImageView mapView = (ImageView) tourView.findViewById(R.id.map);
-        TextView nameView = (TextView) tourView.findViewById(R.id.tour_name);
-        TextView durationView = (TextView) tourView.findViewById(R.id.tour_duration);
+            tourView.setTag(holder);
+        }
+        else {
+            holder = (ViewHolder) tourView.getTag();
+        }
 
         //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
-        String mapUrl = BASE_STATIC_MAPS_API_URL;
+        String mapUrl = TourHelper.BASE_STATIC_MAPS_API_URL;
         for (int i=0;i<stops.length;i++) {
             LatLng stop = stops[i];
             mapUrl += "&markers=size:mid%7Ccolor:blue%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
         }
 
         Log.v("map url: ", mapUrl);
-        new DownloadImageTask(mapView).execute(mapUrl);
+        new DownloadImageTask(holder.mapView).execute(mapUrl);
 
-        nameView.setText(tour.getName());
-        durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
+        holder.nameView.setText(tour.getName());
+        holder.durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
 
-        FrameLayout ratingFrame = (FrameLayout) tourView.findViewById(R.id.rating_frame);
-        TourHelper.setRatingImage(context,ratingFrame,(int) (Math.round(tour.getRating())));
+        TourHelper.setRatingImage(inflater,holder.ratingFrame,(int) (Math.round(tour.getRating())));
 
         return tourView;
+    }
+
+    private static class ViewHolder {
+        public ImageView mapView;
+        public TextView nameView;
+        public TextView durationView;
+        public FrameLayout ratingFrame;
     }
 
     public void addAll(List<TourListItem> newTours) {

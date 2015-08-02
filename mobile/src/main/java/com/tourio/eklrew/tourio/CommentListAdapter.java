@@ -57,7 +57,7 @@ public class CommentListAdapter extends BaseAdapter {
         commenterNameView.setText(commenter.getName());
         commentTextView.setText(comment.getText());
 
-        TourHelper.setRatingImage(context,ratingFrame,comment.getRating());
+        TourHelper.setRatingImage(inflater,ratingFrame,comment.getRating());
 
         //TODO: set commenter image
         return commentView;

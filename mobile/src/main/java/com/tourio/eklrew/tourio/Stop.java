@@ -14,21 +14,21 @@ import java.util.Map;
  */
 public class Stop /*implements Parcelable*/ {
     private int id;
-    private String name;
-    private String description;
+    private String name, description, picUrl;
     private LatLng location;
     private int categoryIndex;
     private final String[] categories = {"Scenic","Eating","Drinking","Activity"};
 
-    public Stop(int id,String name,String description,double latitude,double longitude,int categoryIndex) {
+    public Stop(int id,String name,String description,String picUrl, double latitude,double longitude,int categoryIndex) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.picUrl = picUrl;
         this.location = new LatLng(latitude,longitude);
         this.categoryIndex = categoryIndex;
     }
 
-    public Stop(int id,String name,String description,double latitude,double longitude,String category) throws IllegalArgumentException {
+    public Stop(int id,String name,String description,String picUrl,double latitude,double longitude,String category) throws IllegalArgumentException {
         for (int i=0;i<categories.length;i++) {
             if (categories[i].equals(category)) {
                 categoryIndex = i;
@@ -40,6 +40,7 @@ public class Stop /*implements Parcelable*/ {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.picUrl = picUrl;
         this.location = new LatLng(latitude,longitude);
     }
 

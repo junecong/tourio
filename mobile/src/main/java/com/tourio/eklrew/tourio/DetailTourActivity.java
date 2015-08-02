@@ -36,20 +36,32 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     private FrameLayout detailsFrame;
     private StopListAdapter stopAdapter;
     private CommentListAdapter commentAdapter;
+    private boolean onStops = true; //true if stops being shown, false if comments being shown
+    Button stopsButton,commentsButton;
+    LinearLayout tourDescriptionLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int tourId = getIntent().getExtras().getInt("tour_id");
 
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
         detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
+        tourDescriptionLayout = (LinearLayout) findViewById(R.id.tour_description_layout);
 
         tour = TourHelper.hardCodedTour();
         setMapFragment();
 
+        stopsButton = (Button) findViewById(R.id.stops_button);
+        commentsButton = (Button) findViewById(R.id.comments_button);
+
         showStops(null);
         setRating();
+    }
+
+    private Tour getTourFromDatabase() {
+        int tourId = getIntent().getExtras().getInt("tour_id");
+
+        return null;
     }
 
     public void setMapFragment() {
@@ -64,7 +76,8 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         for (int i=0;i<numStops;i++) {
             locations[i] = stops.get(i).getLocation();
             markers[i] = map.addMarker(new MarkerOptions().position(locations[i])
-                    .title(stops.get(i).getName()));
+                    .title(stops.get(i).getName())
+            );
         }
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -142,15 +155,22 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         startService(startIntent);
     }
 
+    private void swapButtons() {
+        TourHelper.swapColors(stopsButton, commentsButton);
+    }
+
     public void showStops(View view) {
+        if (!onStops) {
+            swapButtons();
+            onStops = true;
+        }
+        tourDescriptionLayout.setVisibility(LinearLayout.VISIBLE);
+
         detailsFrame.removeAllViews();
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_activity_list, null));
         ListView stopListView = (ListView) findViewById(R.id.details_list);
         stopAdapter = new StopListAdapter(this, tour.getStops());
         stopListView.setAdapter(stopAdapter);
-        Button stopsButton = (Button) findViewById(R.id.stops_button);
-        Button commentsButton = (Button) findViewById(R.id.comments_button);
-        TourHelper.swapColors(stopsButton, commentsButton);
 
         stopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -162,6 +182,8 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     public void showDetailStop(Stop stop) {
+        tourDescriptionLayout.setVisibility(LinearLayout.GONE);
+
         detailsFrame.removeAllViews();
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_stop, null));
         TextView stopNameView = (TextView) findViewById(R.id.stop_name);
@@ -172,7 +194,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
 
     public void showDetailComment(Comment comment) {
         detailsFrame.removeAllViews();
-        detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_stop, null));
+        detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_comment, null));
         TextView commenterNameView = (TextView) findViewById(R.id.commenter_name);
         TextView commentTextView = (TextView) findViewById(R.id.comment_text);
         commenterNameView.setText(comment.getCommenter().getName());
@@ -180,36 +202,24 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     public void showComments(View view) {
+        if (onStops) {
+            swapButtons();
+            onStops = false;
+        }
+        tourDescriptionLayout.setVisibility(LinearLayout.GONE);
+
         detailsFrame.removeAllViews();
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_activity_list, null));
         ListView commentListView = (ListView) findViewById(R.id.details_list);
-        commentListView.setAdapter(new CommentListAdapter(this, tour.getComments()));
-        Button stopsButton = (Button) findViewById(R.id.stops_button);
-        Button commentsButton = (Button) findViewById(R.id.comments_button);
-        TourHelper.swapColors(stopsButton,commentsButton);
+        commentAdapter = new CommentListAdapter(this, tour.getComments());
+        commentListView.setAdapter(commentAdapter);
+
+        commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Comment comment = (Comment) commentAdapter.getItem(position);
+                showDetailComment(comment);
+            }
+        });
     }
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_detail_tour, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    */
 }

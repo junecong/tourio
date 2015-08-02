@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:text="a local ice cream place"
             android:id="@+id/stop_description"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"/>
     </LinearLayout>
 </LinearLayout>

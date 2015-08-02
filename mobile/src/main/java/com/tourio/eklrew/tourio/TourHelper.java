@@ -21,16 +21,39 @@ import java.util.GregorianCalendar;
  * Created by Prud on 7/29/2015.
  */
 public class TourHelper {
+    public static final String BASE_DATABASE_URL = "";
+    public static final String BASE_TOUR_URL = BASE_DATABASE_URL + "";
+    public static final String BASE_COMMENTS_URL = BASE_DATABASE_URL + "";
+
+    public static final String GOOGLE_MAPS_API_KEY = "AIzaSyBYIzHjtA9e_PnCUlVXPTD0WQ6nvJKnPbE";
+    public static final String BASE_STATIC_MAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap?" +
+            "size=400x200&" +
+            "key=" + GOOGLE_MAPS_API_KEY;
+
     private static User prud = new User(1,"Prud L",null);
     private static User june = new User(3,"June Cong",null);
     private static User shawn = new User(2,"Shawn Huang",null);
     private static User aim = new User(5,"Aim P",null);
 
+    public static char randomChar() {
+        int rnd = (int) (Math.random() * 52); // or use Random or whatever
+        char base = (rnd < 26) ? 'A' : 'a';
+        return (char) (base + rnd % 26);
+    }
+
+    public static String randomString() {
+        String s = "";
+        for (int i=0;i<100+Math.random()*200;i++) {
+            s+=randomChar();
+        }
+        return s;
+    }
+
     public static ArrayList<Stop> hardCodedStops() {
         ArrayList<Stop> stops = new ArrayList<Stop>();
-        stops.add(new Stop(1,"Indian Rock Park","a big rock",37.892537, -122.272594,"Scenic"));
-        stops.add(new Stop(2,"Ici Ice Cream","hippie ice cream place",37.857598, -122.253266,"Eating"));
-        stops.add(new Stop(3,"Sather Tower","biggest watchtower in the world",37.872320, -122.257791,"Scenic"));
+        stops.add(new Stop(1,"Indian Rock Park",randomString(),"",37.892537, -122.272594,"Scenic"));
+        stops.add(new Stop(2,"Ici Ice Cream",randomString(),"",37.857598, -122.253266,"Eating"));
+        stops.add(new Stop(3,"Sather Tower",randomString(),"",37.872320, -122.257791,"Scenic"));
 
         return stops;
     }
@@ -68,9 +91,9 @@ public class TourHelper {
     }
 
     public static ArrayList<Comment> hardCodedComments() {
-        ArrayList<Comment> comments = new  ArrayList<Comment>();
+        ArrayList<Comment> comments = new ArrayList<Comment>();
 
-        comments.add(new Comment(june,"great tour!",4,new GregorianCalendar(2015,7,29,2,47)));
+        comments.add(new Comment(june, "great tour!",4,new GregorianCalendar(2015, 7, 29, 2, 47)));
         comments.add(new Comment(shawn, "it was ok", 3, new GregorianCalendar(2015, 7, 28, 5, 20)));
         comments.add(new Comment(aim, "best tour ever", 5, new GregorianCalendar(2015, 6, 14, 10, 1)));
 
@@ -84,29 +107,19 @@ public class TourHelper {
         b2.setBackgroundColor(color1);
     }
 
-    public static void setRatingImage(Context context,FrameLayout ratingFrame,int rating) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public static void setRatingImage(LayoutInflater inflater,FrameLayout ratingFrame,int rating) {
+        ratingFrame.removeAllViews();
         ratingFrame.addView(inflater.inflate(R.layout.rating, null));
-        if (rating<5) {
-            ImageView star5 = (ImageView) ratingFrame.findViewById(R.id.star5);
-            star5.setVisibility(ImageView.INVISIBLE);
-        }
-        if (rating<4) {
-            ImageView star4 = (ImageView) ratingFrame.findViewById(R.id.star4);
-            star4.setVisibility(ImageView.INVISIBLE);
-        }
-        if (rating<3) {
-            ImageView star3 = (ImageView) ratingFrame.findViewById(R.id.star3);
-            star3.setVisibility(ImageView.INVISIBLE);
-        }
-        if (rating<2) {
-            ImageView star2 = (ImageView) ratingFrame.findViewById(R.id.star2);
-            star2.setVisibility(ImageView.INVISIBLE);
-        }
-        if (rating<1) {
-            ImageView star1 = (ImageView) ratingFrame.findViewById(R.id.star1);
-            star1.setVisibility(ImageView.INVISIBLE);
-        }
+        ImageView[] stars = {
+                (ImageView) ratingFrame.findViewById(R.id.star1),
+                (ImageView) ratingFrame.findViewById(R.id.star2),
+                (ImageView) ratingFrame.findViewById(R.id.star3),
+                (ImageView) ratingFrame.findViewById(R.id.star4),
+                (ImageView) ratingFrame.findViewById(R.id.star5)
+        };
+
+        for (int i=0;i<rating;i++) { stars[i].setVisibility(ImageView.VISIBLE);}
+        for (int i=rating;i<5;i++) { stars[i].setVisibility(ImageView.GONE);}
         Log.v("rating",""+rating);
     }
 }

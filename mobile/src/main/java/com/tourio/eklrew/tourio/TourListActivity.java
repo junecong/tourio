@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -20,13 +21,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,13 +49,13 @@ public class TourListActivity extends NavigationBarActivity {
     private Button nearMeButton;
     private Button ratingButton;
     private Button durationButton;
-
     private Button currentSortButton;
-    private int cityIndex;
+    private int currentSortType;
+    final int SORT_NEAR_ME = 0;
+    final int SORT_RATING = 1;
+    final int SORT_DURATION = 2;
 
-    final String[] cities = {"Berkeley","San Francisco"};
-    final int INDEX_BERKELEY = 0;
-    final int INDEX_SAN_FRANCISCO = 1;
+    private int cityIndex;
 
 
     @Override
@@ -73,7 +78,6 @@ public class TourListActivity extends NavigationBarActivity {
         });
 
         initButtons();
-        initSpinner();
     }
 
     private void initButtons() {
@@ -87,10 +91,6 @@ public class TourListActivity extends NavigationBarActivity {
         durationButton.setBackgroundColor(Color.parseColor("#ffff9800"));
 
         sortNearMe(null);
-    }
-
-    private void initSpinner() {
-
     }
 
     private Location getCurrentLocation() {
@@ -113,6 +113,7 @@ public class TourListActivity extends NavigationBarActivity {
     public void sortNearMe(View view) {
         TourHelper.swapColors(currentSortButton,nearMeButton);
         currentSortButton = nearMeButton;
+        currentSortType = SORT_NEAR_ME;
         Collections.sort(tours,new TourListItem.DistanceComparator(getCurrentLocation()));
         refreshList();
         Log.v("current button","nearMe");
@@ -121,6 +122,7 @@ public class TourListActivity extends NavigationBarActivity {
     public void sortRating(View view) {
         TourHelper.swapColors(currentSortButton,ratingButton);
         currentSortButton = ratingButton;
+        currentSortType = SORT_RATING;
         Collections.sort(tours,new TourListItem.RatingComparator());
         refreshList();
         Log.v("current button", "rating");
@@ -129,6 +131,7 @@ public class TourListActivity extends NavigationBarActivity {
     public void sortDuration(View view) {
         TourHelper.swapColors(currentSortButton,durationButton);
         currentSortButton = durationButton;
+        currentSortType = SORT_DURATION;
         Collections.sort(tours,new TourListItem.DurationComparator());
         refreshList();
         Log.v("current button", "duration");
@@ -138,23 +141,36 @@ public class TourListActivity extends NavigationBarActivity {
         tourAdapter.addAll(tours);
     }
 
-
-    public class GetLocationTask extends AsyncTask<Void,Void,Location> {
-        protected Location doInBackground(Void... params) {
-            return new Location("");
-        }
-
-        protected void onPostExecute(Location location) {
-            mLocation = location;
-        }
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tour_list, menu);
+        final String[] cities = getResources().getStringArray(R.array.cities);
+        for (String city:cities) {
+            Log.v("city",city);
+        }
+
+        MenuItem spinnerItem = menu.findItem(R.id.cities_spinner);
+        final Spinner citySpinner = (Spinner) MenuItemCompat.getActionView(spinnerItem);
+        final SpinnerAdapter cityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.cities, android.R.layout.simple_spinner_item);
+        citySpinner.setAdapter(cityAdapter);
+        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                refreshList(cityAdapter.getItem(pos).toString());
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
         return true;
+    }
+
+    public void refreshList(String city) {
+        Log.v("current city",city);
     }
 
     @Override
@@ -172,4 +188,14 @@ public class TourListActivity extends NavigationBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    public class GetLocationTask extends AsyncTask<Void,Void,Location> {
+        protected Location doInBackground(Void... params) {
+            return new Location("");
+        }
+
+        protected void onPostExecute(Location location) {
+            mLocation = location;
+        }
+    }
 }
