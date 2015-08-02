@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tourio.eklrew.tourio" >
 
-    <uses-sdk android:minSdkVersion="14"/>
-
     <permission
         android:name="com.example.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
@@ -47,7 +45,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBYIzHjtA9e_PnCUlVXPTD0WQ6nvJKnPbE" />
+            android:value="AIzaSyB6ZX82AfxgQfqbT-sJ_2X0AqRIwcF5FcA" />
 
         <activity
             android:name=".NavigationBarActivity"

@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public abstract class NavigationBarActivity extends ActionBarActivity {
@@ -24,6 +25,7 @@ public abstract class NavigationBarActivity extends ActionBarActivity {
     public FrameLayout contentFrame;
     public DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+    final String[] drawerItemsArray = {"Profile","Browse","Create","$","About"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +54,7 @@ public abstract class NavigationBarActivity extends ActionBarActivity {
         drawerList = (ListView) findViewById(R.id.drawer_list);
         contentFrame = (FrameLayout) findViewById(R.id.content_frame);
 
-        ArrayList<String> drawerItems = new ArrayList<String>();
-        drawerItems.add("Profile");
-        drawerItems.add("Browse");
-        drawerItems.add("Create");
-        drawerItems.add("$");
-        drawerItems.add("About");
+        ArrayList<String> drawerItems = new ArrayList<String>(Arrays.asList(drawerItemsArray));
         ArrayAdapter<String> drawerAdapter = new ArrayAdapter<String>(
                 this, // The current context (this activity)
                 R.layout.drawer_list_item, // The name of the layout ID.
@@ -82,6 +79,7 @@ public abstract class NavigationBarActivity extends ActionBarActivity {
         });
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -103,4 +101,5 @@ public abstract class NavigationBarActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    */
 }

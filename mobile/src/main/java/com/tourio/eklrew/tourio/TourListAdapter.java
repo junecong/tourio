@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +27,6 @@ public class TourListAdapter extends BaseAdapter {
     private Context context;
     private List<TourListItem> tours;
     private static LayoutInflater inflater = null;
-
-    final String BASE_STATIC_MAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap?size=400x200";
 
     public TourListAdapter(Context context,List<TourListItem> tours) {
         this.context = context;
@@ -50,35 +50,54 @@ public class TourListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position,View convertView,ViewGroup parent) {
+    public View getView(int position,View tourView,ViewGroup parent) {
+        ViewHolder holder;
+
         TourListItem tour = tours.get(position);
-        ArrayList<Stop> stops = tour.getStops();
+        LatLng[] stops = tour.getStops();
 
-        View tourView = convertView;
-        if (tourView == null)
+        if (tourView == null){
             tourView = inflater.inflate(R.layout.tour_list_item, null);
+            holder = new ViewHolder();
+            holder.mapView = (ImageView) tourView.findViewById(R.id.map);
+            holder.nameView = (TextView) tourView.findViewById(R.id.tour_name);
+            holder.durationView = (TextView) tourView.findViewById(R.id.tour_duration);
+            holder.ratingFrame = (FrameLayout) tourView.findViewById(R.id.rating_frame);
 
-        ImageView mapView = (ImageView) tourView.findViewById(R.id.map);
-        TextView nameView = (TextView) tourView.findViewById(R.id.tour_name);
-        TextView ratingView = (TextView) tourView.findViewById(R.id.tour_rating);
-        TextView durationView = (TextView) tourView.findViewById(R.id.tour_duration);
-
-
-        //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
-        String mapUrl = BASE_STATIC_MAPS_API_URL +"&markers=";
-        for (int i=0;i<stops.size();i++) {
-            Stop stop = stops.get(i);
-            mapUrl += stop.getLatitude()+","+stop.getLongitude()+"|";
+            tourView.setTag(holder);
+        }
+        else {
+            holder = (ViewHolder) tourView.getTag();
         }
 
-        Log.v("map url: ",mapUrl);
-        new DownloadImageTask(mapView).execute(mapUrl);
+        //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
+        String mapUrl = TourHelper.BASE_STATIC_MAPS_API_URL;
+        for (int i=0;i<stops.length;i++) {
+            LatLng stop = stops[i];
+            mapUrl += "&markers=size:mid%7Ccolor:blue%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
+        }
 
-        nameView.setText(tour.getName());
-        ratingView.setText(Double.toString(tour.getRating())+" stars");
-        durationView.setText(Double.toString(tour.getDuration())+" hours");
+        Log.v("map url: ", mapUrl);
+        new DownloadImageTask(holder.mapView).execute(mapUrl);
 
+        holder.nameView.setText(tour.getName());
+        holder.durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
+
+        TourHelper.setRatingImage(inflater,holder.ratingFrame,(int) (Math.round(tour.getRating())));
 
         return tourView;
+    }
+
+    private static class ViewHolder {
+        public ImageView mapView;
+        public TextView nameView;
+        public TextView durationView;
+        public FrameLayout ratingFrame;
+    }
+
+    public void addAll(List<TourListItem> newTours) {
+        tours = new ArrayList<TourListItem>();
+        tours.addAll(newTours);
+        notifyDataSetChanged();
     }
 }
