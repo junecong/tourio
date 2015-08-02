@@ -54,8 +54,12 @@ public class TourListItem {
 
         @Override
         public int compare(TourListItem a,TourListItem b) {
+            if (a.getStops().length==0 || b.getStops().length==0) {
+                return 0;
+            }
+
             LatLng locA = a.getStops()[0];
-            LatLng locB = b.getStops()[1];
+            LatLng locB = b.getStops()[0];
             float[] resultsA = new float[1];
             float[] resultsB = new float[1];
             Location.distanceBetween(currentLocation.getLatitude(),currentLocation.getLongitude(),locA.latitude,locA.longitude,resultsA);

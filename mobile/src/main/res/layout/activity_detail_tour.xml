@@ -13,7 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <ImageView
                 android:layout_width="50dp"
@@ -21,14 +22,15 @@
                 android:id="@+id/user"
                 android:src="@drawable/icon"
                 android:gravity="left"
-                android:layout_gravity="left"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -43,19 +45,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <TextView
-                        android:textSize="15dp"
-                        android:text="@string/created_by_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"/>
+                <TextView
+                    android:textSize="12dp"
+                    android:text="@string/created_by_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"/>
 
-                    <TextView
-                        android:textSize="15dp"
-                        android:text="@string/tour_maker_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"/>
+                <TextView
+                    android:textSize="12dp"
+                    android:text="@string/tour_maker_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -63,7 +65,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1">
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -76,7 +82,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginLeft="45dp"
                     android:layout_gravity="right"
                     android:gravity="right">
 
@@ -90,7 +95,8 @@
                         android:text="@string/duration_of_tour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"/>
+                        android:layout_gravity="right"
+                        android:textSize="12dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -102,71 +108,84 @@
         android:id="@+id/map"
         class="com.google.android.gms.maps.MapFragment"
         />
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:text="START"
-        android:onClick="startGPS"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@android:color/darker_gray">
-        <Button
-            android:id="@+id/stops_button"
-            android:layout_width="fill_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:text="@string/details"
-            android:onClick="showStops"
-            android:background="@android:color/white"/>
+        android:orientation="vertical"
+        android:id="@+id/hide_this2">
 
         <Button
-            android:id="@+id/comments_button"
             android:layout_width="fill_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="@string/comments"
-            android:onClick="showComments"
-            android:background="@android:color/darker_gray"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            android:layout_height="40dp"
+            android:text="START"
+            android:onClick="startGPS"
+            android:background="@color/orange"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/tour_description_layout">
+            android:orientation="horizontal"
+            android:background="@android:color/darker_gray">
+            <Button
+                android:id="@+id/stops_button"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:text="@string/details"
+                android:onClick="showStops"
+                android:background="@color/lightGrey"/>
 
-            <TextView
-                android:layout_gravity="left"
-                android:text="Tour Description:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10dp"/>
-
-            <TextView
-                android:id="@+id/tour_description"
-                android:text="@string/tour_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10dp"/>
+            <Button
+                android:id="@+id/comments_button"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/comments"
+                android:onClick="showComments"
+                android:background="@android:color/darker_gray"/>
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_marginTop="3dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/details_frame"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/tour_description_layout"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_gravity="left"
+                    android:text="Tour Description:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"/>
+
+                <TextView
+                    android:id="@+id/tour_description"
+                    android:text="@string/tour_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"/>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_marginTop="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/details_frame"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

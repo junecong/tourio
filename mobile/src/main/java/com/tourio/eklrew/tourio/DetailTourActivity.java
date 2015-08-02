@@ -33,7 +33,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     private boolean mapExpanded = false;
     private int mapFragmentHeight;
     private Tour tour;
-    private FrameLayout detailsFrame;
+    private FrameLayout detailsFrame, ratingFrame;
     private StopListAdapter stopAdapter;
     private CommentListAdapter commentAdapter;
     private boolean onStops = true; //true if stops being shown, false if comments being shown
@@ -43,19 +43,24 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
-        detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
-        tourDescriptionLayout = (LinearLayout) findViewById(R.id.tour_description_layout);
 
         tour = TourHelper.hardCodedTour();
+
+        initVars();
         setMapFragment();
+        showStops(null);
+
+        TourHelper.setRatingImage(getLayoutInflater(),ratingFrame,(int) (Math.round(tour.getRating())));
+    }
+
+    public void initVars() {
+        detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
+        ratingFrame = (FrameLayout) findViewById(R.id.rating_frame);
+        tourDescriptionLayout = (LinearLayout) findViewById(R.id.tour_description_layout);
 
         stopsButton = (Button) findViewById(R.id.stops_button);
         commentsButton = (Button) findViewById(R.id.comments_button);
-
-        showStops(null);
-        setRating();
     }
 
     private Tour getTourFromDatabase() {
@@ -109,6 +114,8 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             mapExpanded = true;
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.hide_this);
             linearLayout.setVisibility(LinearLayout.GONE);
+            LinearLayout linearLayout2 = (LinearLayout) findViewById(R.id.hide_this2);
+            linearLayout2.setVisibility(LinearLayout.GONE);
             MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
             View view = mapFragment.getView();
             mapFragmentHeight = view.getHeight();
@@ -128,6 +135,8 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             mapExpanded = false;
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.hide_this);
             linearLayout.setVisibility(LinearLayout.VISIBLE);
+            LinearLayout linearLayout2 = (LinearLayout) findViewById(R.id.hide_this2);
+            linearLayout2.setVisibility(LinearLayout.VISIBLE);
             MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
             View view = mapFragment.getView();
             LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1,mapFragmentHeight);
@@ -135,11 +144,6 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             view.requestLayout();
             map.moveCamera(CameraUpdateFactory.zoomOut());
         }
-    }
-
-    public void setRating() {
-        FrameLayout ratingFrame = (FrameLayout) findViewById(R.id.rating_frame);
-        ratingFrame.addView((getLayoutInflater()).inflate(R.layout.rating, null));
     }
 
     public void startGPS(View view) {
@@ -197,8 +201,10 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_comment, null));
         TextView commenterNameView = (TextView) findViewById(R.id.commenter_name);
         TextView commentTextView = (TextView) findViewById(R.id.comment_text);
+        FrameLayout detailCommentRatingFrame = (FrameLayout) findViewById(R.id.detail_comment_rating_frame);
         commenterNameView.setText(comment.getCommenter().getName());
         commentTextView.setText(comment.getText());
+        TourHelper.setRatingImage(getLayoutInflater(), detailCommentRatingFrame, (int) (Math.round(comment.getRating())));
     }
 
     public void showComments(View view) {

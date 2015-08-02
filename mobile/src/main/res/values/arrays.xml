@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="cities">
-        <item name="Berkeley">Berkeley</item>
-        <item name="San Francisco">San Francisco</item>
+        <item name="1">San Francisco</item>
+        <item name="2">Chicago</item>
     </string-array>
 </resources>

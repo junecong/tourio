@@ -38,7 +38,7 @@
             android:layout_gravity="left"
             android:paddingRight="20dp"
             android:divider="#ff444444"
-            android:dividerHeight="2dp"/>
+            android:dividerHeight="1dp"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -48,7 +48,7 @@
             android:layout_gravity="right"
             android:gravity="right"
             android:layout_weight=".3"
-            android:dividerHeight="2dp">
+            android:dividerHeight="5dp">
 
             <ImageView
                 android:src="@mipmap/clock_icon"

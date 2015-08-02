@@ -17,27 +17,30 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="sortNearMe"/>
+            android:onClick="sortNearMe"
+            android:background="@android:color/white"/>
         <Button
             android:id="@+id/rating"
             android:text="RATING"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="sortRating"/>
+            android:onClick="sortRating"
+            android:background="#ffffbb33"/>
         <Button
             android:id="@+id/duration"
             android:text="DURATION"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="sortDuration"/>
+            android:onClick="sortDuration"
+            android:background="#ffffbb33"/>
     </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/tour_list"
-        android:divider="#FFCC00"
-        android:dividerHeight="5dp"/>
+        android:divider="#000000"
+        android:dividerHeight="1dp"/>
 </LinearLayout>

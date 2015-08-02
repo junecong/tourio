@@ -16,24 +16,68 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Prud on 7/29/2015.
  */
 public class TourHelper {
-    public static final String BASE_DATABASE_URL = "";
-    public static final String BASE_TOUR_URL = BASE_DATABASE_URL + "";
-    public static final String BASE_COMMENTS_URL = BASE_DATABASE_URL + "";
+    //base url for database access
+    public static final String BASE_DATABASE_URL = "http://52.27.112.77:5000";
+    //BASE_CITY_URL + id gives the list of tours in city with given city id
+    public static final String BASE_CITY_URL = BASE_DATABASE_URL + "/city/";
+    //BASE_TOUR_URL + id gives the info for tour with given tour id
+    public static final String BASE_TOUR_URL = BASE_DATABASE_URL + "/tour/";
+    //BASE_COMMENTS_URL + id gives the list of comments with given tour id
+    public static final String BASE_COMMENTS_URL = BASE_DATABASE_URL + "/comments/";
+    //BASE_USER_URL + id gives the info for user with given id
+    public static final String BASE_USER_URL = BASE_DATABASE_URL + "/user/";
 
     public static final String GOOGLE_MAPS_API_KEY = "AIzaSyBYIzHjtA9e_PnCUlVXPTD0WQ6nvJKnPbE";
     public static final String BASE_STATIC_MAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap?" +
             "size=400x200&" +
             "key=" + GOOGLE_MAPS_API_KEY;
 
+
+    //Hard coded city list
+    public static final String[] cities = {"San Francisco","Chicago"};
+
+    //Hard coded dictionary of city to its id in database
+    public static final Map<String,Integer> CITY_NAME_TO_ID_MAP;
+    static
+    {
+        CITY_NAME_TO_ID_MAP = new HashMap<String,Integer>();
+        CITY_NAME_TO_ID_MAP.put("San Francisco",1);
+        CITY_NAME_TO_ID_MAP.put("Chicago",3);
+    }
+
+    //generated map of city to its index in list
+    public static final Map<String,Integer> CITY_NAME_TO_INDEX_MAP;
+    static {
+        CITY_NAME_TO_INDEX_MAP = new HashMap<String,Integer>();
+            for (int i=0;i<cities.length;i++) {
+                CITY_NAME_TO_INDEX_MAP.put(cities[i], i);
+            }
+    }
+
+    //generated map of city index to city id
+    public static final Map<Integer,Integer> CITY_INDEX_TO_ID_MAP;
+    static {
+        CITY_INDEX_TO_ID_MAP = new HashMap<Integer,Integer>();
+        for (int i=0;i<cities.length;i++) {
+            CITY_INDEX_TO_ID_MAP.put(i,CITY_NAME_TO_ID_MAP.get(cities[i]));
+        }
+    }
+
     private static User prud = new User(1,"Prud L",null);
     private static User june = new User(3,"June Cong",null);
     private static User shawn = new User(2,"Shawn Huang",null);
     private static User aim = new User(5,"Aim P",null);
+
+    private static void setMaps() {
+
+    }
 
     public static char randomChar() {
         int rnd = (int) (Math.random() * 52); // or use Random or whatever

@@ -28,9 +28,20 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,6 +57,7 @@ public class TourListActivity extends NavigationBarActivity {
     private TourListAdapter tourAdapter;
 
     private Location mLocation;
+    private boolean hasLocation = false;
 
     private Button nearMeButton;
     private Button ratingButton;
@@ -56,7 +68,7 @@ public class TourListActivity extends NavigationBarActivity {
     final int SORT_RATING = 1;
     final int SORT_DURATION = 2;
 
-    private int cityIndex;
+    private int currentCityIndex;
 
 
     @Override
@@ -64,10 +76,9 @@ public class TourListActivity extends NavigationBarActivity {
         super.onCreate(savedInstanceState);
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_tour_list, null));
 
-        tourListView = (ListView) findViewById(R.id.tour_list);
-        tours = TourHelper.randomTourListItems();
-        tourAdapter = new TourListAdapter(this,tours);
-        tourListView.setAdapter(tourAdapter);
+        initVars();
+        //loadTours();
+
         tourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -77,21 +88,22 @@ public class TourListActivity extends NavigationBarActivity {
                 startActivity(detailIntent);
             }
         });
-
-        initButtons();
-        GetLocationTask getLocationTask = new GetLocationTask();
-        getLocationTask.execute();
     }
 
-    private void initButtons() {
+    private void initVars() {
         nearMeButton = (Button) findViewById(R.id.near_me);
         ratingButton = (Button) findViewById(R.id.rating);
         durationButton = (Button) findViewById(R.id.duration);
         currentSortButton = nearMeButton;
+        currentSortType = SORT_NEAR_ME;
 
-        nearMeButton.setBackgroundColor(Color.parseColor("#ffffffff"));
-        ratingButton.setBackgroundColor(Color.parseColor("#ffff9800"));
-        durationButton.setBackgroundColor(Color.parseColor("#ffff9800"));
+        tourListView = (ListView) findViewById(R.id.tour_list);
+        tourAdapter = new TourListAdapter(TourListActivity.this,
+                new ArrayList<TourListItem>());
+        tourListView.setAdapter(tourAdapter);
+
+        currentSortType = SORT_NEAR_ME;
+        currentCityIndex = 0;
     }
 
     private Location getCurrentLocation() {
@@ -112,6 +124,15 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public void sortNearMe(View view) {
+        if (hasLocation) {
+            sortNearMeHelper();
+        }
+        else {
+            (new GetLocationAndSortTask()).execute();
+        }
+    }
+
+    public void sortNearMeHelper() {
         TourHelper.swapColors(currentSortButton,nearMeButton);
         currentSortButton = nearMeButton;
         currentSortType = SORT_NEAR_ME;
@@ -146,20 +167,20 @@ public class TourListActivity extends NavigationBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tour_list, menu);
-        final String[] cities = getResources().getStringArray(R.array.cities);
-        for (String city:cities) {
+        for (String city : TourHelper.cities) {
             Log.v("city",city);
         }
 
         MenuItem spinnerItem = menu.findItem(R.id.cities_spinner);
         final Spinner citySpinner = (Spinner) MenuItemCompat.getActionView(spinnerItem);
-        final SpinnerAdapter cityAdapter = ArrayAdapter.createFromResource(this,
-                R.array.cities, android.R.layout.simple_spinner_item);
+        final SpinnerAdapter cityAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, TourHelper.cities);
         citySpinner.setAdapter(cityAdapter);
         citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                refreshList(cityAdapter.getItem(pos).toString());
+                currentCityIndex = pos;
+                loadTours();
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -170,8 +191,26 @@ public class TourListActivity extends NavigationBarActivity {
         return true;
     }
 
-    public void refreshList(String city) {
-        Log.v("current city",city);
+    public void loadTours () {
+        (new FetchToursTask()).execute(getCurrentCityId());
+        switch(currentSortType) {
+            case SORT_NEAR_ME: sortNearMe(null); break;
+            case SORT_RATING: sortRating(null); break;
+            case SORT_DURATION: sortDuration(null); break;
+        }
+    }
+
+    public void testHashMaps() {
+        Log.v("hashmaptest name-index",""+TourHelper.CITY_NAME_TO_INDEX_MAP.get("San Francisco"));
+        Log.v("hashmaptest name-index",""+TourHelper.CITY_NAME_TO_INDEX_MAP.get("Chicago"));
+        Log.v("hashmaptest name-id",""+TourHelper.CITY_NAME_TO_ID_MAP.get(TourHelper.cities[0]));
+        Log.v("hashmaptest name-id",""+TourHelper.CITY_NAME_TO_ID_MAP.get(TourHelper.cities[1]));
+        Log.v("hashmaptest index-id",""+TourHelper.CITY_INDEX_TO_ID_MAP.get(0));
+        Log.v("hashmaptest index-id",""+TourHelper.CITY_INDEX_TO_ID_MAP.get(1));
+    }
+
+    public int getCurrentCityId() {
+        return TourHelper.CITY_INDEX_TO_ID_MAP.get(currentCityIndex);
     }
 
     @Override
@@ -190,7 +229,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
 
-    public class GetLocationTask extends AsyncTask<Void,Void,Location> {
+    public class GetLocationAndSortTask extends AsyncTask<Void,Void,Location> {
         ProgressDialog dialog;
 
         @Override
@@ -202,15 +241,15 @@ public class TourListActivity extends NavigationBarActivity {
         protected Location doInBackground(Void... params) {
             Location location = null;
             int timePassed = 0;
-            while (location==null && timePassed<20000) {
+            while (location==null && timePassed<1000) {
                 LocationManager locationManager = (LocationManager)
                         getSystemService(Context.LOCATION_SERVICE);
                 Criteria criteria = new Criteria();
                 location = locationManager.getLastKnownLocation(locationManager
                         .getBestProvider(criteria, false));
-                timePassed += 1000;
+                timePassed += 100;
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Log.e("thread error","thread InterruptedException");
                     e.printStackTrace();
@@ -224,8 +263,125 @@ public class TourListActivity extends NavigationBarActivity {
         @Override
         protected void onPostExecute(Location location) {
             dialog.dismiss();
+            if (location==null) {
+                Toast.makeText(TourListActivity.this,"Location not found",Toast.LENGTH_LONG).show();
+                location = new Location("");
+                location.setLatitude(37.0);
+                location.setLongitude(-122.0);
+            }
+            else {
+                hasLocation = true;
+            }
             mLocation = location;
-            sortNearMe(null);
+            sortNearMeHelper();
+        }
+    }
+
+    public class FetchToursTask extends AsyncTask<Integer,Void,ArrayList<TourListItem>> {
+        private ArrayList<TourListItem> getToursDataFromJson(String json) throws JSONException {
+            ArrayList<TourListItem> tourListFromJson = new ArrayList<TourListItem>();
+
+            //keys of the things in the JSON that need to be extracted
+            final String JSON_TOUR_ID = "id";
+            final String JSON_TOUR_NAME = "TourName";
+            final String JSON_TOUR_RATING = "Rating";
+            final String JSON_TOUR_DURATION = "Duration";
+            final String JSON_STOP_LATITUDE = "Lat";
+            final String JSON_STOP_LONGITUDE = "Long";
+
+            JSONArray toursJsonArray = new JSONArray(json);
+
+            for (int i=0;i<toursJsonArray.length();i+=2) {
+
+                JSONObject tourJsonObject = toursJsonArray.getJSONObject(i);
+                int tourId = tourJsonObject.getInt(JSON_TOUR_ID);
+                String tourName = tourJsonObject.getString(JSON_TOUR_NAME);
+                int tourRating = tourJsonObject.getInt(JSON_TOUR_RATING);
+                int tourDuration = tourJsonObject.getInt(JSON_TOUR_DURATION);
+
+                JSONArray stopsJsonArray = toursJsonArray.getJSONArray(i + 1);
+                int numStops = stopsJsonArray.length();
+                LatLng[] stopListFromJson = new LatLng[numStops];
+                for (int j=0;j<numStops;j++) {
+                    JSONObject stopJsonObject = stopsJsonArray.getJSONObject(j);
+                    stopListFromJson[j] = new LatLng(
+                            stopJsonObject.getDouble(JSON_STOP_LATITUDE),
+                            stopJsonObject.getDouble(JSON_STOP_LONGITUDE)
+                    );
+                }
+
+                tourListFromJson.add(new TourListItem(tourId,tourName,tourDuration,tourRating,stopListFromJson));
+            }
+
+            return tourListFromJson;
+        }
+
+        @Override
+        protected ArrayList<TourListItem> doInBackground(Integer... city) {
+            String toursUrlString = TourHelper.BASE_CITY_URL + city[0];
+            Log.v("URL",toursUrlString);
+            URL toursUrl;
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+            String toursJsonStr = null;
+            try {
+                toursUrl = new URL(toursUrlString);
+                urlConnection = (HttpURLConnection) toursUrl.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream ==null) {
+                    return null;
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                }
+                if (buffer.length() == 0) {
+                    return null;
+                }
+                toursJsonStr = buffer.toString();
+            } catch (IOException e) {
+                Log.e("FetchWeatherTask","IOException - error fetching JSON from database");
+                return null;
+            }
+            finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e("FetchToursTask", "IOException - error closing tours BufferedReader stream", e);
+                    }
+                }
+            }
+
+            try {
+                return getToursDataFromJson(toursJsonStr);
+            } catch (JSONException e) {
+                Log.e("FetchToursTask","JSONException - error converting json");
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<TourListItem> result) {
+            tours = result;
+            tourAdapter.addAll(result);
+            if (tours.isEmpty()) {
+                Log.v("test tours","tours list empty");
+            }
+            for (TourListItem tour:tours) {
+                Log.v("test tours","Name: "+tour.getName());
+            }
         }
     }
 }
