@@ -48,6 +48,8 @@
     <string name="title_activity_action_bar">ActionBarActivity</string>
 
     <string name="tour_in_session">Your tour is in session! You are free to put your phone
-        away and enjoy your adventure :)</string>
+        away and enjoy your adventure via your watch :)</string>
+
+    <string name="connect">Press start on your wear\napp to connect!</string>
 
 </resources>

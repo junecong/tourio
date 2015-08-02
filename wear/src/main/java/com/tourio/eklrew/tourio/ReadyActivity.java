@@ -3,6 +3,7 @@ package com.tourio.eklrew.tourio;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,12 +12,12 @@ import android.widget.TextView;
  */
 public class ReadyActivity extends Activity {
 
-    private TextView mTextView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ready_wear);
+
+        Log.d("Log", ">>>ReadyActivity created<<<");
     }
 
     /* Called when user presses "Yes!" button when asked if ready for next stop. */

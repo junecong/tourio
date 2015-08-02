@@ -136,12 +136,21 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
 //        mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        startActivity(mapsIntent);
 
+        LinearLayout tourDetailLayout = (LinearLayout) findViewById(R.id.tour_detail_layout);
+        LinearLayout hideWhenStart = (LinearLayout) findViewById(R.id.hide_when_start);
+        hideWhenStart.setVisibility(LinearLayout.GONE);
+        tourDetailLayout.addView((getLayoutInflater()).inflate(R.layout.activity_transit_mobile, null));
+
+
+//        RelativeLayout transitView = (RelativeLayout) findViewById(R.id.transit_mobile);
+//        transitView.setVisibility(RelativeLayout.VISIBLE);
+//        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.tour_detail_layout);
+//        linearLayout.setVisibility(LinearLayout.GONE);
+
         Intent navIntent = new Intent(this, NavigationListener.class);
         startService(navIntent);
 
-        // Shawn will be changing this to MobileConnectActivity
-        Intent transitIntent = new Intent(this, MobileTransitActivity.class);
-        startActivity(transitIntent);
+        Log.d("Log", ">>>Initiated listener for wear's start button<<<");
     }
 
     public void showStops(View view) {

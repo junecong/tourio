@@ -31,13 +31,17 @@ public class NavigationListener extends WearableListenerService {
             Intent locationIntent = new Intent(this, LocationService.class);
             startService(locationIntent);
 
-            Uri gmmIntentUri = Uri.parse("google.navigation:q=Exploratorium,+San+Francisco+California");
-                // Currently has "bs" destination
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(mapIntent);
+            startGPS();
         }
+    }
+
+    private void startGPS() {
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=Exploratorium,+San+Francisco+California");
+        // Currently has "bs" destination
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mapIntent);
     }
 
 }

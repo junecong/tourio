@@ -27,7 +27,7 @@ public class TourListAdapter extends BaseAdapter {
     private List<TourListItem> tours;
     private static LayoutInflater inflater = null;
 
-    final String BASE_STATIC_MAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap?size=400x200";
+    final String BASE_STATIC_MAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap?size=400x200&key=AIzaSyBSJ6D6VRB681W9itHToWoEu5k7wq16N7M";
 
     public TourListAdapter(Context context,List<TourListItem> tours) {
         this.context = context;

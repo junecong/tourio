@@ -35,18 +35,7 @@ public class StartActivity extends Activity {
         startService(navIntent);
 
         Intent transitIntent = new Intent(this, TransitActivity.class);
+        transitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(transitIntent);
-
-        Log.d("Log", ">>>TransitActivity started<<<");
-
-        // Should look into WaitHandles when have time
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        finish();
-        return;
     }
 }
