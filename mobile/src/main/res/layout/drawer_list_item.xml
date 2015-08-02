@@ -3,4 +3,5 @@
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:id="@+id/drawer_list_item_textview"
-    android:gravity="center_vertical"/>
+    android:gravity="center_vertical"
+    android:paddingLeft="15sp"/>

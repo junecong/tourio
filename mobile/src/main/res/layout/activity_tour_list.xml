@@ -42,5 +42,5 @@
         android:layout_height="match_parent"
         android:id="@+id/tour_list"
         android:divider="#000000"
-        android:dividerHeight="5dp"/>
+        android:dividerHeight="1dp"/>
 </LinearLayout>

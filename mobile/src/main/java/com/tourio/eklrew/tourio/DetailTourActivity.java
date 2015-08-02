@@ -33,7 +33,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     private boolean mapExpanded = false;
     private int mapFragmentHeight;
     private Tour tour;
-    private FrameLayout detailsFrame;
+    private FrameLayout detailsFrame, ratingFrame;
     private StopListAdapter stopAdapter;
     private CommentListAdapter commentAdapter;
     private boolean onStops = true; //true if stops being shown, false if comments being shown
@@ -46,6 +46,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
 
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
         detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
+        ratingFrame = (FrameLayout) findViewById(R.id.rating_frame);
         tourDescriptionLayout = (LinearLayout) findViewById(R.id.tour_description_layout);
 
         tour = TourHelper.hardCodedTour();
@@ -55,7 +56,8 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         commentsButton = (Button) findViewById(R.id.comments_button);
 
         showStops(null);
-        setRating();
+
+        TourHelper.setRatingImage(getLayoutInflater(),ratingFrame,(int) (Math.round(tour.getRating())));
     }
 
     private Tour getTourFromDatabase() {
@@ -137,11 +139,6 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         }
     }
 
-    public void setRating() {
-        FrameLayout ratingFrame = (FrameLayout) findViewById(R.id.rating_frame);
-        ratingFrame.addView((getLayoutInflater()).inflate(R.layout.rating, null));
-    }
-
     public void startGPS(View view) {
         LatLng firstStopLocation = tour.getStops().get(0).getLocation();
         double latitude = firstStopLocation.latitude;
@@ -197,8 +194,10 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_comment, null));
         TextView commenterNameView = (TextView) findViewById(R.id.commenter_name);
         TextView commentTextView = (TextView) findViewById(R.id.comment_text);
+        FrameLayout detailCommentRatingFrame = (FrameLayout) findViewById(R.id.detail_comment_rating_frame);
         commenterNameView.setText(comment.getCommenter().getName());
         commentTextView.setText(comment.getText());
+        TourHelper.setRatingImage(getLayoutInflater(), detailCommentRatingFrame, (int) (Math.round(comment.getRating())));
     }
 
     public void showComments(View view) {
