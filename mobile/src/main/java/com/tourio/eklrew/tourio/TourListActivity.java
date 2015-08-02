@@ -1,5 +1,6 @@
 package com.tourio.eklrew.tourio;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -78,6 +79,8 @@ public class TourListActivity extends NavigationBarActivity {
         });
 
         initButtons();
+        GetLocationTask getLocationTask = new GetLocationTask();
+        getLocationTask.execute();
     }
 
     private void initButtons() {
@@ -89,8 +92,6 @@ public class TourListActivity extends NavigationBarActivity {
         nearMeButton.setBackgroundColor(Color.parseColor("#ffffffff"));
         ratingButton.setBackgroundColor(Color.parseColor("#ffff9800"));
         durationButton.setBackgroundColor(Color.parseColor("#ffff9800"));
-
-        sortNearMe(null);
     }
 
     private Location getCurrentLocation() {
@@ -114,7 +115,7 @@ public class TourListActivity extends NavigationBarActivity {
         TourHelper.swapColors(currentSortButton,nearMeButton);
         currentSortButton = nearMeButton;
         currentSortType = SORT_NEAR_ME;
-        Collections.sort(tours,new TourListItem.DistanceComparator(getCurrentLocation()));
+        Collections.sort(tours,new TourListItem.DistanceComparator(mLocation));
         refreshList();
         Log.v("current button","nearMe");
     }
@@ -190,12 +191,41 @@ public class TourListActivity extends NavigationBarActivity {
 
 
     public class GetLocationTask extends AsyncTask<Void,Void,Location> {
-        protected Location doInBackground(Void... params) {
-            return new Location("");
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = ProgressDialog.show( TourListActivity.this, " " , "Waiting for location...", true);
         }
 
+        @Override
+        protected Location doInBackground(Void... params) {
+            Location location = null;
+            int timePassed = 0;
+            while (location==null && timePassed<20000) {
+                LocationManager locationManager = (LocationManager)
+                        getSystemService(Context.LOCATION_SERVICE);
+                Criteria criteria = new Criteria();
+                location = locationManager.getLastKnownLocation(locationManager
+                        .getBestProvider(criteria, false));
+                timePassed += 1000;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Log.e("thread error","thread InterruptedException");
+                    e.printStackTrace();
+                }
+
+                Log.v("location_debug",(location==null)? "location null" : location.getLatitude()+","+location.getLongitude());
+            }
+            return location;
+        }
+
+        @Override
         protected void onPostExecute(Location location) {
+            dialog.dismiss();
             mLocation = location;
+            sortNearMe(null);
         }
     }
 }
