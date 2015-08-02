@@ -30,13 +30,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tour_rating"
-            android:gravity="left"
+            android:id="@+id/rating_frame"
+            android:layout_gravity="left"
             android:paddingRight="20dp"
-            android:textSize="12sp"
             android:divider="#ff444444"
             android:dividerHeight="2dp"/>
 

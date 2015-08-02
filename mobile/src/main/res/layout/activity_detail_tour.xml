@@ -65,44 +65,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="right">
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:id="@+id/star1"
-                    android:src="@mipmap/ic_star" />
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:id="@+id/star2"
-                    android:src="@mipmap/ic_star" />
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:id="@+id/star3"
-                    android:src="@mipmap/ic_star" />
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:id="@+id/star4"
-                    android:src="@mipmap/ic_star" />
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:id="@+id/star5"
-                    android:src="@mipmap/ic_star" />
-
-                </LinearLayout>
+                    android:id="@+id/rating_frame"/>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -167,13 +133,10 @@
 
     </LinearLayout>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="180dp"
-        android:id="@+id/listView"
-        android:layout_gravity="center_vertical"
-        android:stackFromBottom="false" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/details_frame"/>
 
 
 </LinearLayout>
-

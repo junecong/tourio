@@ -23,6 +23,10 @@
             android:id="@+id/stop_description"
             android:text="stop description"
             android:textSize="15sp"/>
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:onClick="showStops"/>
     </LinearLayout>
 </LinearLayout>

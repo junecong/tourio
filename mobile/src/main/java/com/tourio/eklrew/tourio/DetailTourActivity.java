@@ -1,32 +1,20 @@
 package com.tourio.eklrew.tourio;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -45,15 +33,26 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     private boolean mapExpanded = false;
     private int mapFragmentHeight;
     private Tour tour;
+    private FrameLayout detailsFrame;
+    private StopListAdapter stopAdapter;
+    private CommentListAdapter commentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         int tourId = getIntent().getExtras().getInt("tour_id");
 
-        super.onCreate(savedInstanceState);
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
+        detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
 
         tour = TourHelper.hardCodedTour();
+        setMapFragment();
+
+        showStops(null);
+        setRating();
+    }
+
+    public void setMapFragment() {
         ArrayList<Stop> stops = tour.getStops();
         int numStops = stops.size();
 
@@ -89,8 +88,6 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             }
         });
         map.setOnMapClickListener(this);
-
-        showStops(null);
     }
 
     @Override
@@ -127,6 +124,11 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         }
     }
 
+    public void setRating() {
+        FrameLayout ratingFrame = (FrameLayout) findViewById(R.id.rating_frame);
+        ratingFrame.addView((getLayoutInflater()).inflate(R.layout.rating, null));
+    }
+
     public void startGPS(View view) {
         LatLng firstStopLocation = tour.getStops().get(0).getLocation();
         double latitude = firstStopLocation.latitude;
@@ -141,15 +143,46 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     public void showStops(View view) {
-        ListView stopListView = (ListView) findViewById(R.id.listView);
-        stopListView.setAdapter(new StopListAdapter(this, tour.getStops()));
+        detailsFrame.removeAllViews();
+        detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_activity_list, null));
+        ListView stopListView = (ListView) findViewById(R.id.details_list);
+        stopAdapter = new StopListAdapter(this, tour.getStops());
+        stopListView.setAdapter(stopAdapter);
         Button stopsButton = (Button) findViewById(R.id.stops_button);
         Button commentsButton = (Button) findViewById(R.id.comments_button);
         TourHelper.swapColors(stopsButton, commentsButton);
+
+        stopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Stop stop = (Stop) stopAdapter.getItem(position);
+                showDetailStop(stop);
+            }
+        });
+    }
+
+    public void showDetailStop(Stop stop) {
+        detailsFrame.removeAllViews();
+        detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_stop, null));
+        TextView stopNameView = (TextView) findViewById(R.id.stop_name);
+        TextView stopDescriptionView = (TextView) findViewById(R.id.stop_description);
+        stopNameView.setText(stop.getName());
+        stopDescriptionView.setText(stop.getDescription());
+    }
+
+    public void showDetailComment(Comment comment) {
+        detailsFrame.removeAllViews();
+        detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_stop, null));
+        TextView commenterNameView = (TextView) findViewById(R.id.commenter_name);
+        TextView commentTextView = (TextView) findViewById(R.id.comment_text);
+        commenterNameView.setText(comment.getCommenter().getName());
+        commentTextView.setText(comment.getText());
     }
 
     public void showComments(View view) {
-        ListView commentListView = (ListView) findViewById(R.id.listView);
+        detailsFrame.removeAllViews();
+        detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_activity_list, null));
+        ListView commentListView = (ListView) findViewById(R.id.details_list);
         commentListView.setAdapter(new CommentListAdapter(this, tour.getComments()));
         Button stopsButton = (Button) findViewById(R.id.stops_button);
         Button commentsButton = (Button) findViewById(R.id.comments_button);

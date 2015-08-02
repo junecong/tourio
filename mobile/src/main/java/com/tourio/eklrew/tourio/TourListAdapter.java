@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,7 +62,6 @@ public class TourListAdapter extends BaseAdapter {
 
         ImageView mapView = (ImageView) tourView.findViewById(R.id.map);
         TextView nameView = (TextView) tourView.findViewById(R.id.tour_name);
-        TextView ratingView = (TextView) tourView.findViewById(R.id.tour_rating);
         TextView durationView = (TextView) tourView.findViewById(R.id.tour_duration);
 
         //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
@@ -75,8 +75,10 @@ public class TourListAdapter extends BaseAdapter {
         new DownloadImageTask(mapView).execute(mapUrl);
 
         nameView.setText(tour.getName());
-        ratingView.setText((int) (Math.round(tour.getRating()))+" stars");
         durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
+
+        FrameLayout ratingFrame = (FrameLayout) tourView.findViewById(R.id.rating_frame);
+        TourHelper.setRatingImage(context,ratingFrame,(int) (Math.round(tour.getRating())));
 
         return tourView;
     }

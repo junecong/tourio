@@ -4,7 +4,12 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -77,5 +82,31 @@ public class TourHelper {
         int color2 = ((ColorDrawable) b2.getBackground()).getColor();
         b1.setBackgroundColor(color2);
         b2.setBackgroundColor(color1);
+    }
+
+    public static void setRatingImage(Context context,FrameLayout ratingFrame,int rating) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ratingFrame.addView(inflater.inflate(R.layout.rating, null));
+        if (rating<5) {
+            ImageView star5 = (ImageView) ratingFrame.findViewById(R.id.star5);
+            star5.setVisibility(ImageView.INVISIBLE);
+        }
+        if (rating<4) {
+            ImageView star4 = (ImageView) ratingFrame.findViewById(R.id.star4);
+            star4.setVisibility(ImageView.INVISIBLE);
+        }
+        if (rating<3) {
+            ImageView star3 = (ImageView) ratingFrame.findViewById(R.id.star3);
+            star3.setVisibility(ImageView.INVISIBLE);
+        }
+        if (rating<2) {
+            ImageView star2 = (ImageView) ratingFrame.findViewById(R.id.star2);
+            star2.setVisibility(ImageView.INVISIBLE);
+        }
+        if (rating<1) {
+            ImageView star1 = (ImageView) ratingFrame.findViewById(R.id.star1);
+            star1.setVisibility(ImageView.INVISIBLE);
+        }
+        Log.v("rating",""+rating);
     }
 }

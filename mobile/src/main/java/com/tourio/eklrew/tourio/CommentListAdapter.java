@@ -1,11 +1,11 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,13 +52,14 @@ public class CommentListAdapter extends BaseAdapter {
         ImageView commenterImageView = (ImageView)commentView.findViewById(R.id.commenter_image);
         TextView commenterNameView = (TextView)commentView.findViewById(R.id.commenter_name);
         TextView commentTextView = (TextView)commentView.findViewById(R.id.comment_text);
-        ImageView commentRatingView = (ImageView) commentView.findViewById(R.id.comment_rating);
+        FrameLayout ratingFrame = (FrameLayout) commentView.findViewById(R.id.rating_frame);
 
         commenterNameView.setText(commenter.getName());
-        commentTextView.setText(comment.getComment());
+        commentTextView.setText(comment.getText());
 
-        //TODO: set commenter and rating images
+        TourHelper.setRatingImage(context,ratingFrame,comment.getRating());
 
+        //TODO: set commenter image
         return commentView;
     }
 }

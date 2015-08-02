@@ -1,6 +1,5 @@
 package com.tourio.eklrew.tourio;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -9,13 +8,13 @@ import java.util.GregorianCalendar;
 public class Comment {
 
     private User commenter;
-    private String comment;
+    private String text;
     private int rating;
     private GregorianCalendar time;
 
-    public Comment(User commenter,String comment,int rating, GregorianCalendar time) {
+    public Comment(User commenter,String text,int rating, GregorianCalendar time) {
         this.commenter = commenter;
-        this.comment=comment;
+        this.text = text;
         this.rating=rating;
         this.time=time;
     }
@@ -24,8 +23,8 @@ public class Comment {
         return commenter;
     }
 
-    public String getComment() {
-        return comment;
+    public String getText() {
+        return text;
     }
 
     public int getRating() {
