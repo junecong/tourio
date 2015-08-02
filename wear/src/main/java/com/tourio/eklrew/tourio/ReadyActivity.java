@@ -3,7 +3,6 @@ package com.tourio.eklrew.tourio;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.wearable.view.WatchViewStub;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,7 +16,7 @@ public class ReadyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ready_wear);
+        setContentView(R.layout.activity_ready_wear);
     }
 
     /* Called when user presses "Yes!" button when asked if ready for next stop. */

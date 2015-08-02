@@ -33,7 +33,7 @@ public class WearMapActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wear_map);
+        setContentView(R.layout.activity_map_wear);
         Log.d("Log", ">>>WearMapActivity created<<<");
 
         // Retrieve the containers for the root of the layout and the map. Margins will need to be

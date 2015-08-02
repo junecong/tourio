@@ -1,7 +1,6 @@
 package com.tourio.eklrew.tourio;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,7 +12,7 @@ public class NextStopActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.next_stop_wear);
+        setContentView(R.layout.activity_next_wear);
     }
 
     /* Called when user presses "Skip" button when user is presented with next stop. */

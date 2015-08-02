@@ -28,6 +28,9 @@ public class NavigationListener extends WearableListenerService {
         if (messageEvent.getPath().equals(START_TOUR)) {
             // TODO: Get address to tour's first stop from database
 
+            Intent locationIntent = new Intent(this, LocationService.class);
+            startService(locationIntent);
+
             Uri gmmIntentUri = Uri.parse("google.navigation:q=Exploratorium,+San+Francisco+California");
                 // Currently has "bs" destination
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);

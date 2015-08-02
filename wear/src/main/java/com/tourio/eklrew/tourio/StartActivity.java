@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -37,5 +38,15 @@ public class StartActivity extends Activity {
         startActivity(transitIntent);
 
         Log.d("Log", ">>>TransitActivity started<<<");
+
+        // Should look into WaitHandles when have time
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        finish();
+        return;
     }
 }

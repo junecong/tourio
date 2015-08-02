@@ -128,16 +128,20 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     public void startGPS(View view) {
-        LatLng firstStopLocation = tour.getStops().get(0).getLocation();
-        double latitude = firstStopLocation.latitude;
-        double longitude = firstStopLocation.longitude;
-        String uri = "google.navigation:q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
-        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(mapsIntent);
+//        LatLng firstStopLocation = tour.getStops().get(0).getLocation();
+//        double latitude = firstStopLocation.latitude;
+//        double longitude = firstStopLocation.longitude;
+//        String uri = "google.navigation:q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
+//        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+//        mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(mapsIntent);
 
-        Intent startIntent = new Intent(this, NavigationListener.class);
-        startService(startIntent);
+        Intent navIntent = new Intent(this, NavigationListener.class);
+        startService(navIntent);
+
+        // Shawn will be changing this to MobileConnectActivity
+        Intent transitIntent = new Intent(this, MobileTransitActivity.class);
+        startActivity(transitIntent);
     }
 
     public void showStops(View view) {

@@ -12,7 +12,7 @@ public class TransitActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.transit_wear);
+        setContentView(R.layout.activity_transit_wear);
     }
 
     public void viewMap(View view) {

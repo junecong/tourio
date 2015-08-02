@@ -47,4 +47,7 @@
     </string-array>
     <string name="title_activity_action_bar">ActionBarActivity</string>
 
+    <string name="tour_in_session">Your tour is in session! You are free to put your phone
+        away and enjoy your adventure :)</string>
+
 </resources>
