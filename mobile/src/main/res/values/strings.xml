@@ -35,6 +35,7 @@
     <string name="title_activity_create_tour">CreateTourActivity</string>
     <string name="title_activity_cashout">CashoutActivity</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="comment_text">This is a comment and it is really long adnakdfasldkjfa sdfkjsd lkf jasdlkfjsd</string>
 
     <string-array name="cities_list">
         <item>Berkeley</item>

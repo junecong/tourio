@@ -52,7 +52,9 @@ public class StopListAdapter extends BaseAdapter {
         TextView stopNumberView = (TextView)stopView.findViewById(R.id.stop_number);
         TextView stopNameView = (TextView)stopView.findViewById(R.id.stop_name);
         TextView stopDescriptionView = (TextView)stopView.findViewById(R.id.stop_description);
+        ImageView stopImageView = (ImageView) stopView.findViewById(R.id.stop_image);
 
+        (new DownloadImageTask(stopImageView)).execute(stop.getPicUrl());
         stopNumberView.setText(""+(position+1));
         stopNameView.setText(stop.getName());
         stopDescriptionView.setText(stop.getDescription());

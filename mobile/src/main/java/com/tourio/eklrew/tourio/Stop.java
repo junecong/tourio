@@ -1,13 +1,6 @@
 package com.tourio.eklrew.tourio;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Prud on 7/25/2015.
@@ -17,7 +10,7 @@ public class Stop /*implements Parcelable*/ {
     private String name, description, picUrl;
     private LatLng location;
     private int categoryIndex;
-    final String[] categories = TourHelper.StopCategoriesHelper.STOP_CATEGORIES;
+    final String[] categories = TourioHelper.StopCategoriesHelper.STOP_CATEGORIES;
 
     public Stop(String name,String description,String picUrl, double latitude,double longitude) {
         this.name = name;
@@ -43,7 +36,7 @@ public class Stop /*implements Parcelable*/ {
 
     public Stop(int id,String name,String description,String picUrl,double latitude,double longitude,String category) throws IllegalArgumentException {
         this(id,name,description,picUrl,latitude,longitude);
-        Integer index = TourHelper.StopCategoriesHelper.STOP_CATEGORY_NAME_TO_INDEX_MAP.get(category);
+        Integer index = TourioHelper.StopCategoriesHelper.STOP_CATEGORY_NAME_TO_INDEX_MAP.get(category);
         if (index == null) {
             throw new IllegalArgumentException(category+" is not a valid category for a stop.");
         }
@@ -71,7 +64,9 @@ public class Stop /*implements Parcelable*/ {
         return location;
     }
     public String getCategory() {return categories[categoryIndex];}
-
+    public String getPicUrl() {
+        return picUrl;
+    }
     /*
     public static final Parcelable.Creator<Stop> CREATOR = new Parcelable.Creator<Stop>() {
         public Stop createFromParcel(Parcel in) {

@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="sortNearMe"
-            android:background="@android:color/white"/>
+            android:background="@color/lightGrey"/>
         <Button
             android:id="@+id/rating"
             android:text="RATING"
@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="sortRating"
-            android:background="#ffffbb33"/>
+            android:background="@color/lightGrey"/>
         <Button
             android:id="@+id/duration"
             android:text="DURATION"
@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="sortDuration"
-            android:background="#ffffbb33"/>
+            android:background="@color/lightGrey"/>
     </LinearLayout>
 
     <ListView

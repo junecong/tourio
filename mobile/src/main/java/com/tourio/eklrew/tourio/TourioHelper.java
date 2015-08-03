@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 //holds constants and static helper methods
-public class TourHelper {
+public class TourioHelper {
     //holds google maps static api stuff
     public static class GoogleMapsStaticApiHelper {
         public static final String GOOGLE_MAPS_API_KEY = "AIzaSyBYIzHjtA9e_PnCUlVXPTD0WQ6nvJKnPbE";
@@ -69,7 +69,7 @@ public class TourHelper {
         public static final String JSON_CREATOR_NAME = "FirstName";
         public static final String JSON_STOP_NAME = "Name";
         public static final String JSON_STOP_DESCRIPTION = "Description";
-        public static final String JSON_STOP_PIC_URL = "pic1";
+        public static final String JSON_STOP_PIC_URL = "Pic1";
         public static final String JSON_STOP_LATITUDE = "Lat";
         public static final String JSON_STOP_LONGITUDE = "Long";
         public static final String JSON_STOP_CATEGORY_INDEX = "Category";

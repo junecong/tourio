@@ -3,28 +3,19 @@ package com.tourio.eklrew.tourio;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -43,9 +34,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Prud on 7/24/2015.
@@ -133,7 +122,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public void sortNearMeHelper() {
-        TourHelper.LayoutHelper.swapColors(currentSortButton,nearMeButton);
+        TourioHelper.LayoutHelper.swapColors(currentSortButton,nearMeButton);
         currentSortButton = nearMeButton;
         currentSortType = SORT_NEAR_ME;
         Collections.sort(tours,new TourListItem.DistanceComparator(mLocation));
@@ -142,7 +131,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public void sortRating(View view) {
-        TourHelper.LayoutHelper.swapColors(currentSortButton,ratingButton);
+        TourioHelper.LayoutHelper.swapColors(currentSortButton,ratingButton);
         currentSortButton = ratingButton;
         currentSortType = SORT_RATING;
         Collections.sort(tours,new TourListItem.RatingComparator());
@@ -151,7 +140,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public void sortDuration(View view) {
-        TourHelper.LayoutHelper.swapColors(currentSortButton,durationButton);
+        TourioHelper.LayoutHelper.swapColors(currentSortButton,durationButton);
         currentSortButton = durationButton;
         currentSortType = SORT_DURATION;
         Collections.sort(tours,new TourListItem.DurationComparator());
@@ -167,14 +156,14 @@ public class TourListActivity extends NavigationBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tour_list, menu);
-        for (String city : TourHelper.CityHelper.CITIES) {
+        for (String city : TourioHelper.CityHelper.CITIES) {
             Log.v("city",city);
         }
 
         MenuItem spinnerItem = menu.findItem(R.id.cities_spinner);
         final Spinner citySpinner = (Spinner) MenuItemCompat.getActionView(spinnerItem);
         final SpinnerAdapter cityAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, TourHelper.CityHelper.CITIES);
+                android.R.layout.simple_spinner_item, TourioHelper.CityHelper.CITIES);
         citySpinner.setAdapter(cityAdapter);
         citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,7 +190,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public int getCurrentCityId() {
-        return TourHelper.CityHelper.CITY_INDEX_TO_ID_MAP.get(currentCityIndex);
+        return TourioHelper.CityHelper.CITY_INDEX_TO_ID_MAP.get(currentCityIndex);
     }
 
     @Override
@@ -277,10 +266,10 @@ public class TourListActivity extends NavigationBarActivity {
             for (int i=0;i<toursJsonArray.length();i+=2) {
 
                 JSONObject tourJsonObject = toursJsonArray.getJSONObject(i);
-                int tourId = tourJsonObject.getInt(TourHelper.TourListJsonHelper.JSON_TOUR_ID);
-                String tourName = tourJsonObject.getString(TourHelper.TourListJsonHelper.JSON_TOUR_NAME);
-                int tourRating = tourJsonObject.getInt(TourHelper.TourListJsonHelper.JSON_TOUR_RATING);
-                int tourDuration = tourJsonObject.getInt(TourHelper.TourListJsonHelper.JSON_TOUR_DURATION);
+                int tourId = tourJsonObject.getInt(TourioHelper.TourListJsonHelper.JSON_TOUR_ID);
+                String tourName = tourJsonObject.getString(TourioHelper.TourListJsonHelper.JSON_TOUR_NAME);
+                int tourRating = tourJsonObject.getInt(TourioHelper.TourListJsonHelper.JSON_TOUR_RATING);
+                int tourDuration = tourJsonObject.getInt(TourioHelper.TourListJsonHelper.JSON_TOUR_DURATION);
 
                 JSONArray stopsJsonArray = toursJsonArray.getJSONArray(i + 1);
                 int numStops = stopsJsonArray.length();
@@ -288,8 +277,8 @@ public class TourListActivity extends NavigationBarActivity {
                 for (int j=0;j<numStops;j++) {
                     JSONObject stopJsonObject = stopsJsonArray.getJSONObject(j);
                     stopListFromJson[j] = new LatLng(
-                            stopJsonObject.getDouble(TourHelper.TourListJsonHelper.JSON_STOP_LATITUDE),
-                            stopJsonObject.getDouble(TourHelper.TourListJsonHelper.JSON_STOP_LONGITUDE)
+                            stopJsonObject.getDouble(TourioHelper.TourListJsonHelper.JSON_STOP_LATITUDE),
+                            stopJsonObject.getDouble(TourioHelper.TourListJsonHelper.JSON_STOP_LONGITUDE)
                     );
                 }
 
@@ -301,7 +290,7 @@ public class TourListActivity extends NavigationBarActivity {
 
         @Override
         protected ArrayList<TourListItem> doInBackground(Integer... city) {
-            String toursUrlString = TourHelper.DataBaseUrlHelper.BASE_CITY_URL + city[0];
+            String toursUrlString = TourioHelper.DataBaseUrlHelper.BASE_CITY_URL + city[0];
             Log.v("URL",toursUrlString);
             URL toursUrl;
             HttpURLConnection urlConnection = null;

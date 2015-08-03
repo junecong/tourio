@@ -1,6 +1,7 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,28 +57,40 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     Button stopsButton,commentsButton;
     LinearLayout tourDescriptionLayout;
 
+    ImageView creatorImageView;
+    TextView tourTitleView,tourDescriptionView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
-
+        initViews();
         tourId = getIntent().getExtras().getInt("tour_id");
-        (new FetchTourTask()).execute();
-
-        initVars();
-        setMapFragment();
-        showStops(null);
-
-        TourHelper.LayoutHelper.setRatingImage(getLayoutInflater(), ratingFrame, (int) (Math.round(tour.getRating())));
+        (new FetchTourTask()).execute(); //gets tour from database and sets UI elements to it
     }
 
-    public void initVars() {
+    public void initViews() {
         detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
         ratingFrame = (FrameLayout) findViewById(R.id.rating_frame);
         tourDescriptionLayout = (LinearLayout) findViewById(R.id.tour_description_layout);
 
         stopsButton = (Button) findViewById(R.id.stops_button);
         commentsButton = (Button) findViewById(R.id.comments_button);
+
+        creatorImageView = (ImageView) findViewById(R.id.user);
+        tourTitleView = (TextView) findViewById(R.id.title);
+        tourDescriptionView = (TextView) findViewById(R.id.tour_description);
+    }
+
+    public void setViews() {
+        (new DownloadImageTask(creatorImageView)).execute(tour.getCreator().getPicUrl());
+        showStops(null);
+        TourioHelper.LayoutHelper.setRatingImage(getLayoutInflater(),
+                ratingFrame, (int) (Math.round(tour.getRating())));
+
+        tourTitleView.setText(tour.getName());
+        tourDescriptionView.setText(tour.getDescription());
     }
 
     public void setMapFragment() {
@@ -169,7 +184,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     private void swapButtons() {
-        TourHelper.LayoutHelper.swapColors(stopsButton, commentsButton);
+        TourioHelper.LayoutHelper.swapColors(stopsButton, commentsButton);
     }
 
     public void showStops(View view) {
@@ -201,6 +216,8 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_stop, null));
         TextView stopNameView = (TextView) findViewById(R.id.stop_name);
         TextView stopDescriptionView = (TextView) findViewById(R.id.stop_description);
+        ImageView stopImageView = (ImageView) findViewById(R.id.stop_image);
+        (new DownloadImageTask(stopImageView)).execute(stop.getPicUrl());
         stopNameView.setText(stop.getName());
         stopDescriptionView.setText(stop.getDescription());
     }
@@ -210,10 +227,12 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_comment, null));
         TextView commenterNameView = (TextView) findViewById(R.id.commenter_name);
         TextView commentTextView = (TextView) findViewById(R.id.comment_text);
+        ImageView stopImageView = (ImageView) findViewById(R.id.commenter_image);
+        (new DownloadImageTask(stopImageView)).execute(comment.getCommenter().getPicUrl());
         FrameLayout detailCommentRatingFrame = (FrameLayout) findViewById(R.id.detail_comment_rating_frame);
         commenterNameView.setText(comment.getCommenter().getName());
         commentTextView.setText(comment.getText());
-        TourHelper.LayoutHelper.setRatingImage(getLayoutInflater(), detailCommentRatingFrame, (int) (Math.round(comment.getRating())));
+        TourioHelper.LayoutHelper.setRatingImage(getLayoutInflater(), detailCommentRatingFrame, (int) (Math.round(comment.getRating())));
     }
 
     public void showComments(View view) {
@@ -244,17 +263,17 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             JSONArray tourJsonArray = new JSONArray(json);
 
             JSONObject tourJsonObject = tourJsonArray.getJSONObject(0);
-            int tourRating = tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_RATING);
-            String tourName = tourJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_TOUR_NAME);
-            String tourDescription = tourJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_TOUR_DESCRIPTION);
-            String tourCity = TourHelper.CityHelper.CITY_ID_TO_NAME_MAP.get((
-                    tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_CITY_ID)));
-            int tourCreatorId = tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_CREATOR_ID);
-            int tourDuration = tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_DURATION);
+            int tourRating = tourJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_TOUR_RATING);
+            String tourName = tourJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_TOUR_NAME);
+            String tourDescription = tourJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_TOUR_DESCRIPTION);
+            String tourCity = TourioHelper.CityHelper.CITY_ID_TO_NAME_MAP.get((
+                    tourJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_TOUR_CITY_ID)));
+            int tourCreatorId = tourJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_TOUR_CREATOR_ID);
+            int tourDuration = tourJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_TOUR_DURATION);
 
             JSONObject creatorJsonObject = tourJsonArray.getJSONArray(1).getJSONObject(0);
-            String creatorName = creatorJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_CREATOR_NAME);
-            String creatorPicUrl = creatorJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_CREATOR_PIC_URL);
+            String creatorName = creatorJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_CREATOR_NAME);
+            String creatorPicUrl = creatorJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_CREATOR_PIC_URL);
             User creator = new User(tourCreatorId,creatorName,creatorPicUrl);
 
             JSONArray stopsJsonArray = tourJsonArray.getJSONArray(2);
@@ -262,12 +281,12 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             for (int j=0;j<stopsJsonArray.length();j++) {
                 JSONObject stopJsonObject = stopsJsonArray.getJSONObject(j);
                 stopListFromJson.add( new Stop(
-                        stopJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_STOP_NAME),
-                        stopJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_STOP_DESCRIPTION),
-                        stopJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_STOP_PIC_URL),
-                        stopJsonObject.getDouble(TourHelper.DetailTourJsonHelper.JSON_STOP_LATITUDE),
-                        stopJsonObject.getDouble(TourHelper.DetailTourJsonHelper.JSON_STOP_LONGITUDE),
-                        stopJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_STOP_CATEGORY_INDEX)
+                        stopJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_STOP_NAME),
+                        stopJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_STOP_DESCRIPTION),
+                        stopJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_STOP_PIC_URL),
+                        stopJsonObject.getDouble(TourioHelper.DetailTourJsonHelper.JSON_STOP_LATITUDE),
+                        stopJsonObject.getDouble(TourioHelper.DetailTourJsonHelper.JSON_STOP_LONGITUDE),
+                        stopJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_STOP_CATEGORY_INDEX)
                 ));
             }
 
@@ -280,7 +299,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
 
         @Override
         protected Tour doInBackground(Void... params) {
-            String toursUrlString = TourHelper.DataBaseUrlHelper.BASE_TOUR_URL + tourId;
+            String toursUrlString = TourioHelper.DataBaseUrlHelper.BASE_TOUR_URL + tourId;
             Log.v("URL", toursUrlString);
             URL tourUrl;
             HttpURLConnection urlConnection = null;
@@ -337,6 +356,8 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         @Override
         protected void onPostExecute(Tour result) {
             tour = result;
+            setMapFragment();
+            setViews();
         }
     }
 

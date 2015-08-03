@@ -1,20 +1,15 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -71,7 +66,7 @@ public class TourListAdapter extends BaseAdapter {
         }
 
         //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
-        String mapUrl = TourHelper.GoogleMapsStaticApiHelper.BASE_STATIC_MAPS_API_URL;
+        String mapUrl = TourioHelper.GoogleMapsStaticApiHelper.BASE_STATIC_MAPS_API_URL;
         for (int i=0;i<stops.length;i++) {
             LatLng stop = stops[i];
             mapUrl += "&markers=size:mid%7Ccolor:blue%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
@@ -83,7 +78,7 @@ public class TourListAdapter extends BaseAdapter {
         holder.nameView.setText(tour.getName());
         holder.durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
 
-        TourHelper.LayoutHelper.setRatingImage(inflater,holder.ratingFrame,(int) (Math.round(tour.getRating())));
+        TourioHelper.LayoutHelper.setRatingImage(inflater,holder.ratingFrame,(int) (Math.round(tour.getRating())));
 
         return tourView;
     }

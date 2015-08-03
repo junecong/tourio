@@ -4,4 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/details_list"
     android:layout_gravity="center_vertical"
-    android:stackFromBottom="false"/>
+    android:stackFromBottom="false"
+    android:layout_margin="10dp"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="10.0sp"/>
