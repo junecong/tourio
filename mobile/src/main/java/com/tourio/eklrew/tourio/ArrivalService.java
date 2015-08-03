@@ -19,26 +19,24 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Created by Shawn on 7/31/2015.
+ * Created by Shawn on 8/2/2015.
  */
-public class StartNavigationService extends Service {
+public class ArrivalService extends Service {
 
     private GoogleApiClient mGoogleApiClient;
     private String transcriptionNodeId = null;
 
-    /* Message from wear to mobile to start tour. */
-    private static final String START_TOUR = "start_tour";
+    private static final String READY_WEAR = "ready_wear";
 
-    /* Establishes GoogleApiClient connection. */
     @Override
     public int onStartCommand(Intent emptyIntent, int f, int id) {
-        Log.d("Log", ">>>Initiated service for sending msg to mobile to start gps<<<");
+        Log.d("Log", ">>>ArrivalService started<<<");
 
         this.mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle bundle) {
-                        Log.d("Log", ">>>StartNavigationService GoogleApiClient connected<<<");
+                        Log.d("Log", ">>>ArrivalService GoogleApiClient connected<<<");
                         initCapability();
                     }
                     @Override
@@ -65,24 +63,24 @@ public class StartNavigationService extends Service {
             @Override
             public void run() {
                 CapabilityApi.GetCapabilityResult capResult = Wearable.CapabilityApi.getCapability(
-                        mGoogleApiClient, START_TOUR, CapabilityApi.FILTER_REACHABLE).await();
+                        mGoogleApiClient, READY_WEAR, CapabilityApi.FILTER_REACHABLE).await();
 
                 Collection<String> nodes = getNodes();
-                Log.d("# nodes detected:", String.valueOf(nodes.size()));
+                Log.d("AS # nodes detected:", String.valueOf(nodes.size()));
 
                 for (String node : nodes) {
                     transcriptionNodeId = node;
                 }
 
-                Log.d("node id detected", String.valueOf(transcriptionNodeId));
+                Log.d("AS node id", String.valueOf(transcriptionNodeId));
 
                 Wearable.MessageApi.sendMessage(mGoogleApiClient, transcriptionNodeId,
-                        START_TOUR, null).setResultCallback(
+                        READY_WEAR, null).setResultCallback(
                         new ResultCallback<MessageApi.SendMessageResult>() {
                             @Override
                             public void onResult(MessageApi.SendMessageResult sendMessageResult) {
                                 if (!sendMessageResult.getStatus().isSuccess()) {
-                                    Log.d("Error:", "__________Message Failed__________");
+                                    Log.d("Error:", ">>>Message Failed<<<");
                                 }
                             }
                         });

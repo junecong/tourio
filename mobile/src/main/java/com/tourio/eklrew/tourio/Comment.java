@@ -13,10 +13,14 @@ public class Comment {
     private GregorianCalendar time;
 
     public Comment(User commenter,String text,int rating, GregorianCalendar time) {
+        this(commenter,text,rating);
+        this.time=time;
+    }
+
+    public Comment(User commenter,String text,int rating) {
         this.commenter = commenter;
         this.text = text;
         this.rating=rating;
-        this.time=time;
     }
 
     public User getCommenter() {

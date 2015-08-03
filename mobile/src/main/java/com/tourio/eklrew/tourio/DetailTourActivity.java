@@ -171,16 +171,29 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     public void startGPS(View view) {
-        LatLng firstStopLocation = tour.getStops().get(0).getLocation();
-        double latitude = firstStopLocation.latitude;
-        double longitude = firstStopLocation.longitude;
-        String uri = "google.navigation:q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
-        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(mapsIntent);
+//        LatLng firstStopLocation = tour.getStops().get(0).getLocation();
+//        double latitude = firstStopLocation.latitude;
+//        double longitude = firstStopLocation.longitude;
+//        String uri = "google.navigation:q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
+//        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+//        mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(mapsIntent);
 
-        Intent startIntent = new Intent(this, NavigationListener.class);
-        startService(startIntent);
+        LinearLayout tourDetailLayout = (LinearLayout) findViewById(R.id.tour_detail_layout);
+        LinearLayout hideWhenStart = (LinearLayout) findViewById(R.id.hide_when_start);
+        hideWhenStart.setVisibility(LinearLayout.GONE);
+        tourDetailLayout.addView((getLayoutInflater()).inflate(R.layout.activity_transit_mobile, null));
+
+
+//        RelativeLayout transitView = (RelativeLayout) findViewById(R.id.transit_mobile);
+//        transitView.setVisibility(RelativeLayout.VISIBLE);
+//        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.tour_detail_layout);
+//        linearLayout.setVisibility(LinearLayout.GONE);
+
+        Intent navIntent = new Intent(this, NavigationListener.class);
+        startService(navIntent);
+
+        Log.d("Log", ">>>Initiated listener for wear's start button<<<");
     }
 
     private void swapButtons() {
@@ -291,7 +304,23 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             }
 
             ArrayList<Comment> commentListFromJson = new ArrayList<Comment>();
-            //TODO: get comments list
+            for (int i=3;i<tourJsonArray.length();i+=2) {
+                JSONObject commenterJsonObject = tourJsonArray.getJSONArray(i).getJSONObject(0);
+                JSONObject commentJsonObject = tourJsonArray.getJSONObject(i + 1);
+
+                String commenterName = commenterJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_COMMENTER_NAME);
+                String commenterPicUrl = commenterJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_COMMENTER_PIC_URL);
+
+                String commentText = commentJsonObject.getString(TourioHelper.DetailTourJsonHelper.JSON_COMMENT_TEXT);
+                int commentRating = commentJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_COMMENT_RATING);
+                int commenterId = commentJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_COMMENTER_ID);
+                //int commentTime = commentJsonObject.getInt(TourioHelper.DetailTourJsonHelper.JSON_COMMENT_TIME);
+
+                //commentTime = (int) (0x00000000ffffffffL&commentTime);
+                //Log.v("comment time",""+commentTime);
+                commentListFromJson.add(new Comment(new User(commenterId, commenterName, commenterPicUrl),
+                        commentText, commentRating)); //TourioHelper.DetailTourJsonHelper.intToCalendar(commentTime)
+            }
 
             return new Tour(tourId, tourName, tourDescription, tourCity, tourDuration,tourRating,
             creator, stopListFromJson,commentListFromJson);

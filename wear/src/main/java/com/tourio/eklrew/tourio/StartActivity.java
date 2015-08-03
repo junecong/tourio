@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,8 +35,7 @@ public class StartActivity extends Activity {
         startService(navIntent);
 
         Intent transitIntent = new Intent(this, TransitActivity.class);
+        transitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(transitIntent);
-
-        Log.d("Log", ">>>TransitActivity started<<<");
     }
 }

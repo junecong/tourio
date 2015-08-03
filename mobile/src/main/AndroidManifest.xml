@@ -67,6 +67,16 @@
             android:name=".AboutActivity"
             android:label="@string/title_activity_about" >
         </activity>
+        <service
+            android:name=".LocationService"
+            android:label="@string/title_activity_about" >
+        </service>
+
+        <service
+            android:name=".ArrivalService"
+            android:label="@string/title_activity_about">
+        </service>
+
         <service android:name=".NavigationListener" >
             <intent-filter>
                 <action android:name=

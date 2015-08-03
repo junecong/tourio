@@ -53,6 +53,7 @@ public class TourioHelper {
         public static final String JSON_TOUR_NAME = "TourName";
         public static final String JSON_TOUR_RATING = "Rating";
         public static final String JSON_TOUR_DURATION = "Duration";
+
         public static final String JSON_STOP_LATITUDE = "Lat";
         public static final String JSON_STOP_LONGITUDE = "Long";
     }
@@ -65,14 +66,36 @@ public class TourioHelper {
         public static final String JSON_TOUR_CITY_ID = "CityID";
         public static final String JSON_TOUR_DESCRIPTION = "TourDescription";
         public static final String JSON_TOUR_DURATION = "Duration";
+
         public static final String JSON_CREATOR_PIC_URL = "imageUrl";
         public static final String JSON_CREATOR_NAME = "FirstName";
+
         public static final String JSON_STOP_NAME = "Name";
         public static final String JSON_STOP_DESCRIPTION = "Description";
         public static final String JSON_STOP_PIC_URL = "Pic1";
         public static final String JSON_STOP_LATITUDE = "Lat";
         public static final String JSON_STOP_LONGITUDE = "Long";
         public static final String JSON_STOP_CATEGORY_INDEX = "Category";
+
+        public static final String JSON_COMMENT_TEXT = "Comment";
+        public static final String JSON_COMMENT_RATING = "Rating";
+        public static final String JSON_COMMENTER_ID = "CommenterID";
+        public static final String JSON_COMMENT_TIME = "Time";
+
+        public static final String JSON_COMMENTER_NAME = "FirstName";
+        public static final String JSON_COMMENTER_PIC_URL = "imageUrl";
+
+        //converts integer time (yyyymmddhhmm) to GregorianCalendar object
+        public static GregorianCalendar intToCalendar(int time) {
+            String timeStr = Integer.toString(time);
+            int year = Integer.parseInt(timeStr.substring(0, 4));
+            int month = Integer.parseInt(timeStr.substring(4, 6));
+            int day = Integer.parseInt(timeStr.substring(6, 8));
+            int hour = Integer.parseInt(timeStr.substring(8, 10));
+            int minute = Integer.parseInt(timeStr.substring(10, 12));
+
+            return new GregorianCalendar(year,month,day,hour,minute);
+        }
     }
 
     //hardcoded cities

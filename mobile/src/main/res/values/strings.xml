@@ -53,5 +53,6 @@
     <color name="Transparent80">#80000000</color>
     <color name="lightGrey">#eeeeee</color>
 
-
+    <string name="tour_in_session">Your tour is in session! You are free to put your phone
+        away and enjoy your adventure via your watch :)</string>
 </resources>
