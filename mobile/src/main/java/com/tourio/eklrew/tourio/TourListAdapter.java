@@ -71,7 +71,7 @@ public class TourListAdapter extends BaseAdapter {
         }
 
         //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
-        String mapUrl = TourHelper.BASE_STATIC_MAPS_API_URL;
+        String mapUrl = TourHelper.GoogleMapsStaticApiHelper.BASE_STATIC_MAPS_API_URL;
         for (int i=0;i<stops.length;i++) {
             LatLng stop = stops[i];
             mapUrl += "&markers=size:mid%7Ccolor:blue%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
@@ -83,7 +83,7 @@ public class TourListAdapter extends BaseAdapter {
         holder.nameView.setText(tour.getName());
         holder.durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
 
-        TourHelper.setRatingImage(inflater,holder.ratingFrame,(int) (Math.round(tour.getRating())));
+        TourHelper.LayoutHelper.setRatingImage(inflater,holder.ratingFrame,(int) (Math.round(tour.getRating())));
 
         return tourView;
     }

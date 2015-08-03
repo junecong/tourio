@@ -82,4 +82,8 @@ public class Tour {
     public String getCreatorPicUrl() {
         return creator.getPicUrl();
     }
+
+    public void skipStop() {
+        currStopIndex++;
+    }
 }

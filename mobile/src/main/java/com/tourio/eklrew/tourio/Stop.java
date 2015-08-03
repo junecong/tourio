@@ -17,31 +17,39 @@ public class Stop /*implements Parcelable*/ {
     private String name, description, picUrl;
     private LatLng location;
     private int categoryIndex;
-    private final String[] categories = {"Scenic","Eating","Drinking","Activity"};
+    final String[] categories = TourHelper.StopCategoriesHelper.STOP_CATEGORIES;
 
-    public Stop(int id,String name,String description,String picUrl, double latitude,double longitude,int categoryIndex) {
-        this.id = id;
+    public Stop(String name,String description,String picUrl, double latitude,double longitude) {
         this.name = name;
         this.description = description;
         this.picUrl = picUrl;
         this.location = new LatLng(latitude,longitude);
+    }
+
+    public Stop(int id,String name,String description,String picUrl, double latitude,double longitude) {
+        this(name,description,picUrl,latitude,longitude);
+        this.id = id;
+    }
+
+    public Stop(int id,String name,String description,String picUrl, double latitude,double longitude,int categoryIndex) {
+        this(id,name,description,picUrl,latitude,longitude);
+        this.categoryIndex = categoryIndex;
+    }
+
+    public Stop(String name,String description,String picUrl, double latitude,double longitude,int categoryIndex) {
+        this(name,description,picUrl,latitude,longitude);
         this.categoryIndex = categoryIndex;
     }
 
     public Stop(int id,String name,String description,String picUrl,double latitude,double longitude,String category) throws IllegalArgumentException {
-        for (int i=0;i<categories.length;i++) {
-            if (categories[i].equals(category)) {
-                categoryIndex = i;
-            }
+        this(id,name,description,picUrl,latitude,longitude);
+        Integer index = TourHelper.StopCategoriesHelper.STOP_CATEGORY_NAME_TO_INDEX_MAP.get(category);
+        if (index == null) {
+            throw new IllegalArgumentException(category+" is not a valid category for a stop.");
         }
-        if (category==null) {
-            throw new IllegalArgumentException("Category not valid");
+        else {
+            categoryIndex = index;
         }
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.picUrl = picUrl;
-        this.location = new LatLng(latitude,longitude);
     }
 
     public String getName() {

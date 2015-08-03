@@ -2,7 +2,9 @@ package com.tourio.eklrew.tourio;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,12 +24,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
  * Created by Prud on 7/24/2015.
  */
 public class DetailTourActivity extends NavigationBarActivity implements GoogleMap.OnMapClickListener {
+
+    private int tourId;
 
     private GoogleMap map;
     private boolean mapExpanded = false;
@@ -45,13 +59,14 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         super.onCreate(savedInstanceState);
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_detail_tour, null));
 
-        tour = TourHelper.hardCodedTour();
+        tourId = getIntent().getExtras().getInt("tour_id");
+        (new FetchTourTask()).execute();
 
         initVars();
         setMapFragment();
         showStops(null);
 
-        TourHelper.setRatingImage(getLayoutInflater(),ratingFrame,(int) (Math.round(tour.getRating())));
+        TourHelper.LayoutHelper.setRatingImage(getLayoutInflater(), ratingFrame, (int) (Math.round(tour.getRating())));
     }
 
     public void initVars() {
@@ -61,12 +76,6 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
 
         stopsButton = (Button) findViewById(R.id.stops_button);
         commentsButton = (Button) findViewById(R.id.comments_button);
-    }
-
-    private Tour getTourFromDatabase() {
-        int tourId = getIntent().getExtras().getInt("tour_id");
-
-        return null;
     }
 
     public void setMapFragment() {
@@ -160,7 +169,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     private void swapButtons() {
-        TourHelper.swapColors(stopsButton, commentsButton);
+        TourHelper.LayoutHelper.swapColors(stopsButton, commentsButton);
     }
 
     public void showStops(View view) {
@@ -204,7 +213,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         FrameLayout detailCommentRatingFrame = (FrameLayout) findViewById(R.id.detail_comment_rating_frame);
         commenterNameView.setText(comment.getCommenter().getName());
         commentTextView.setText(comment.getText());
-        TourHelper.setRatingImage(getLayoutInflater(), detailCommentRatingFrame, (int) (Math.round(comment.getRating())));
+        TourHelper.LayoutHelper.setRatingImage(getLayoutInflater(), detailCommentRatingFrame, (int) (Math.round(comment.getRating())));
     }
 
     public void showComments(View view) {
@@ -228,4 +237,107 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             }
         });
     }
+
+    public class FetchTourTask extends AsyncTask<Void,Void,Tour> {
+        private Tour getTourDataFromJson(String json) throws JSONException {
+
+            JSONArray tourJsonArray = new JSONArray(json);
+
+            JSONObject tourJsonObject = tourJsonArray.getJSONObject(0);
+            int tourRating = tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_RATING);
+            String tourName = tourJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_TOUR_NAME);
+            String tourDescription = tourJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_TOUR_DESCRIPTION);
+            String tourCity = TourHelper.CityHelper.CITY_ID_TO_NAME_MAP.get((
+                    tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_CITY_ID)));
+            int tourCreatorId = tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_CREATOR_ID);
+            int tourDuration = tourJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_TOUR_DURATION);
+
+            JSONObject creatorJsonObject = tourJsonArray.getJSONArray(1).getJSONObject(0);
+            String creatorName = creatorJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_CREATOR_NAME);
+            String creatorPicUrl = creatorJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_CREATOR_PIC_URL);
+            User creator = new User(tourCreatorId,creatorName,creatorPicUrl);
+
+            JSONArray stopsJsonArray = tourJsonArray.getJSONArray(2);
+            ArrayList<Stop> stopListFromJson = new ArrayList<Stop>();
+            for (int j=0;j<stopsJsonArray.length();j++) {
+                JSONObject stopJsonObject = stopsJsonArray.getJSONObject(j);
+                stopListFromJson.add( new Stop(
+                        stopJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_STOP_NAME),
+                        stopJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_STOP_DESCRIPTION),
+                        stopJsonObject.getString(TourHelper.DetailTourJsonHelper.JSON_STOP_PIC_URL),
+                        stopJsonObject.getDouble(TourHelper.DetailTourJsonHelper.JSON_STOP_LATITUDE),
+                        stopJsonObject.getDouble(TourHelper.DetailTourJsonHelper.JSON_STOP_LONGITUDE),
+                        stopJsonObject.getInt(TourHelper.DetailTourJsonHelper.JSON_STOP_CATEGORY_INDEX)
+                ));
+            }
+
+            ArrayList<Comment> commentListFromJson = new ArrayList<Comment>();
+            //TODO: get comments list
+
+            return new Tour(tourId, tourName, tourDescription, tourCity, tourDuration,tourRating,
+            creator, stopListFromJson,commentListFromJson);
+        }
+
+        @Override
+        protected Tour doInBackground(Void... params) {
+            String toursUrlString = TourHelper.DataBaseUrlHelper.BASE_TOUR_URL + tourId;
+            Log.v("URL", toursUrlString);
+            URL tourUrl;
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+            String tourJsonStr = null;
+            try {
+                tourUrl = new URL(toursUrlString);
+                urlConnection = (HttpURLConnection) tourUrl.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream ==null) {
+                    return null;
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                }
+                if (buffer.length() == 0) {
+                    return null;
+                }
+                tourJsonStr = buffer.toString();
+            } catch (IOException e) {
+                Log.e("FetchTourTask","IOException - error fetching JSON from database");
+                return null;
+            }
+            finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e("FetchTourTask", "IOException - error closing tours BufferedReader stream", e);
+                    }
+                }
+            }
+
+            try {
+                return getTourDataFromJson(tourJsonStr);
+            } catch (JSONException e) {
+                Log.e("FetchTourTask","JSONException - error converting json");
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Tour result) {
+            tour = result;
+        }
+    }
+
 }

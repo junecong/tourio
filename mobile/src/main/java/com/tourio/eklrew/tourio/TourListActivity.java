@@ -133,7 +133,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public void sortNearMeHelper() {
-        TourHelper.swapColors(currentSortButton,nearMeButton);
+        TourHelper.LayoutHelper.swapColors(currentSortButton,nearMeButton);
         currentSortButton = nearMeButton;
         currentSortType = SORT_NEAR_ME;
         Collections.sort(tours,new TourListItem.DistanceComparator(mLocation));
@@ -142,7 +142,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public void sortRating(View view) {
-        TourHelper.swapColors(currentSortButton,ratingButton);
+        TourHelper.LayoutHelper.swapColors(currentSortButton,ratingButton);
         currentSortButton = ratingButton;
         currentSortType = SORT_RATING;
         Collections.sort(tours,new TourListItem.RatingComparator());
@@ -151,7 +151,7 @@ public class TourListActivity extends NavigationBarActivity {
     }
 
     public void sortDuration(View view) {
-        TourHelper.swapColors(currentSortButton,durationButton);
+        TourHelper.LayoutHelper.swapColors(currentSortButton,durationButton);
         currentSortButton = durationButton;
         currentSortType = SORT_DURATION;
         Collections.sort(tours,new TourListItem.DurationComparator());
@@ -167,14 +167,14 @@ public class TourListActivity extends NavigationBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tour_list, menu);
-        for (String city : TourHelper.cities) {
+        for (String city : TourHelper.CityHelper.CITIES) {
             Log.v("city",city);
         }
 
         MenuItem spinnerItem = menu.findItem(R.id.cities_spinner);
         final Spinner citySpinner = (Spinner) MenuItemCompat.getActionView(spinnerItem);
         final SpinnerAdapter cityAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, TourHelper.cities);
+                android.R.layout.simple_spinner_item, TourHelper.CityHelper.CITIES);
         citySpinner.setAdapter(cityAdapter);
         citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -200,17 +200,8 @@ public class TourListActivity extends NavigationBarActivity {
         }
     }
 
-    public void testHashMaps() {
-        Log.v("hashmaptest name-index",""+TourHelper.CITY_NAME_TO_INDEX_MAP.get("San Francisco"));
-        Log.v("hashmaptest name-index",""+TourHelper.CITY_NAME_TO_INDEX_MAP.get("Chicago"));
-        Log.v("hashmaptest name-id",""+TourHelper.CITY_NAME_TO_ID_MAP.get(TourHelper.cities[0]));
-        Log.v("hashmaptest name-id",""+TourHelper.CITY_NAME_TO_ID_MAP.get(TourHelper.cities[1]));
-        Log.v("hashmaptest index-id",""+TourHelper.CITY_INDEX_TO_ID_MAP.get(0));
-        Log.v("hashmaptest index-id",""+TourHelper.CITY_INDEX_TO_ID_MAP.get(1));
-    }
-
     public int getCurrentCityId() {
-        return TourHelper.CITY_INDEX_TO_ID_MAP.get(currentCityIndex);
+        return TourHelper.CityHelper.CITY_INDEX_TO_ID_MAP.get(currentCityIndex);
     }
 
     @Override
@@ -281,23 +272,15 @@ public class TourListActivity extends NavigationBarActivity {
         private ArrayList<TourListItem> getToursDataFromJson(String json) throws JSONException {
             ArrayList<TourListItem> tourListFromJson = new ArrayList<TourListItem>();
 
-            //keys of the things in the JSON that need to be extracted
-            final String JSON_TOUR_ID = "id";
-            final String JSON_TOUR_NAME = "TourName";
-            final String JSON_TOUR_RATING = "Rating";
-            final String JSON_TOUR_DURATION = "Duration";
-            final String JSON_STOP_LATITUDE = "Lat";
-            final String JSON_STOP_LONGITUDE = "Long";
-
             JSONArray toursJsonArray = new JSONArray(json);
 
             for (int i=0;i<toursJsonArray.length();i+=2) {
 
                 JSONObject tourJsonObject = toursJsonArray.getJSONObject(i);
-                int tourId = tourJsonObject.getInt(JSON_TOUR_ID);
-                String tourName = tourJsonObject.getString(JSON_TOUR_NAME);
-                int tourRating = tourJsonObject.getInt(JSON_TOUR_RATING);
-                int tourDuration = tourJsonObject.getInt(JSON_TOUR_DURATION);
+                int tourId = tourJsonObject.getInt(TourHelper.TourListJsonHelper.JSON_TOUR_ID);
+                String tourName = tourJsonObject.getString(TourHelper.TourListJsonHelper.JSON_TOUR_NAME);
+                int tourRating = tourJsonObject.getInt(TourHelper.TourListJsonHelper.JSON_TOUR_RATING);
+                int tourDuration = tourJsonObject.getInt(TourHelper.TourListJsonHelper.JSON_TOUR_DURATION);
 
                 JSONArray stopsJsonArray = toursJsonArray.getJSONArray(i + 1);
                 int numStops = stopsJsonArray.length();
@@ -305,8 +288,8 @@ public class TourListActivity extends NavigationBarActivity {
                 for (int j=0;j<numStops;j++) {
                     JSONObject stopJsonObject = stopsJsonArray.getJSONObject(j);
                     stopListFromJson[j] = new LatLng(
-                            stopJsonObject.getDouble(JSON_STOP_LATITUDE),
-                            stopJsonObject.getDouble(JSON_STOP_LONGITUDE)
+                            stopJsonObject.getDouble(TourHelper.TourListJsonHelper.JSON_STOP_LATITUDE),
+                            stopJsonObject.getDouble(TourHelper.TourListJsonHelper.JSON_STOP_LONGITUDE)
                     );
                 }
 
@@ -318,7 +301,7 @@ public class TourListActivity extends NavigationBarActivity {
 
         @Override
         protected ArrayList<TourListItem> doInBackground(Integer... city) {
-            String toursUrlString = TourHelper.BASE_CITY_URL + city[0];
+            String toursUrlString = TourHelper.DataBaseUrlHelper.BASE_CITY_URL + city[0];
             Log.v("URL",toursUrlString);
             URL toursUrl;
             HttpURLConnection urlConnection = null;
@@ -346,7 +329,7 @@ public class TourListActivity extends NavigationBarActivity {
                 }
                 toursJsonStr = buffer.toString();
             } catch (IOException e) {
-                Log.e("FetchWeatherTask","IOException - error fetching JSON from database");
+                Log.e("FetchToursTask","IOException - error fetching JSON from database");
                 return null;
             }
             finally {
