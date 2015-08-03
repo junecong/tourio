@@ -73,7 +73,7 @@ public class TourListAdapter extends BaseAdapter {
         }
 
         Log.v("map url: ", mapUrl);
-        new DownloadImageTask(holder.mapView).execute(mapUrl);
+        new DownloadImageTask(context,holder.mapView).execute(mapUrl);
 
         holder.nameView.setText(tour.getName());
         holder.durationView.setText((int) (Math.round(tour.getDuration()))+" hours");
