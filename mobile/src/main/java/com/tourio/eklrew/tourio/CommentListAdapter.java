@@ -54,6 +54,7 @@ public class CommentListAdapter extends BaseAdapter {
         TextView commentTextView = (TextView)commentView.findViewById(R.id.comment_text);
         FrameLayout ratingFrame = (FrameLayout) commentView.findViewById(R.id.rating_frame);
 
+        (new DownloadImageTask(commenterImageView)).execute(commenter.getPicUrl());
         commenterNameView.setText(commenter.getName());
         commentTextView.setText(comment.getText());
 

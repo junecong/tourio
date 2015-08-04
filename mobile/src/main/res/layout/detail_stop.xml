@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="25dp">
+    android:layout_margin="25dp"
+    android:weightSum="1">
 
 
     <LinearLayout
@@ -37,16 +38,17 @@
 
     </LinearLayout>
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="78dp"
-            android:id="@+id/stop_image"
-            android:src="@drawable/ic_launcher"
-            android:layout_weight="0.1"
-            android:layout_gravity="right" />
-
     </LinearLayout>
 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:id="@+id/stop_image"
+        android:src="@drawable/ic_launcher"
+        android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"/>
 
     <ScrollView
         android:layout_width="match_parent"

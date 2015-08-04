@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp"
+    tools:context="com.tourio.eklrew.tourio.TipActivity"
+    android:orientation="vertical"
+    android:background="#515151">
+
+
+    <LinearLayout
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_weight="0.3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"/>
+
+        <NumberPicker
+            android:id="@+id/tip_numberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+        </NumberPicker>
+    </LinearLayout>
+
+    <TextView
+        android:layout_below="@id/tip_numberPicker"
+        android:id="@+id/tip_text"
+        android:text="Tip the tour creator!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:text="Tip!"
+        android:layout_below="@id/tip_text"
+        android:layout_width="80dp"
+        android:background="#FF6344"
+        android:layout_height="35dp"
+        android:layout_marginTop="12dp"
+        android:id="@+id/tip_button"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:onClick="onClickTip"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+</LinearLayout>

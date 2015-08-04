@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:rectLayout="@layout/rect_activity_main_wear"
-    app:roundLayout="@layout/start_wear"
+    app:roundLayout="@layout/activity_start_wear"
     tools:context=".MainWearActivity"
     tools:deviceIds="wear">
 </android.support.wearable.view.WatchViewStub>

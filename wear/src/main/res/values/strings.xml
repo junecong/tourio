@@ -8,18 +8,20 @@
     <string name="ready_to_start">Ready to start your tour?</string>
     <string name="start">Start!</string>
 
-    <string name="enjoy_text">Enjoy your time\nat Delores Park!</string>
+    <string name="enjoy_text">Enjoy your time at</string>
+    <string name="enjoy_stop">The Exploratorium</string>
     <string name="ready_for_next">Let us know when you\'re\nready for the next stop!</string>
-    <string name="yes">I\'m ready!</string>
+    <string name="ready_text">I\'m ready for next stop!</string>
 
-    <string name="next_stop"><u>Next Stop</u></string>
+    <string name="next_stop">Next Stop!</string>
     <string name="placeholder_name">The Exploratorium</string>
-    <string name="placeholder_description">A hands-on museum of science, art, and human perception
-        in San Francisco.</string>
+    <string name="placeholder_description">A hands-on museum of science,\nart, and human perception
+        \nin San Francisco.</string>
     <string name="skip">Skip</string>
-    <string name="go">Go</string>
+    <string name="go">Go!</string>
 
-    <string name="heading_to_text">You are heading to\nDelores Park!</string>
+    <string name="heading_to_text">You are heading to</string>
+    <string name="headed_stop">Delores Park</string>
     <string name="view_map">View map</string>
     <string name="skip_this_stop">Skip this stop</string>
     <string name="wear_map_long_press_intro">Long click to exit the map.</string>

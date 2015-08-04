@@ -3,67 +3,95 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:id="@+id/map"
-        android:paddingBottom="12sp"/>
+        android:layout_height="match_parent"
+        android:id="@+id/relative">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tour_name"
-            android:gravity="left"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-light"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <FrameLayout
-            android:layout_weight=".7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/rating_frame"
-            android:layout_gravity="left"
-            android:paddingRight="20dp"
-            android:divider="#ff444444"
-            android:dividerHeight="1dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:id="@+id/map"
+            android:src="@drawable/gradient_shape"/>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="45dp"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:layout_weight=".3"
-            android:dividerHeight="5dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
-            <ImageView
-                android:src="@mipmap/clock_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="right"/>
-
-            <TextView
-                android:text="@string/duration_of_tour"
-                android:id="@+id/tour_duration"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"/>
+                android:orientation="vertical"
+                android:layout_weight=".75">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tour_name"
+                    android:gravity="left"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:orientation="vertical"
+                android:layout_gravity="right"
+                android:gravity="right">
+
+                <FrameLayout
+                    android:layout_weight=".5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/rating_frame"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="left"
+                    android:foregroundGravity="left"
+                    android:divider="#ff444444"
+                    android:dividerHeight="1dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:dividerHeight="5dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp">
+
+                    <ImageView
+                        android:background="@mipmap/clock_icon"
+                        android:scaleType="centerInside"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="left"
+                        android:gravity="left"/>
+
+                    <TextView
+                        android:text="@string/duration_of_tour"
+                        android:id="@+id/tour_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
+
+    </RelativeLayout>
+
+
 
 </LinearLayout>

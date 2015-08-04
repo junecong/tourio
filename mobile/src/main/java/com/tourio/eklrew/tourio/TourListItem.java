@@ -73,7 +73,7 @@ public class TourListItem {
     public static class RatingComparator implements Comparator<TourListItem> {
         @Override
         public int compare(TourListItem a,TourListItem b) {
-            return Double.compare(a.getRating(),b.getRating());
+            return Double.compare(b.getRating(),a.getRating());
         }
     }
 

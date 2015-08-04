@@ -36,7 +36,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_margin="10dp">
+                    android:layout_margin="10dp"
+                    android:layout_weight=".7">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -45,21 +46,22 @@
                         android:id="@+id/title"
                         android:textStyle="bold"
                         android:textSize="20sp"
-                        android:layout_gravity="left"/>
+                        android:layout_gravity="left"
+                        android:maxLines="2"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                     <TextView
-                        android:textSize="12dp"
+                        android:textSize="10dp"
                         android:text="@string/created_by_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"/>
 
                     <TextView
-                        android:textSize="12dp"
+                        android:textSize="10dp"
                         android:text="@string/tour_maker_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -72,24 +74,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="center"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight=".3">
 
                     <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rating_frame"
-                        android:layout_gravity="right"
-                        android:layout_marginTop="8dp"/>
+                        android:layout_gravity="left"
+                        android:layout_marginTop="3dp"
+                        android:layout_weight=".5"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_gravity="right"
-                        android:gravity="right">
+                        android:layout_gravity="left"
+                        android:gravity="left"
+                        android:layout_weight=".5">
 
                         <ImageView
                             android:src="@mipmap/clock_icon"
@@ -173,7 +177,8 @@
                         android:text="Tour Description:"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"/>
+                        android:layout_marginTop="15dp"
+                        android:textSize="10dp"/>
 
                     <TextView
                         android:id="@+id/tour_description"
@@ -181,7 +186,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"/>
+                        android:layout_marginBottom="5dp"
+                        android:textSize="12dp"/>
 
                 </LinearLayout>
 

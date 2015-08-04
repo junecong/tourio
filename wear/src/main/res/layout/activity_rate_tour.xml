@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tourio.eklrew.tourio.RateTourActivity"
+    android:orientation="vertical"
+    android:background="#515151">
+
+    <TextView
+        android:id="@+id/review_the_tour"
+        android:text="Review the tour!" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="35dp"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/stars"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="top">
+        <ImageView
+            android:id="@+id/one_star"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/empty_star"
+            android:padding="0dp"
+            android:onClick="onClickOneStar"/>
+        <ImageView
+            android:id="@+id/two_star"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/empty_star"
+            android:padding="0dp"
+            android:onClick="onClickTwoStars"/>
+        <ImageView
+            android:id="@+id/three_star"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/empty_star"
+            android:padding="0dp"
+            android:onClick="onClickThreeStars"/>
+        <ImageView
+            android:id="@+id/four_star"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/empty_star"
+            android:padding="0dp"
+            android:onClick="onClickFourStars"/>
+        <ImageView
+            android:id="@+id/five_star"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/empty_star"
+            android:padding="0dp"
+            android:onClick="onClickFiveStars"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:text="Add Comment!"
+                android:textSize="10sp"
+                android:id="@+id/button_comment"
+                android:layout_marginLeft="-15dp"
+                android:background="#FF6344"
+                android:textColor="#FFFFFF"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:paddingRight="-25dp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="5dp"/>
+            <Button
+                android:text="Next Time!"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/button_comment"
+                android:id="@+id/button_next_time"
+                android:layout_width="120dp"
+                android:paddingLeft="-30dp"
+                android:textColor="#FFFFFF"
+                android:background="#FF6344"
+                android:onClick="nextTime"
+                android:textAllCaps="false"
+                android:layout_height="40dp"
+                android:layout_marginTop="25dp"/>
+
+        </LinearLayout>
+</LinearLayout>

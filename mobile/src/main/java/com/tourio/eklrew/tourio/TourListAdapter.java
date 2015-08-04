@@ -69,7 +69,7 @@ public class TourListAdapter extends BaseAdapter {
         String mapUrl = TourioHelper.GoogleMapsStaticApiHelper.BASE_STATIC_MAPS_API_URL;
         for (int i=0;i<stops.length;i++) {
             LatLng stop = stops[i];
-            mapUrl += "&markers=size:mid%7Ccolor:blue%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
+            mapUrl += "&markers=size:mid%7Ccolor:red%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
         }
 
         Log.v("map url: ", mapUrl);

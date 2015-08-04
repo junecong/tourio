@@ -1,7 +1,7 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Intent;
-import android.media.Image;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,16 +30,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -42,7 +50,9 @@ import java.util.ArrayList;
 /**
  * Created by Prud on 7/24/2015.
  */
-public class DetailTourActivity extends NavigationBarActivity implements GoogleMap.OnMapClickListener {
+public class DetailTourActivity extends NavigationBarActivity
+        implements GoogleMap.OnMapClickListener, MessageApi.MessageListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private int tourId;
 
@@ -60,6 +70,11 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     ImageView creatorImageView;
     TextView tourTitleView,tourDescriptionView;
 
+    private GoogleApiClient mGoogleApiClient;
+    private Location mCurrentLocation;
+    private LocationRequest mLocationRequest;
+
+    Stop currStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,29 +186,13 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
     }
 
     public void startGPS(View view) {
-//        LatLng firstStopLocation = tour.getStops().get(0).getLocation();
-//        double latitude = firstStopLocation.latitude;
-//        double longitude = firstStopLocation.longitude;
-//        String uri = "google.navigation:q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
-//        Intent mapsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-//        mapsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(mapsIntent);
-
         LinearLayout tourDetailLayout = (LinearLayout) findViewById(R.id.tour_detail_layout);
         LinearLayout hideWhenStart = (LinearLayout) findViewById(R.id.hide_when_start);
         hideWhenStart.setVisibility(LinearLayout.GONE);
         tourDetailLayout.addView((getLayoutInflater()).inflate(R.layout.activity_transit_mobile, null));
 
-
-//        RelativeLayout transitView = (RelativeLayout) findViewById(R.id.transit_mobile);
-//        transitView.setVisibility(RelativeLayout.VISIBLE);
-//        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.tour_detail_layout);
-//        linearLayout.setVisibility(LinearLayout.GONE);
-
-        Intent navIntent = new Intent(this, NavigationListener.class);
-        startService(navIntent);
-
-        Log.d("Log", ">>>Initiated listener for wear's start button<<<");
+        buildGoogleApiClient();
+        Wearable.MessageApi.addListener(mGoogleApiClient,this);
     }
 
     private void swapButtons() {
@@ -270,6 +269,114 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         });
     }
 
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+        String messagePath = messageEvent.getPath();
+        Log.d("Message received:", ">>>" + messagePath + "<<<");
+
+        /* Starts Google Maps navigation for starting tour. Navigates user from current location
+         * to first stop. */
+        if (messagePath.equals(TourioHelper.ReceiveMessageHelper.START_GPS)) {
+            startGPS();
+        }
+        if (messagePath.equals(TourioHelper.ReceiveMessageHelper.SKIP_STOP)) {
+            currStop = tour.goToNextStop();
+            sendNextStopMessage(true);
+        }
+    }
+
+    private void sendNextStopMessage(boolean skipOrArrived) {
+        int currStopStatus = 0;
+        if (tour.isFirstStop()) {
+            currStopStatus = 1;
+        }
+        if (tour.isLastStop()) {
+            currStopStatus = 2;
+        }
+        Intent sendMessageIntent = new Intent(this,NextStopMessageService.class);
+        sendMessageIntent.putExtra("skip_or_arrived",skipOrArrived);
+        sendMessageIntent.putExtra("stop_info",currStop.getName()+"|"+currStop.getDescription()+"|"+currStopStatus);
+        startService(sendMessageIntent);
+    }
+
+    private void startGPS() {
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
+                currStop.getLatitude() + "," +
+                currStop.getLongitude());
+        // Currently has "bs" destination
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mapIntent);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .addApi(Wearable.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.d("Log", ">>>LocationService GoogleApiClient connected<<<");
+
+        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        startLocationUpdates();
+    }
+
+    protected void startLocationUpdates() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        // Do nothing
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // Do nothing
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        // This is a hardcoded destination for testing purpose.
+        Location destination = new Location(currStop.getName());
+        destination.setLatitude(currStop.getLatitude());
+        destination.setLongitude(currStop.getLongitude());
+
+        mCurrentLocation = location;
+
+        Log.d("Current latitude:", String.valueOf(mCurrentLocation.getLatitude()));
+        Log.d("Current longitude:", String.valueOf(mCurrentLocation.getLongitude()));
+        Log.d("Current distance:", String.valueOf(mCurrentLocation.distanceTo(destination)));
+
+        if (mCurrentLocation.distanceTo(destination) < 10) {
+            Log.d("Log", ">>>Arrival detected<<<");
+
+            currStop = tour.goToNextStop();
+            stopLocationUpdates();
+            sendNextStopMessage(false);
+        }
+    }
+
+
     public class FetchTourTask extends AsyncTask<Void,Void,Tour> {
         private Tour getTourDataFromJson(String json) throws JSONException {
 
@@ -323,7 +430,7 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
             }
 
             return new Tour(tourId, tourName, tourDescription, tourCity, tourDuration,tourRating,
-            creator, stopListFromJson,commentListFromJson);
+                    creator, stopListFromJson,commentListFromJson);
         }
 
         @Override
@@ -385,9 +492,9 @@ public class DetailTourActivity extends NavigationBarActivity implements GoogleM
         @Override
         protected void onPostExecute(Tour result) {
             tour = result;
+            currStop = tour.getStops().get(0);
             setMapFragment();
             setViews();
         }
     }
-
 }

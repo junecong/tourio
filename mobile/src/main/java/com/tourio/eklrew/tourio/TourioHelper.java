@@ -253,4 +253,19 @@ public class TourioHelper {
             Log.v("rating",""+rating);
         }
     }
+
+
+
+    public static class SendMessageHelper {
+        public static final String SKIP_MESSAGE_PATH = "skip_next_stop_info";
+        public static final String ARRIVED_MESSAGE_PATH = "arrived_info";
+        public static final int STOP_STATUS_FIRST_STOP = 1;
+        public static final int STOP_STATUS_MIDDLE_STOP = 0;
+        public static final int STOP_STATUS_LAST_STOP = 2;
+        public static final String WEAR_RECEIVE_CAPABILITY = "receive_stop_info_capability";
+    }
+    public static class ReceiveMessageHelper {
+        public static final String START_GPS = "start_gps";
+        public static final String SKIP_STOP = "skip_stop";
+    }
 }

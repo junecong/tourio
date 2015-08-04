@@ -1,5 +1,6 @@
 package com.tourio.eklrew.tourio;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,22 +22,34 @@ import java.util.HashSet;
 /**
  * Created by Shawn on 8/2/2015.
  */
-public class ArrivalService extends Service {
+public class NextStopMessageService extends IntentService {
 
     private GoogleApiClient mGoogleApiClient;
     private String transcriptionNodeId = null;
 
-    private static final String READY_WEAR = "ready_wear";
+    private String message;
+    private String messagePath;
+    private final String WEAR_RECEIVE_CAPABILITY = TourioHelper.SendMessageHelper.WEAR_RECEIVE_CAPABILITY;
+
+    public NextStopMessageService() {
+        super("NextStopMessageService");
+    }
 
     @Override
-    public int onStartCommand(Intent emptyIntent, int f, int id) {
-        Log.d("Log", ">>>ArrivalService started<<<");
+    public void onHandleIntent(Intent intent) {
+        boolean skipOrArrived = intent.getExtras().getBoolean("skip_or_arrived");
+        messagePath = skipOrArrived? TourioHelper.SendMessageHelper.SKIP_MESSAGE_PATH :
+                TourioHelper.SendMessageHelper.ARRIVED_MESSAGE_PATH;
+        message = intent.getExtras().getString("stop_info");
+        buildGoogleApiClient();
+    }
 
+    public void buildGoogleApiClient() {
         this.mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle bundle) {
-                        Log.d("Log", ">>>ArrivalService GoogleApiClient connected<<<");
+                        Log.d("Log", ">>>NextStopMessageService GoogleApiClient connected<<<");
                         initCapability();
                     }
                     @Override
@@ -53,8 +66,6 @@ public class ArrivalService extends Service {
                 .addApi(Wearable.API)
                 .build();
         this.mGoogleApiClient.connect();
-
-        return START_STICKY;
     }
 
     /* Establishes GoogleApiClient connection. */
@@ -63,7 +74,7 @@ public class ArrivalService extends Service {
             @Override
             public void run() {
                 CapabilityApi.GetCapabilityResult capResult = Wearable.CapabilityApi.getCapability(
-                        mGoogleApiClient, READY_WEAR, CapabilityApi.FILTER_REACHABLE).await();
+                        mGoogleApiClient, WEAR_RECEIVE_CAPABILITY, CapabilityApi.FILTER_REACHABLE).await();
 
                 Collection<String> nodes = getNodes();
                 Log.d("AS # nodes detected:", String.valueOf(nodes.size()));
@@ -75,12 +86,15 @@ public class ArrivalService extends Service {
                 Log.d("AS node id", String.valueOf(transcriptionNodeId));
 
                 Wearable.MessageApi.sendMessage(mGoogleApiClient, transcriptionNodeId,
-                        READY_WEAR, null).setResultCallback(
+                        messagePath, message.getBytes()).setResultCallback(
                         new ResultCallback<MessageApi.SendMessageResult>() {
                             @Override
                             public void onResult(MessageApi.SendMessageResult sendMessageResult) {
                                 if (!sendMessageResult.getStatus().isSuccess()) {
-                                    Log.d("Error:", ">>>Message Failed<<<");
+                                    Log.d("Message failed", ""+sendMessageResult.getStatus().getStatusCode());
+                                }
+                                else {
+                                    Log.d("message success",new String(message.getBytes()));
                                 }
                             }
                         });
@@ -102,5 +116,10 @@ public class ArrivalService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

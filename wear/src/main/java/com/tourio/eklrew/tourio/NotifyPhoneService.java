@@ -1,5 +1,6 @@
 package com.tourio.eklrew.tourio;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,24 +22,52 @@ import java.util.HashSet;
 /**
  * Created by Shawn on 7/31/2015.
  */
-public class StartNavigationService extends Service {
+
+/**
+sends message to phone
+if message path is START_GPS, phone will route to next stop
+if message path is SKIP_STOP, phone will skip and send next stop info
+*/
+
+//notifies phone if go or skip was pressed
+public class NotifyPhoneService extends IntentService {
 
     private GoogleApiClient mGoogleApiClient;
     private String transcriptionNodeId = null;
 
     /* Message from wear to mobile to start tour. */
-    private static final String START_TOUR = "start_tour";
+    private static final String START_GPS = "start_gps";
+    private static final String SKIP_STOP = "skip_stop";
+    private String capabilityPath;
+    String intentString;
+
+    public NotifyPhoneService() {
+        super("NotifyPhoneService");
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        intentString = intent.getExtras().getString("go_or_skip");
+        capabilityPath = intentString.equals("go")? START_GPS : SKIP_STOP;
+        Log.d("capability path",capabilityPath);
+
+        buildGoogleApiClient();
+    }
 
     /* Establishes GoogleApiClient connection. */
-    @Override
-    public int onStartCommand(Intent emptyIntent, int f, int id) {
-        Log.d("Log", ">>>Initiated service for sending msg to mobile to start gps<<<");
+//    @Override
+//    public int onStartCommand(Intent intent, int f, int id) {
+//        Log.d("Log", ">>>Initiated service for sending msg to mobile to start gps<<<");
+//
+//        return START_STICKY;
+//    }
 
+    private void buildGoogleApiClient() {
         this.mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle bundle) {
-                        Log.d("Log", ">>>StartNavigationService GoogleApiClient connected<<<");
+                        Log.d("Log", ">>>NotifyPhoneService GoogleApiClient connected<<<");
                         initCapability();
                     }
                     @Override
@@ -55,8 +84,6 @@ public class StartNavigationService extends Service {
                 .addApi(Wearable.API)
                 .build();
         this.mGoogleApiClient.connect();
-
-        return START_STICKY;
     }
 
     /* Establishes GoogleApiClient connection. */
@@ -65,7 +92,7 @@ public class StartNavigationService extends Service {
             @Override
             public void run() {
                 CapabilityApi.GetCapabilityResult capResult = Wearable.CapabilityApi.getCapability(
-                        mGoogleApiClient, START_TOUR, CapabilityApi.FILTER_REACHABLE).await();
+                        mGoogleApiClient, capabilityPath, CapabilityApi.FILTER_REACHABLE).await();
 
                 Collection<String> nodes = getNodes();
                 Log.d("# nodes detected:", String.valueOf(nodes.size()));
@@ -77,12 +104,15 @@ public class StartNavigationService extends Service {
                 Log.d("node id detected", String.valueOf(transcriptionNodeId));
 
                 Wearable.MessageApi.sendMessage(mGoogleApiClient, transcriptionNodeId,
-                        START_TOUR, null).setResultCallback(
+                        capabilityPath, null).setResultCallback(
                         new ResultCallback<MessageApi.SendMessageResult>() {
                             @Override
                             public void onResult(MessageApi.SendMessageResult sendMessageResult) {
                                 if (!sendMessageResult.getStatus().isSuccess()) {
-                                    Log.d("Error:", "__________Message Failed__________");
+                                    Log.e("Error:", "__________Message Failed__________");
+                                }
+                                else {
+                                    Log.d("message send status","sent");
                                 }
                             }
                         });

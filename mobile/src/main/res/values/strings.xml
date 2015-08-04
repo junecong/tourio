@@ -11,7 +11,7 @@
 
     <string name="title_of_tour">Fun Day In Berkeley</string>
     <string name="duration_of_tour">3 Hours</string>
-    <string name="created_by_name">Created By : </string>
+    <string name="created_by_name">Created By: </string>
     <string name="tour_maker_name">June Cong</string>
     <string name="tour_description">Fun Day In Berkeley is a quick
         tour of chill spots that helps you relax.
@@ -19,7 +19,7 @@
         and do a lot more!</string>
 
     <string name="details">Details</string>
-    <string name="comments">Comments</string>
+    <string name="comments">Reviews</string>
     <string name="title_activity_navigation_bar">NavigationBarActivity</string>
 
     <string name="title_section1">Section 1</string>
@@ -54,5 +54,5 @@
     <color name="lightGrey">#eeeeee</color>
 
     <string name="tour_in_session">Your tour is in session! You are free to put your phone
-        away and enjoy your adventure via your watch :)</string>
+        away :)</string>
 </resources>

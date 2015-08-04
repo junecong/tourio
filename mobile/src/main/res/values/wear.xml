@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="android_wear_capabilities">
-        <item>start_tour</item>
+        <item>start_gps</item>
+        <item>skip_stop</item>
     </string-array>
 </resources>

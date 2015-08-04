@@ -3,50 +3,98 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#515151">
+    <!--android:background="#FF6344"-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp">
+        android:id="@+id/transit_layout_1"
+        android:layout_marginTop="35dp">
 
         <TextView
             android:id="@+id/heading_to_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/heading_to_text"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/stop_text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="20sp"
+            android:background="#FFFFFF"
+            android:textStyle="bold"
+            android:textColor="#FF6344"
+            android:layout_marginTop="5dp"
+            android:text="@string/headed_stop"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/heading_to_text"
             android:gravity="center"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/transit_layout_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transit_layout_1"
+        android:layout_marginLeft="-25dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/map_button"
-            android:layout_width="wrap_content"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:text="@string/view_map"
             android:textAllCaps="false"
+            android:paddingRight="-30dp"
+            android:background="#FF6344"
+            android:textSize="10dp"
+            android:textStyle="bold"
             android:onClick="viewMap"
-            android:layout_below="@id/heading_to_text"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="5dp"/>
 
         <Button
             android:id="@+id/directions_button"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/view_directions"
+            android:background="#FF6344"
             android:textAllCaps="false"
-            android:layout_below="@id/map_button"
-            android:layout_marginTop="-5dp"
+            android:layout_marginTop="8dp"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            android:paddingLeft="-50dp"
+            android:layout_toEndOf="@id/map_button"
             android:onClick="viewDirections"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/transit_layout_2"
+        android:layout_marginTop="5dp">
 
         <Button
             android:id="@+id/transit_skip_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/skip_this_stop"
-            android:textAllCaps="false"
+            android:background="#FF6344"
+            android:textColor="#FFFFFF"
+            android:textSize="10dp"
+            android:textStyle="bold"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/directions_button"
+            android:onClick="skipThisStop"
+            android:textAllCaps="false"
             android:layout_marginTop="-4dp"/>
     </RelativeLayout>
 

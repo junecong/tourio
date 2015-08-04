@@ -1,9 +1,11 @@
 package com.tourio.eklrew.tourio;
 
-import android.app.Activity;
+import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.os.IBinder;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -11,23 +13,17 @@ import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 
-/**
- * Created by Shawn on 7/31/2015.
- */
-public class TransitActivity extends Activity implements MessageApi.MessageListener {
-    public static final String ARRIVED_MESSAGE_PATH = "arrived_info";
-    private StopInfo currStop;
+//Listens for info about the next stop from the phone
+//started by the Transit and NextStop activities
+public class SkipListenerService extends Service implements MessageApi.MessageListener{
+    public static final String SKIP_MESSAGE_PATH = "skip_next_stop_info";
 
     private GoogleApiClient mGoogleApiClient;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transit_wear);
-
-        currStop = getIntent().getParcelableExtra("next_stop");
-
+    public int onStartCommand(Intent intent,int flags,int startId) {
         startMessageListener();
+        return START_STICKY;
     }
 
     private void startMessageListener() {
@@ -54,31 +50,23 @@ public class TransitActivity extends Activity implements MessageApi.MessageListe
         Wearable.MessageApi.addListener(mGoogleApiClient, this);
     }
 
-    public void viewMap(View view) {
-        Intent viewMapIntent = new Intent(this, WearMapActivity.class);
-        startActivity(viewMapIntent);
-    }
-
-    public void viewDirections(View view) {
-        Intent dirIntent = new Intent(Intent.ACTION_MAIN);
-        dirIntent.addCategory(Intent.CATEGORY_HOME);
-        dirIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(dirIntent);
-    }
-
-    public void skip(View view) {
-        WearHelper.skipWithDialog(this);
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         String messagePath = messageEvent.getPath();
-        if (messagePath.equals(ARRIVED_MESSAGE_PATH)) {
+        Log.d("message received",messagePath);
+        if (messagePath.equals(SKIP_MESSAGE_PATH)) {
+            Log.d("message received",messagePath);
             String message = new String(messageEvent.getData());
             StopInfo nextStop = WearHelper.stringToStopInfo(message);
-            Intent arriveIntent = new Intent(this,ArrivedActivity.class);
-            arriveIntent.putExtra("curr_stop",currStop);
-            arriveIntent.putExtra("next_stop",nextStop);
+            Intent nextStopIntent = new Intent(this,NextStopActivity.class);
+            nextStopIntent.putExtra("next_stop",nextStop);
+            startActivity(nextStopIntent);
+            stopSelf();
         }
     }
 }

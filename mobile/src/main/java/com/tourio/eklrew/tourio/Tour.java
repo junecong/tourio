@@ -13,7 +13,7 @@ public class Tour {
     private ArrayList<Stop> stops;
     private ArrayList<Comment> comments;
 
-    private int currStopIndex;
+    private int nextStopIndex;
 
     public Tour(int id, String name, String description, String city, double duration,double rating,
                 User creator, ArrayList<Stop> stops,ArrayList<Comment> comments) {
@@ -28,7 +28,7 @@ public class Tour {
         this.stops = stops;
         this.comments = comments;
 
-        currStopIndex = 0;
+        nextStopIndex = 0;
     }
 
     public int getId() {
@@ -67,12 +67,12 @@ public class Tour {
         return comments;
     }
 
-    public int getCurrStopIndex() {
-        return currStopIndex;
+    public int getNextStopIndex() {
+        return nextStopIndex;
     }
 
-    public Stop getCurrentStop() {
-        return getStops().get(currStopIndex);
+    public Stop getNextStop() {
+        return getStops().get(nextStopIndex);
     }
 
     public String getCreatorName() {
@@ -83,7 +83,15 @@ public class Tour {
         return creator.getPicUrl();
     }
 
-    public void skipStop() {
-        currStopIndex++;
+    public Stop goToNextStop() {
+        Stop stop = getNextStop();
+        nextStopIndex++;
+        return stop;
+    }
+    public boolean isFirstStop() {
+        return nextStopIndex ==1;
+    }
+    public boolean isLastStop() {
+        return nextStopIndex ==stops.size();
     }
 }
