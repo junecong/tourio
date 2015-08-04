@@ -28,7 +28,7 @@ public class WearHelper {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 skipWithoutDialog(context);
-                                Toast.makeText(context, "Generated next stop", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Generated next stop", Toast.LENGTH_SHORT).show();
                             }
 
                         })
@@ -61,7 +61,7 @@ public class WearHelper {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 skipWithoutDialog(context);
-                                Toast.makeText(context, "Tour finished", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Tour finished", Toast.LENGTH_SHORT).show();
                             }
 
                         })

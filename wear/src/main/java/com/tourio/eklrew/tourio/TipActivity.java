@@ -34,7 +34,7 @@ public class TipActivity extends Activity {
     }
 
     public void onClickTip(View view){
-        Toast.makeText(this, "Tip sent!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Tip sent!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, RateTourActivity.class);
         tip = np.getValue();
         intent.putExtra("int_value", tip);
