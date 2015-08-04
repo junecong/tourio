@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by Shawn on 7/25/2015.
  */
@@ -19,18 +21,33 @@ public class NextStopActivity extends Activity {
 
         nextStop = getIntent().getParcelableExtra("next_stop");
 
-        //TODO: TextView stopType = (TextView) findViewById(R.id.TEXTVIEWID);
+        setViews();
+    }
+
+    public void setViews() {
+        TextView stopType = (TextView) findViewById(R.id.next_stop_text);
+        TextView nextStopName = (TextView) findViewById(R.id.next_stop_name);
+        TextView nextStopDescription = (TextView) findViewById(R.id.next_stop_description);
+
         if (nextStop.isFirstStop()) {
-            //TODO: stopType.setText("First Stop");
+            stopType.setText("First Stop");
         }
         if (nextStop.isLastStop()) {
-            //TODO: stopType.setText("Last Stop");
+            stopType.setText("Last Stop");
         }
+        nextStopName.setText(nextStop.getName());
+        nextStopDescription.setText(nextStop.getDescription());
+
     }
 
     /* Called when user presses "Skip" button when user is presented with next stop. */
     public void skipTheStop(View view) {
-        WearHelper.skipWithDialog(this);
+        if (nextStop.isLastStop()) {
+            WearHelper.skipLastStop(this);
+        }
+        else {
+            WearHelper.skipWithDialog(this);
+        }
     }
 
     /* Called when user presses "Go" button when user is presented with next stop. */

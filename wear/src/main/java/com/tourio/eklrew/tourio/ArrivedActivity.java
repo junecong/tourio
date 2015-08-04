@@ -21,7 +21,14 @@ public class ArrivedActivity extends Activity {
 
         Intent intent = getIntent();
         currStop = intent.getParcelableExtra("curr_stop");
-        currStop = intent.getParcelableExtra("next_stop");
+        nextStop = intent.getParcelableExtra("next_stop");
+
+        setViews();
+    }
+
+    public void setViews() {
+        TextView stopNameView = (TextView) findViewById(R.id.stop_text);
+        stopNameView.setText(currStop.getName());
     }
 
     /* Called when user presses "Yes!" button when asked if ready for next stop. */

@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="sortNearMe"
-            android:background="@color/lightGrey"/>
+            android:background="@color/white"/>
         <Button
             android:id="@+id/rating"
             android:text="RATING"
@@ -41,6 +41,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/tour_list"
-        android:divider="#000000"
-        android:dividerHeight="1dp"/>
+        android:divider="@android:color/transparent"
+        android:dividerHeight="2dp"/>
 </LinearLayout>

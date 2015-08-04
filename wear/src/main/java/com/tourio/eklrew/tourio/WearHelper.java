@@ -4,6 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -11,21 +18,69 @@ import android.widget.Toast;
  */
 public class WearHelper {
     public static void skipWithDialog(final Context context) {
-        new AlertDialog.Builder(context)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("SKIP")
-                .setMessage("Do you really want to skip?")
-                .setPositiveButton("Skip", new DialogInterface.OnClickListener() {
+        AlertDialog confirmSkip =
+                new AlertDialog.Builder(context)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setTitle("Do you really want to skip")
+                        .setMessage("Do you really want to skip?")
+                        .setPositiveButton("Skip", new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        skipWithoutDialog(context);
-                        Toast.makeText(context,"Generated next stop",Toast.LENGTH_LONG).show();
-                    }
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                skipWithoutDialog(context);
+                                Toast.makeText(context, "Generated next stop", Toast.LENGTH_LONG).show();
+                            }
 
-                })
-                .setNegativeButton("No", null)
-                .show();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+        TextView alertMsg = (TextView) confirmSkip.findViewById(android.R.id.message);
+        alertMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        alertMsg.setTextColor(Color.parseColor("#FF6344"));
+        alertMsg.setTypeface(null, Typeface.BOLD);
+        alertMsg.setGravity(Gravity.CENTER);
+
+        Button posButton = confirmSkip.getButton(DialogInterface.BUTTON_POSITIVE);
+        posButton.setTypeface(null, Typeface.BOLD);
+        posButton.setTextColor(Color.parseColor("#FF6344"));
+
+        Button negButton = confirmSkip.getButton(DialogInterface.BUTTON_NEGATIVE);
+        negButton.setTypeface(null, Typeface.BOLD);
+        negButton.setTextColor(Color.parseColor("#FF6344"));
+    }
+
+    public static void skipLastStop(final Context context) {
+        AlertDialog confirmSkip =
+                new AlertDialog.Builder(context)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setTitle("Do you really want to skip")
+                        .setMessage("Do you really want to skip?")
+                        .setPositiveButton("Skip", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                skipWithoutDialog(context);
+                                Toast.makeText(context, "Tour finished", Toast.LENGTH_LONG).show();
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+        TextView alertMsg = (TextView) confirmSkip.findViewById(android.R.id.message);
+        alertMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        alertMsg.setTextColor(Color.parseColor("#FF6344"));
+        alertMsg.setTypeface(null, Typeface.BOLD);
+        alertMsg.setGravity(Gravity.CENTER);
+
+        Button posButton = confirmSkip.getButton(DialogInterface.BUTTON_POSITIVE);
+        posButton.setTypeface(null, Typeface.BOLD);
+        posButton.setTextColor(Color.parseColor("#FF6344"));
+
+        Button negButton = confirmSkip.getButton(DialogInterface.BUTTON_NEGATIVE);
+        negButton.setTypeface(null, Typeface.BOLD);
+        negButton.setTextColor(Color.parseColor("#FF6344"));
     }
 
     public static void skipWithoutDialog(Context context) {
@@ -42,10 +97,11 @@ public class WearHelper {
     public static final char DIVIDER = '|';
     public static StopInfo stringToStopInfo(String message) {
         int divider1Index = message.indexOf(DIVIDER);
-        int divider2Index = message.indexOf("is", message.indexOf("is") + 1);
+        int divider2Index = message.indexOf(DIVIDER, divider1Index + 1);
         String stopName = message.substring(0, divider1Index);
         String stopDescription = message.substring(divider1Index + 1,divider2Index);
         int status = Integer.parseInt(message.substring(divider2Index + 1));
+        Log.d("stop info parsed","stop name: "+stopName+".. stop description: "+stopDescription+".. stop status: "+status);
         return new StopInfo(stopName,stopDescription,status);
     }
 }

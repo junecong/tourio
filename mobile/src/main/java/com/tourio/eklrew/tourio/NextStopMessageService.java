@@ -37,9 +37,12 @@ public class NextStopMessageService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent intent) {
-        boolean skipOrArrived = intent.getExtras().getBoolean("skip_or_arrived");
-        messagePath = skipOrArrived? TourioHelper.SendMessageHelper.SKIP_MESSAGE_PATH :
-                TourioHelper.SendMessageHelper.ARRIVED_MESSAGE_PATH;
+        int messageType = intent.getExtras().getInt("message_type");
+        switch (messageType) {
+            case 0: messagePath = TourioHelper.SendMessageHelper.DONE_MESSAGE_PATH; break;
+            case 1: messagePath = TourioHelper.SendMessageHelper.SKIP_MESSAGE_PATH; break;
+            case 2: messagePath = TourioHelper.SendMessageHelper.ARRIVED_MESSAGE_PATH; break;
+        }
         message = intent.getExtras().getString("stop_info");
         buildGoogleApiClient();
     }

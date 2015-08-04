@@ -94,4 +94,7 @@ public class Tour {
     public boolean isLastStop() {
         return nextStopIndex ==stops.size();
     }
+    public boolean isDone() {
+        return nextStopIndex==stops.size();
+    }
 }

@@ -66,8 +66,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:dividerHeight="5dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="10dp">
+                    android:layout_gravity="left">
 
                     <ImageView
                         android:background="@mipmap/clock_icon"

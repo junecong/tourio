@@ -17,6 +17,7 @@ import com.google.android.gms.wearable.Wearable;
 //started by the Transit and NextStop activities
 public class SkipListenerService extends Service implements MessageApi.MessageListener{
     public static final String SKIP_MESSAGE_PATH = "skip_next_stop_info";
+    public static final String DONE_MESSAGE_PATH = "tour_done";
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -60,13 +61,20 @@ public class SkipListenerService extends Service implements MessageApi.MessageLi
         String messagePath = messageEvent.getPath();
         Log.d("message received",messagePath);
         if (messagePath.equals(SKIP_MESSAGE_PATH)) {
-            Log.d("message received",messagePath);
+            Log.d("message received",new String(messageEvent.getData()));
             String message = new String(messageEvent.getData());
             StopInfo nextStop = WearHelper.stringToStopInfo(message);
             Intent nextStopIntent = new Intent(this,NextStopActivity.class);
-            nextStopIntent.putExtra("next_stop",nextStop);
+            nextStopIntent.putExtra("next_stop", nextStop);
+            nextStopIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(nextStopIntent);
             stopSelf();
+        }
+
+        if (messagePath.equals(DONE_MESSAGE_PATH)) {
+            Intent tipIntent = new Intent(this,TipActivity.class);
+            tipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(tipIntent);
         }
     }
 }

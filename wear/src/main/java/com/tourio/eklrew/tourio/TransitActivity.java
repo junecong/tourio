@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -16,6 +18,7 @@ import com.google.android.gms.wearable.Wearable;
  */
 public class TransitActivity extends Activity implements MessageApi.MessageListener {
     public static final String ARRIVED_MESSAGE_PATH = "arrived_info";
+    public static final String DONE_MESSAGE_PATH = "tour_done";
     private StopInfo currStop;
 
     private GoogleApiClient mGoogleApiClient;
@@ -27,7 +30,14 @@ public class TransitActivity extends Activity implements MessageApi.MessageListe
 
         currStop = getIntent().getParcelableExtra("next_stop");
 
+        setViews();
+
         startMessageListener();
+    }
+
+    public void setViews() {
+        TextView stopNameView = (TextView) findViewById(R.id.stop_text);
+        stopNameView.setText(currStop.getName());
     }
 
     private void startMessageListener() {
@@ -66,8 +76,13 @@ public class TransitActivity extends Activity implements MessageApi.MessageListe
         startActivity(dirIntent);
     }
 
-    public void skip(View view) {
-        WearHelper.skipWithDialog(this);
+    public void skipThisStop(View view) {
+        if (currStop.isLastStop()) {
+            WearHelper.skipLastStop(this);
+        }
+        else {
+            WearHelper.skipWithDialog(this);
+        }
     }
 
     @Override
@@ -79,6 +94,13 @@ public class TransitActivity extends Activity implements MessageApi.MessageListe
             Intent arriveIntent = new Intent(this,ArrivedActivity.class);
             arriveIntent.putExtra("curr_stop",currStop);
             arriveIntent.putExtra("next_stop",nextStop);
+            startActivity(arriveIntent);
+        }
+
+        if (messagePath.equals(DONE_MESSAGE_PATH)) {
+            Intent tipIntent = new Intent(this,TipActivity.class);
+            Toast.makeText(this, "Tour finished", Toast.LENGTH_LONG).show();
+            startActivity(tipIntent);
         }
     }
 }

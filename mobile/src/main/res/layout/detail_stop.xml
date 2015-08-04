@@ -45,7 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:id="@+id/stop_image"
-        android:src="@drawable/ic_launcher"
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"/>

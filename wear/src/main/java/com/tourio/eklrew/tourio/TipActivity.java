@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TipActivity extends Activity {
 
@@ -26,13 +27,14 @@ public class TipActivity extends Activity {
         np.setValue(5);
 
         TextView t = (TextView) findViewById(R.id.tip_text);
-        t.setText("Tip the tour creator!");
+        //t.setText("Tip the tour creator!");
 
 //        Button b = (Button) findViewById(R.id.tip_button);
 
     }
 
     public void onClickTip(View view){
+        Toast.makeText(this, "Tip sent!", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, RateTourActivity.class);
         tip = np.getValue();
         intent.putExtra("int_value", tip);

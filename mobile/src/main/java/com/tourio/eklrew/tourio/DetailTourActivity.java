@@ -192,7 +192,7 @@ public class DetailTourActivity extends NavigationBarActivity
         tourDetailLayout.addView((getLayoutInflater()).inflate(R.layout.activity_transit_mobile, null));
 
         buildGoogleApiClient();
-        Wearable.MessageApi.addListener(mGoogleApiClient,this);
+        Wearable.MessageApi.addListener(mGoogleApiClient, this);
     }
 
     private void swapButtons() {
@@ -280,12 +280,18 @@ public class DetailTourActivity extends NavigationBarActivity
             startGPS();
         }
         if (messagePath.equals(TourioHelper.ReceiveMessageHelper.SKIP_STOP)) {
-            currStop = tour.goToNextStop();
-            sendNextStopMessage(true);
+            if (tour.isDone()) {
+                stopLocationUpdates();
+                sendNextStopMessage(0);
+            }
+            else {
+                currStop = tour.goToNextStop();
+                sendNextStopMessage(1);
+            }
         }
     }
 
-    private void sendNextStopMessage(boolean skipOrArrived) {
+    private void sendNextStopMessage(int messageType) {
         int currStopStatus = 0;
         if (tour.isFirstStop()) {
             currStopStatus = 1;
@@ -294,7 +300,7 @@ public class DetailTourActivity extends NavigationBarActivity
             currStopStatus = 2;
         }
         Intent sendMessageIntent = new Intent(this,NextStopMessageService.class);
-        sendMessageIntent.putExtra("skip_or_arrived",skipOrArrived);
+        sendMessageIntent.putExtra("message_type",messageType);
         sendMessageIntent.putExtra("stop_info",currStop.getName()+"|"+currStop.getDescription()+"|"+currStopStatus);
         startService(sendMessageIntent);
     }
@@ -303,7 +309,8 @@ public class DetailTourActivity extends NavigationBarActivity
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
                 currStop.getLatitude() + "," +
                 currStop.getLongitude());
-        // Currently has "bs" destination
+        Log.v("destination name",currStop.getName());
+        Log.v("destination coordinates",currStop.getLatitude()+","+currStop.getLongitude());
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -331,8 +338,8 @@ public class DetailTourActivity extends NavigationBarActivity
 
     protected void startLocationUpdates() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -356,23 +363,26 @@ public class DetailTourActivity extends NavigationBarActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        // This is a hardcoded destination for testing purpose.
         Location destination = new Location(currStop.getName());
         destination.setLatitude(currStop.getLatitude());
         destination.setLongitude(currStop.getLongitude());
 
         mCurrentLocation = location;
 
-        Log.d("Current latitude:", String.valueOf(mCurrentLocation.getLatitude()));
-        Log.d("Current longitude:", String.valueOf(mCurrentLocation.getLongitude()));
-        Log.d("Current distance:", String.valueOf(mCurrentLocation.distanceTo(destination)));
+        //Log.d("Current latitude:", String.valueOf(mCurrentLocation.getLatitude()));
+        //Log.d("Current longitude:", String.valueOf(mCurrentLocation.getLongitude()));
+        //Log.d("Current distance:", String.valueOf(mCurrentLocation.distanceTo(destination)));
 
         if (mCurrentLocation.distanceTo(destination) < 10) {
-            Log.d("Log", ">>>Arrival detected<<<");
-
-            currStop = tour.goToNextStop();
-            stopLocationUpdates();
-            sendNextStopMessage(false);
+            //stopLocationUpdates();
+            if (tour.isDone()) {
+                stopLocationUpdates();
+                sendNextStopMessage(0);
+            }
+            else {
+                currStop = tour.goToNextStop();
+                sendNextStopMessage(2);
+            }
         }
     }
 

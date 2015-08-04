@@ -6,7 +6,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_detail_tour">DetailTourActivity</string>
+    <string name="title_activity_detail_tour">Tourio</string>
 
 
     <string name="title_of_tour">Fun Day In Berkeley</string>
@@ -20,7 +20,7 @@
 
     <string name="details">Details</string>
     <string name="comments">Reviews</string>
-    <string name="title_activity_navigation_bar">NavigationBarActivity</string>
+    <string name="title_activity_navigation_bar">Tourio</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -31,11 +31,11 @@
 
     <string name="action_example">Example action</string>
     <string name="menu">Menu</string>
-    <string name="title_activity_my_profile">MyProfileActivity</string>
-    <string name="title_activity_create_tour">CreateTourActivity</string>
-    <string name="title_activity_cashout">CashoutActivity</string>
-    <string name="title_activity_about">AboutActivity</string>
-    <string name="comment_text">This is a comment and it is really long adnakdfasldkjfa sdfkjsd lkf jasdlkfjsd</string>
+    <string name="title_activity_my_profile">Tourio</string>
+    <string name="title_activity_create_tour">Tourio</string>
+    <string name="title_activity_cashout">Tourio</string>
+    <string name="title_activity_about">Tourio</string>
+    <string name="comment_text">This is a comment and it is really long adnakdfasldkjfa sdfkjsd lkf jasdlkfjsd hakdalkd skdf lsdkfdj sl</string>
 
     <string-array name="cities_list">
         <item>Berkeley</item>
@@ -45,14 +45,16 @@
         <item>Chicago</item>
         <item>Los Angeles</item>
     </string-array>
-    <string name="title_activity_action_bar">ActionBarActivity</string>
+    <string name="title_activity_action_bar">Tourio</string>
+    <string name="tourio">Tourio</string>
 
     <color name="orange">#FF6344</color>
     <color name="white">#FFFFFF</color>
     <color name="Transparent">#00000000</color>
+    <color name="Transparent40">#20000000</color>
     <color name="Transparent80">#80000000</color>
     <color name="lightGrey">#eeeeee</color>
 
     <string name="tour_in_session">Your tour is in session! You are free to put your phone
-        away :)</string>
+        away</string>
 </resources>
