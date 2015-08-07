@@ -1,11 +1,18 @@
 package com.tourio.eklrew.tourio;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageView;
+
+import java.io.InputStream;
 import java.util.GregorianCalendar;
 
 /**
  * Created by Prud on 7/25/2015.
  */
-public class Comment {
+public class Comment extends TourioListItem{
 
     private User commenter;
     private String text;
@@ -18,9 +25,11 @@ public class Comment {
     }
 
     public Comment(User commenter,String text,int rating) {
+        super();
         this.commenter = commenter;
         this.text = text;
         this.rating=rating;
+        setPicUrl(commenter.getPicUrl());
     }
 
     public User getCommenter() {

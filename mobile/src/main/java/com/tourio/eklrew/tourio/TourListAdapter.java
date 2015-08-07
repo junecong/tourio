@@ -1,6 +1,7 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,15 +66,30 @@ public class TourListAdapter extends BaseAdapter {
             holder = (ViewHolder) tourView.getTag();
         }
 
-        //String mapUrl = BASE_STATIC_MAPS_API_URL + "size="+ width+ "x"+ height +"&markers=";
-        String mapUrl = TourioHelper.GoogleMapsStaticApiHelper.BASE_STATIC_MAPS_API_URL;
-        for (int i=0;i<stops.length;i++) {
-            LatLng stop = stops[i];
-            mapUrl += "&markers=size:mid%7Ccolor:red%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
+
+        if (tour.getImage() != null) {
+            BitmapDrawable resultDrawable = new BitmapDrawable(context.getResources(), tour.getImage());
+            holder.mapView.setBackgroundDrawable(resultDrawable);
+        }
+        else {
+            String mapUrl = TourioHelper.GoogleMapsStaticApiHelper.BASE_STATIC_MAPS_API_URL;
+            Log.v("new map url",mapUrl);
+            for (int i=0;i<stops.length;i++) {
+                LatLng stop = stops[i];
+                mapUrl += "&markers=size:mid%7Ccolor:red%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
+            }
+            tour.setPicUrl(mapUrl);
+            tour.loadImage(context,holder.mapView);
         }
 
-        Log.v("map url: ", mapUrl);
-        new DownloadImageTask(context,holder.mapView).execute(mapUrl);
+
+//        String mapUrl = TourioHelper.GoogleMapsStaticApiHelper.BASE_STATIC_MAPS_API_URL;
+//        Log.v("new map url",mapUrl);
+//        for (int i=0;i<stops.length;i++) {
+//            LatLng stop = stops[i];
+//            mapUrl += "&markers=size:mid%7Ccolor:red%7Clabel:"+(i+1)+"%7C"+stop.latitude+","+stop.longitude;
+//        }
+//        (new DownloadImageTask(context,holder.mapView)).execute(mapUrl);
 
         holder.nameView.setText(tour.getName());
         holder.durationView.setText((int) (Math.round(tour.getDuration()))+" hours");

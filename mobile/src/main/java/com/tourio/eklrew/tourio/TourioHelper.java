@@ -1,6 +1,7 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -251,6 +252,18 @@ public class TourioHelper {
             for (int i=0;i<rating;i++) { stars[i].setVisibility(ImageView.VISIBLE);}
             for (int i=rating;i<5;i++) { stars[i].setVisibility(ImageView.GONE);}
             Log.v("rating",""+rating);
+        }
+
+        public static Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
+
+            final float densityMultiplier = context.getResources().getDisplayMetrics().density;
+
+            int h= (int) (newHeight*densityMultiplier);
+            int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
+
+            photo=Bitmap.createScaledBitmap(photo, w, h, true);
+
+            return photo;
         }
     }
 

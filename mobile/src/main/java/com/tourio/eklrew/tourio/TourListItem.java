@@ -1,15 +1,21 @@
 package com.tourio.eklrew.tourio;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.InputStream;
 import java.util.Comparator;
 
 /**
  * Created by Prud on 7/24/2015.
  */
-public class TourListItem {
+public class TourListItem extends TourioListItem{
     private int id;
     private String name;
     private double duration, rating;
@@ -17,6 +23,7 @@ public class TourListItem {
 
     public TourListItem(int id, String name, double duration,
                         double rating, LatLng[] stops) {
+        super();
         this.id = id;
         this.name = name;
         this.duration = duration;
@@ -83,5 +90,4 @@ public class TourListItem {
             return Double.compare(a.getDuration(),b.getDuration());
         }
     }
-
 }

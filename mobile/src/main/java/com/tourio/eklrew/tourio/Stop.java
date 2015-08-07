@@ -1,21 +1,29 @@
 package com.tourio.eklrew.tourio;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageView;
+
 import com.google.android.gms.maps.model.LatLng;
+
+import java.io.InputStream;
 
 /**
  * Created by Prud on 7/25/2015.
  */
-public class Stop /*implements Parcelable*/ {
+public class Stop extends TourioListItem {
     private int id;
-    private String name, description, picUrl;
+    private String name, description;
     private LatLng location;
     private int categoryIndex;
     final String[] categories = TourioHelper.StopCategoriesHelper.STOP_CATEGORIES;
 
     public Stop(String name,String description,String picUrl, double latitude,double longitude) {
+        super(picUrl);
         this.name = name;
         this.description = description;
-        this.picUrl = picUrl;
         this.location = new LatLng(latitude,longitude);
     }
 
@@ -64,9 +72,7 @@ public class Stop /*implements Parcelable*/ {
         return location;
     }
     public String getCategory() {return categories[categoryIndex];}
-    public String getPicUrl() {
-        return picUrl;
-    }
+
     /*
     public static final Parcelable.Creator<Stop> CREATOR = new Parcelable.Creator<Stop>() {
         public Stop createFromParcel(Parcel in) {

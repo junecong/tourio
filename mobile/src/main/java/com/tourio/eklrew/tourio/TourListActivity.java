@@ -221,7 +221,7 @@ public class TourListActivity extends NavigationBarActivity {
         protected Location doInBackground(Void... params) {
             Location location = null;
             int timePassed = 0;
-            while (location==null && timePassed<1000) {
+            while (location==null && timePassed<0) {
                 LocationManager locationManager = (LocationManager)
                         getSystemService(Context.LOCATION_SERVICE);
                 Criteria criteria = new Criteria();
@@ -244,10 +244,10 @@ public class TourListActivity extends NavigationBarActivity {
         protected void onPostExecute(Location location) {
             dialog.dismiss();
             if (location==null) {
-                Toast.makeText(TourListActivity.this,"Location not found",Toast.LENGTH_LONG).show();
+                //Toast.makeText(TourListActivity.this,"Location not found",Toast.LENGTH_LONG).show();
                 location = new Location("");
-                location.setLatitude(37.0);
-                location.setLongitude(-122.0);
+                location.setLatitude(37.872441);
+                location.setLongitude(-122.259503);
             }
             else {
                 hasLocation = true;
@@ -264,7 +264,6 @@ public class TourListActivity extends NavigationBarActivity {
             JSONArray toursJsonArray = new JSONArray(json);
 
             for (int i=0;i<toursJsonArray.length();i+=2) {
-
                 JSONObject tourJsonObject = toursJsonArray.getJSONObject(i);
                 int tourId = tourJsonObject.getInt(TourioHelper.TourListJsonHelper.JSON_TOUR_ID);
                 String tourName = tourJsonObject.getString(TourioHelper.TourListJsonHelper.JSON_TOUR_NAME);

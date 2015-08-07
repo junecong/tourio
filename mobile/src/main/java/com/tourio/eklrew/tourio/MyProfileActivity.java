@@ -1,22 +1,23 @@
 package com.tourio.eklrew.tourio;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 
 public class MyProfileActivity extends NavigationBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_my_profile, null));
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_my_profile, menu);
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
         return true;
     }
 
@@ -34,4 +35,5 @@ public class MyProfileActivity extends NavigationBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    */
 }

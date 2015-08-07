@@ -54,13 +54,18 @@ public class CommentListAdapter extends BaseAdapter {
         TextView commentTextView = (TextView)commentView.findViewById(R.id.comment_text);
         FrameLayout ratingFrame = (FrameLayout) commentView.findViewById(R.id.rating_frame);
 
-        (new DownloadImageTask(commenterImageView)).execute(commenter.getPicUrl());
+        if (comment.getImage() != null) {
+            commenterImageView.setImageBitmap(comment.getImage());
+        }
+        else {
+            comment.loadImage(commenterImageView);
+        }
+
         commenterNameView.setText(commenter.getName());
         commentTextView.setText(comment.getText());
 
         TourioHelper.LayoutHelper.setRatingImage(inflater,ratingFrame,comment.getRating());
 
-        //TODO: set commenter image
         return commentView;
     }
 }

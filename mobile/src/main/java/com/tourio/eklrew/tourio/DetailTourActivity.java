@@ -68,7 +68,7 @@ public class DetailTourActivity extends NavigationBarActivity
     LinearLayout tourDescriptionLayout;
 
     ImageView creatorImageView;
-    TextView tourTitleView,tourDescriptionView;
+    TextView tourTitleView,tourDescriptionView,creatorNameView;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mCurrentLocation;
@@ -89,6 +89,7 @@ public class DetailTourActivity extends NavigationBarActivity
         detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
         ratingFrame = (FrameLayout) findViewById(R.id.rating_frame);
         tourDescriptionLayout = (LinearLayout) findViewById(R.id.tour_description_layout);
+        creatorNameView = (TextView) findViewById(R.id.creator_name);
 
         stopsButton = (Button) findViewById(R.id.stops_button);
         commentsButton = (Button) findViewById(R.id.comments_button);
@@ -100,12 +101,12 @@ public class DetailTourActivity extends NavigationBarActivity
 
     public void setViews() {
         (new DownloadImageTask(creatorImageView)).execute(tour.getCreator().getPicUrl());
-        showStops(null);
         TourioHelper.LayoutHelper.setRatingImage(getLayoutInflater(),
                 ratingFrame, (int) (Math.round(tour.getRating())));
 
         tourTitleView.setText(tour.getName());
         tourDescriptionView.setText(tour.getDescription());
+        creatorNameView.setText(" "+tour.getCreatorName());
     }
 
     public void setMapFragment() {
@@ -209,7 +210,6 @@ public class DetailTourActivity extends NavigationBarActivity
         detailsFrame.removeAllViews();
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_activity_list, null));
         ListView stopListView = (ListView) findViewById(R.id.details_list);
-        stopAdapter = new StopListAdapter(this, tour.getStops());
         stopListView.setAdapter(stopAdapter);
 
         stopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -229,7 +229,7 @@ public class DetailTourActivity extends NavigationBarActivity
         TextView stopNameView = (TextView) findViewById(R.id.stop_name);
         TextView stopDescriptionView = (TextView) findViewById(R.id.stop_description);
         ImageView stopImageView = (ImageView) findViewById(R.id.stop_image);
-        (new DownloadImageTask(stopImageView)).execute(stop.getPicUrl());
+        stopImageView.setImageBitmap(stop.getImage());
         stopNameView.setText(stop.getName());
         stopDescriptionView.setText(stop.getDescription());
     }
@@ -239,8 +239,8 @@ public class DetailTourActivity extends NavigationBarActivity
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_comment, null));
         TextView commenterNameView = (TextView) findViewById(R.id.commenter_name);
         TextView commentTextView = (TextView) findViewById(R.id.comment_text);
-        ImageView stopImageView = (ImageView) findViewById(R.id.commenter_image);
-        (new DownloadImageTask(stopImageView)).execute(comment.getCommenter().getPicUrl());
+        ImageView commentImageView = (ImageView) findViewById(R.id.commenter_image);
+        commentImageView.setImageBitmap(comment.getImage());
         FrameLayout detailCommentRatingFrame = (FrameLayout) findViewById(R.id.detail_comment_rating_frame);
         commenterNameView.setText(comment.getCommenter().getName());
         commentTextView.setText(comment.getText());
@@ -257,7 +257,6 @@ public class DetailTourActivity extends NavigationBarActivity
         detailsFrame.removeAllViews();
         detailsFrame.addView((getLayoutInflater()).inflate(R.layout.detail_activity_list, null));
         ListView commentListView = (ListView) findViewById(R.id.details_list);
-        commentAdapter = new CommentListAdapter(this, tour.getComments());
         commentListView.setAdapter(commentAdapter);
 
         commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -422,6 +421,9 @@ public class DetailTourActivity extends NavigationBarActivity
 
             ArrayList<Comment> commentListFromJson = new ArrayList<Comment>();
             for (int i=3;i<tourJsonArray.length();i+=2) {
+                if (tourJsonArray.getJSONArray(i).length() == 0) {
+                    continue;
+                }
                 JSONObject commenterJsonObject = tourJsonArray.getJSONArray(i).getJSONObject(0);
                 JSONObject commentJsonObject = tourJsonArray.getJSONObject(i + 1);
 
@@ -502,6 +504,9 @@ public class DetailTourActivity extends NavigationBarActivity
         @Override
         protected void onPostExecute(Tour result) {
             tour = result;
+            stopAdapter = new StopListAdapter(DetailTourActivity.this, tour.getStops());
+            showStops(null);
+            commentAdapter = new CommentListAdapter(DetailTourActivity.this, tour.getComments());
             currStop = tour.getStops().get(0);
             setMapFragment();
             setViews();
