@@ -3,12 +3,15 @@ package com.tourio.eklrew.tourio;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -61,7 +64,8 @@ public class TourListAdapter extends BaseAdapter {
         if (tourView == null){
             tourView = inflater.inflate(R.layout.tour_list_item, null);
             holder = new ViewHolder();
-            holder.mapView = (ImageView) tourView.findViewById(R.id.map);
+            holder.evenImageView = (ImageView) tourView.findViewById(R.id.even_image);
+            holder.oddImageView = (ImageView) tourView.findViewById(R.id.odd_image);
             holder.nameView = (TextView) tourView.findViewById(R.id.tour_name);
             holder.durationView = (TextView) tourView.findViewById(R.id.tour_duration);
             holder.ratingFrame = (FrameLayout) tourView.findViewById(R.id.rating_frame);
@@ -75,7 +79,8 @@ public class TourListAdapter extends BaseAdapter {
             holder = (ViewHolder) tourView.getTag();
         }
 
-        //tour.setImageView(holder.mapView);
+        final boolean isEven = (tour.getCurrImageIndex()%2 ==0) ;
+        ImageView currImageView = isEven? holder.evenImageView : holder.oddImageView;
 
         /*
         if (tour.getImage() != null) {
@@ -97,13 +102,11 @@ public class TourListAdapter extends BaseAdapter {
         if (tour.getImage() != null) {
             //BitmapDrawable resultDrawable = new BitmapDrawable(context.getResources(), tour.getImage());
             //holder.mapView.setBackgroundDrawable(resultDrawable);
-            holder.mapView.setImageBitmap(tour.getImage());
+            currImageView.setImageBitmap(tour.getImage());
         }
         else {
-            tour.loadImage(holder.mapView);
+            tour.loadImage(currImageView);
         }
-
-
 
         holder.nameView.setText(tour.getName());
         holder.durationView.setText((int) (Math.round(tour.getDuration())) + " hours");
@@ -137,18 +140,48 @@ public class TourListAdapter extends BaseAdapter {
         holder.leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tour.changeImage(context, holder.mapView, false);
+                if (isEven) {
+                    holder.evenImageView.setImageBitmap(tour.getImage());
+                    tour.changeImage(context, holder.oddImageView, false);
+                    Animation slideInImage = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_left);
+                    Animation slideOutImage = AnimationUtils.loadAnimation(context, R.anim.slide_out_to_right);
+                    holder.oddImageView.startAnimation(slideInImage);
+                    holder.evenImageView.startAnimation(slideOutImage);
+                }
+                else {
+                    holder.oddImageView.setImageBitmap(tour.getImage());
+                    tour.changeImage(context, holder.evenImageView, false);
+                    Animation slideInImage = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_left);
+                    Animation slideOutImage = AnimationUtils.loadAnimation(context, R.anim.slide_out_to_right);
+                    holder.evenImageView.startAnimation(slideInImage);
+                    holder.oddImageView.startAnimation(slideOutImage);
+                }
             }
         });
 
         holder.rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tour.changeImage(context, holder.mapView, true);
+                if (isEven) {
+                    holder.evenImageView.setImageBitmap(tour.getImage());
+                    tour.changeImage(context, holder.oddImageView, true);
+                    Animation slideInImage = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_right);
+                    Animation slideOutImage = AnimationUtils.loadAnimation(context, R.anim.slide_out_to_left);
+                    holder.oddImageView.startAnimation(slideInImage);
+                    holder.evenImageView.startAnimation(slideOutImage);
+                }
+                else {
+                    holder.oddImageView.setImageBitmap(tour.getImage());
+                    tour.changeImage(context, holder.evenImageView, true);
+                    Animation slideInImage = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_left);
+                    Animation slideOutImage = AnimationUtils.loadAnimation(context, R.anim.slide_out_to_right);
+                    holder.evenImageView.startAnimation(slideInImage);
+                    holder.oddImageView.startAnimation(slideOutImage);
+                }
             }
         });
 
-        holder.mapView.setOnClickListener(new View.OnClickListener() {
+        holder.evenImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent detailIntent = new Intent(context, DetailTourActivity.class)
@@ -156,6 +189,16 @@ public class TourListAdapter extends BaseAdapter {
                 context.startActivity(detailIntent);
             }
         });
+        /*
+        holder.oddImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent detailIntent = new Intent(context, DetailTourActivity.class)
+                        .putExtra("tour_id", tour.getTourId());
+                context.startActivity(detailIntent);
+            }
+        });
+        */
         holder.titleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +212,8 @@ public class TourListAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        public ImageView mapView;
+        public ImageView evenImageView;
+        public ImageView oddImageView;
         public TextView nameView;
         public TextView durationView;
         public FrameLayout ratingFrame;
