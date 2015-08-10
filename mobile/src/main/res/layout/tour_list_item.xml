@@ -8,15 +8,25 @@
         android:layout_height="match_parent"
         android:id="@+id/relative">
 
-
+        <!--
+        <com.tourio.eklrew.tourio.NonSwipeableViewPager
+            android:id="@+id/image_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+       -->
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:id="@+id/map"
-            android:src="@drawable/gradient_shape"/>
+            android:id="@+id/even_image"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:id="@+id/odd_image"/>
 
         <ImageView
             android:layout_width="50dp"

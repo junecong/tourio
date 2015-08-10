@@ -23,7 +23,6 @@ public class TourListItem extends TourioListItem{
     private LatLng[] stops;
     private String[] stopImageUrls;
     private int currImageIndex;
-    private ImageView imageView;
 
     private TourListItem(int id, String name, double duration,
                         double rating) {
@@ -74,24 +73,14 @@ public class TourListItem extends TourioListItem{
         return stops;
     }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
-    }
-
-    public ImageView getImageView() {
-        return imageView;
+    public int getCurrImageIndex() {
+        return currImageIndex;
     }
 
     public void changeImage (Context context, ImageView imageView, boolean nextOrPrev) {
+        int numStops = stopImageUrls.length;
         currImageIndex += (nextOrPrev ? 1 : -1);
-        if (currImageIndex == -1) {
-            currImageIndex = stopImageUrls.length -1;
-        }
-        if (currImageIndex == stopImageUrls.length) {
-            currImageIndex = 0;
-        }
-
-        setPicUrl(stopImageUrls[currImageIndex]);
+        setPicUrl(stopImageUrls[(currImageIndex%numStops + numStops)%numStops]);
         loadImage(imageView);
     }
 

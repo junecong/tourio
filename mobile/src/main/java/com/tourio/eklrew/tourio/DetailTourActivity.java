@@ -235,6 +235,7 @@ public class DetailTourActivity extends NavigationBarActivity
         ListView commentListView = (ListView) findViewById(R.id.details_list);
         commentListView.setAdapter(commentAdapter);
 
+        /*
         commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -242,6 +243,7 @@ public class DetailTourActivity extends NavigationBarActivity
                 showDetailComment(comment);
             }
         });
+        */
     }
 
     @Override

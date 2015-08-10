@@ -28,7 +28,6 @@ public class WearHelper {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 skipWithoutDialog(context);
-                                Toast.makeText(context, "Generated next stop", Toast.LENGTH_SHORT).show();
                             }
 
                         })
