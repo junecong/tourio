@@ -68,15 +68,35 @@ public class TourListActivity extends NavigationBarActivity {
         initVars();
         //loadTours();
 
+/*
+        //final SwipeDetector swipeDetector = new SwipeDetector();
+        //tourListView.setOnTouchListener(swipeDetector);
+
         tourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 TourListItem item = (TourListItem) tourAdapter.getItem(position);
+
+                if(swipeDetector.swipeDetected()) {
+                    if(swipeDetector.getAction() == SwipeDetector.Action.LR) {
+                        //swiped left to right
+                        item.changeImage(TourListActivity.this,item.getImageView(),true);
+                    } else if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
+                        //swiped right to left
+                        item.changeImage(TourListActivity.this,item.getImageView(),false);
+                    } else {
+                        Intent detailIntent = new Intent(TourListActivity.this, DetailTourActivity.class)
+                                .putExtra("tour_id", item.getTourId());
+                        startActivity(detailIntent);
+                    }
+                }
+
                 Intent detailIntent = new Intent(TourListActivity.this, DetailTourActivity.class)
                         .putExtra("tour_id", item.getTourId());
                 startActivity(detailIntent);
             }
         });
+        */
     }
 
     private void initVars() {
@@ -281,7 +301,8 @@ public class TourListActivity extends NavigationBarActivity {
                     );
                 }
 
-                tourListFromJson.add(new TourListItem(tourId,tourName,tourDuration,tourRating,stopListFromJson));
+                //tourListFromJson.add(new TourListItem(tourId,tourName,tourDuration,tourRating,stopListFromJson));
+                tourListFromJson.add(new TourListItem(tourId,tourName,tourDuration,tourRating,stopListFromJson,TourioHelper.TourDataHelper.hardCodedStopImages()));
             }
 
             return tourListFromJson;

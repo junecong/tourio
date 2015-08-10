@@ -41,28 +41,33 @@ public abstract class TourioListItem {
         new ImageLoadTask(bmImage).execute(picUrl);
     }
 
+    /*
     public void loadImage(Context context,ImageView bmImage) {
         new ImageLoadTask(context,bmImage).execute(picUrl);
     }
+    */
 
     public class ImageLoadTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
-        boolean isForTourList;
+        //boolean isForTourList;
         Context context;
 
+        /*
         public ImageLoadTask(Context context,ImageView bmImage) {
             this.context=context;
             this.isForTourList=true;
             this.bmImage = bmImage;
         }
+        */
 
         public ImageLoadTask(ImageView bmImage) {
-            this.isForTourList=false;
+            //this.isForTourList=false;
             this.bmImage = bmImage;
         }
 
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
+            Log.v("downloading image",urldisplay);
             Bitmap mIcon11 = null;
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
@@ -77,13 +82,19 @@ public abstract class TourioListItem {
 
         protected void onPostExecute(Bitmap result) {
             image = result;
+            bmImage.setImageBitmap(result);
+
+            /*
             if (isForTourList) {
-                BitmapDrawable resultDrawable = new BitmapDrawable(context.getResources(), result);
-                bmImage.setBackgroundDrawable(resultDrawable);
-            }
-            else {
+                //BitmapDrawable resultDrawable = new BitmapDrawable(context.getResources(), result);
+                //bmImage.setBackgroundDrawable(resultDrawable);
                 bmImage.setImageBitmap(result);
             }
+            else {
+                image = result;
+                bmImage.setImageBitmap(result);
+            }
+            */
         }
     }
 }

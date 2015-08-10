@@ -163,6 +163,16 @@ public class TourioHelper {
         private static User shawn = new User(2,"Shawn Huang",null);
         private static User aim = new User(5,"Aim P",null);
 
+        public static String[] hardCodedStopImages() {
+            return new String[] {
+                    "https://upload.wikimedia.org/wikipedia/commons/8/85/CAMP_2012.jpg",
+                    "http://s3-media1.fl.yelpcdn.com/bphoto/ttVmYYSvxAJwINqhDZJZZA/ls.jpg",
+                    "https://c2.staticflickr.com/6/5061/5736050612_a8f21f1262_b.jpg",
+                    "http://s3-media4.fl.yelpcdn.com/bphoto/SG0NJG1prp5RC11UfshF7Q/o.jpg",
+                    "https://upload.wikimedia.org/wikipedia/commons/2/2a/Dolores_Park,_San_Francisco_2013-04-13_14-48.jpg"
+            };
+        }
+
         public static char randomChar() {
             int rnd = (int) (Math.random() * 52); // or use Random or whatever
             char base = (rnd < 26) ? 'A' : 'a';
