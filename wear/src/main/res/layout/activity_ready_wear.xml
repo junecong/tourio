@@ -22,13 +22,13 @@
             android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
-            android:textSize="15sp"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/stop_text"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:background="#FFFFFF"
             android:textStyle="bold"
             android:textColor="#FF6344"
@@ -49,7 +49,7 @@
             android:background="#FF6344"
             android:textColor="#FFFFFF"
             android:textAllCaps="false"
-            android:textSize="9dp"
+            android:textSize="10dp"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
             android:layout_below="@id/stop_text"

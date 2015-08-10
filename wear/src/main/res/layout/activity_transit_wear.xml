@@ -23,13 +23,13 @@
             android:gravity="center"
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
-            android:textSize="15sp"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/stop_text"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:background="#FFFFFF"
             android:textStyle="bold"
             android:textColor="#FF6344"
@@ -46,10 +46,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/transit_layout_1"
-        android:layout_marginLeft="-25dp"
         android:orientation="horizontal">
 
         <Button
+            android:layout_marginLeft="-8dp"
             android:id="@+id/map_button"
             android:layout_width="125dp"
             android:layout_height="wrap_content"

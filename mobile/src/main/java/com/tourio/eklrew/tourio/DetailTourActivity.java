@@ -46,6 +46,7 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Prud on 7/24/2015.
@@ -106,46 +107,21 @@ public class DetailTourActivity extends NavigationBarActivity
 
         tourTitleView.setText(tour.getName());
         tourDescriptionView.setText(tour.getDescription());
-        creatorNameView.setText(" "+tour.getCreatorName());
+        creatorNameView.setText(" " + tour.getCreatorName());
     }
 
     public void setMapFragment() {
-        ArrayList<Stop> stops = tour.getStops();
-        int numStops = stops.size();
-
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
-        Marker[] markers = new Marker[numStops];
+        ArrayList<Stop> stops = tour.getStops();
+        int numStops = stops.size();
         LatLng[] locations = new LatLng[numStops];
         for (int i=0;i<numStops;i++) {
             locations[i] = stops.get(i).getLocation();
-            markers[i] = map.addMarker(new MarkerOptions().position(locations[i])
-                    .title(stops.get(i).getName())
-            );
         }
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Marker marker : markers) {
-            builder.include(marker.getPosition());
-        }
-
-        LatLngBounds bounds = builder.build();
-
-        Polyline line = map.addPolyline(new PolylineOptions()
-                .add(locations)
-                .width(5));
-
-        int padding = 50; // offset from edges of the map in pixels
-        final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-
-        map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                map.moveCamera(cu);
-            }
-        });
-        map.setOnMapClickListener(this);
+        (new FetchPathTask()).execute(locations);
     }
 
     @Override
@@ -305,7 +281,7 @@ public class DetailTourActivity extends NavigationBarActivity
     }
 
     private void startGPS() {
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
+        Uri gmmIntentUri = Uri.parse("google.navigation:mode=w&q=" +
                 currStop.getLatitude() + "," +
                 currStop.getLongitude());
         Log.v("destination name",currStop.getName());
@@ -510,6 +486,136 @@ public class DetailTourActivity extends NavigationBarActivity
             currStop = tour.getStops().get(0);
             setMapFragment();
             setViews();
+        }
+    }
+
+    //sets path in map
+    public class FetchPathTask extends AsyncTask<LatLng[],Void,List<LatLng[]>> {
+        LatLng[] stops;
+
+        private List<LatLng[]> getPathDataFromJson(String json) throws JSONException {
+            List<LatLng[]> route = new ArrayList<LatLng[]>();
+
+            JSONObject JsonDirectionsObject = new JSONObject(json);
+            JSONObject JsonRoute = JsonDirectionsObject.getJSONArray("routes").getJSONObject(0);
+            JSONArray JsonLegs = JsonRoute.getJSONArray("legs");
+            for (int i=0;i<JsonLegs.length();i++) {
+                JSONArray JsonSteps = JsonLegs.getJSONObject(i).getJSONArray("steps");
+                LatLng[] leg = new LatLng[JsonSteps.length()+1];
+                JSONObject JsonLegStartLocation = JsonSteps.getJSONObject(0).getJSONObject("start_location");
+                leg[0] = new LatLng(JsonLegStartLocation.getDouble("lat"),JsonLegStartLocation.getDouble("lng"));
+                for (int j=0;j<JsonSteps.length();j++) {
+                    JSONObject JsonStep = JsonSteps.getJSONObject(j);
+                    JSONObject JsonEndLocation = JsonStep.getJSONObject("end_location");
+                    double lat = JsonEndLocation.getDouble("lat");
+                    double lng = JsonEndLocation.getDouble("lng");
+                    leg[j+1] = new LatLng(lat,lng);
+                }
+                route.add(leg);
+            }
+
+            return route;
+        }
+
+        @Override
+        protected List<LatLng[]> doInBackground(LatLng[]... params) {
+            LatLng[] stops = params[0];
+            this.stops = stops;
+            String directionsUrlString = TourioHelper.GoogleMapsDirectionsApiHelper.BASE_DIRECTIONS_API_URL;
+            directionsUrlString += "&origin=" + stops[0].latitude+","+stops[0].longitude;
+            directionsUrlString += "&destination=" + stops[stops.length-1].latitude+","+stops[stops.length-1].longitude;
+            directionsUrlString += "&waypoints=";
+            for (int i=1;i<stops.length-1;i++) {
+                directionsUrlString += stops[i].latitude+","+stops[i].longitude+"|";
+            }
+            //directionsUrlString += "&key="+TourioHelper.GOOGLE_MAPS_API_KEY;
+            Log.v("directions URL", directionsUrlString);
+
+            URL directionsUrl;
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+            String directionsJsonStr = null;
+            try {
+                directionsUrl = new URL(directionsUrlString);
+                urlConnection = (HttpURLConnection) directionsUrl.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream ==null) {
+                    return null;
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                }
+                if (buffer.length() == 0) {
+                    return null;
+                }
+                directionsJsonStr = buffer.toString();
+            } catch (IOException e) {
+                Log.e("FetchPathTask","IOException - error fetching JSON from database");
+                return null;
+            }
+            finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e("FetchPathTask", "IOException - error closing tours BufferedReader stream", e);
+                    }
+                }
+            }
+
+            try {
+                return getPathDataFromJson(directionsJsonStr);
+            } catch (JSONException e) {
+                Log.e("FetchPathTask","JSONException - error converting json");
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<LatLng[]> result) {
+            int numStops = stops.length;
+            for (int i=0;i<result.size();i++) {
+                map.addPolyline(new PolylineOptions()
+                        .add(result.get(i))
+                        .width(5));
+            }
+
+            Marker[] markers = new Marker[numStops];
+            for (int i=0;i<numStops;i++) {
+                markers[i] = map.addMarker(new MarkerOptions().position(stops[i])
+                                .title(tour.getStops().get(i).getName())
+                );
+            }
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Marker marker : markers) {
+                builder.include(marker.getPosition());
+            }
+
+            LatLngBounds bounds = builder.build();
+
+            int padding = 50; // offset from edges of the map in pixels
+            final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
+            map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    map.moveCamera(cu);
+                }
+            });
+            map.setOnMapClickListener(DetailTourActivity.this);
         }
     }
 }

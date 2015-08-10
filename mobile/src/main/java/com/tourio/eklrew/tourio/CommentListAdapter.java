@@ -1,12 +1,15 @@
 package com.tourio.eklrew.tourio;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -42,7 +45,7 @@ public class CommentListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position,View convertView,ViewGroup parent) {
-        Comment comment = comments.get(position);
+        final Comment comment = comments.get(position);
         User commenter = comment.getCommenter();
 
         View commentView = convertView;
@@ -51,8 +54,9 @@ public class CommentListAdapter extends BaseAdapter {
 
         ImageView commenterImageView = (ImageView)commentView.findViewById(R.id.commenter_image);
         TextView commenterNameView = (TextView)commentView.findViewById(R.id.commenter_name);
-        TextView commentTextView = (TextView)commentView.findViewById(R.id.comment_text);
+        final TextView commentTextView = (TextView)commentView.findViewById(R.id.comment_text);
         FrameLayout ratingFrame = (FrameLayout) commentView.findViewById(R.id.rating_frame);
+        LinearLayout parentLayout = (LinearLayout) commentView.findViewById(R.id.comment_parent_layout);
 
         if (comment.getImage() != null) {
             commenterImageView.setImageBitmap(comment.getImage());
@@ -64,7 +68,24 @@ public class CommentListAdapter extends BaseAdapter {
         commenterNameView.setText(commenter.getName());
         commentTextView.setText(comment.getText());
 
-        TourioHelper.LayoutHelper.setRatingImage(inflater,ratingFrame,comment.getRating());
+        TourioHelper.LayoutHelper.setRatingImage(inflater, ratingFrame, comment.getRating());
+
+        parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (comment.isExpanded()) {
+                    Log.v(">CommentListAdapter<","expanded comment was clicked");
+                    commentTextView.setMaxLines(2);
+                    commentTextView.setEllipsize(TextUtils.TruncateAt.END);
+                    comment.setExpanded(false);
+                } else {
+                    Log.v(">CommentListAdapter<","compressed comment was clicked");
+                    commentTextView.setMaxLines(Integer.MAX_VALUE);
+                    commentTextView.setEllipsize(null);
+                    comment.setExpanded(true);
+                }
+            }
+        });
 
         return commentView;
     }

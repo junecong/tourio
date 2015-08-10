@@ -60,8 +60,9 @@ public class WearHelper {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                skipWithoutDialog(context);
-                                Toast.makeText(context, "Tour finished", Toast.LENGTH_SHORT).show();
+                                Intent doneIntent = new Intent(context,TourDoneActivity.class);
+                                context.startActivity(doneIntent);
+                                doneIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             }
 
                         })

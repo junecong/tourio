@@ -98,9 +98,8 @@ public class TransitActivity extends Activity implements MessageApi.MessageListe
         }
 
         if (messagePath.equals(DONE_MESSAGE_PATH)) {
-            Intent tipIntent = new Intent(this,TipActivity.class);
-            Toast.makeText(this, "Tour finished", Toast.LENGTH_SHORT).show();
-            startActivity(tipIntent);
+            Intent doneIntent = new Intent(this,TourDoneActivity.class);
+            startActivity(doneIntent);
         }
     }
 }

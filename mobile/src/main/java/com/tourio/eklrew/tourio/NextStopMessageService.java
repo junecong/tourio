@@ -111,7 +111,9 @@ public class NextStopMessageService extends IntentService {
         NodeApi.GetConnectedNodesResult nodes =
                 Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
         for (Node node : nodes.getNodes()) {
-            results.add(node.getId());
+            if (node.isNearby()) {
+                results.add(node.getId());
+            }
         }
         return results;
     }
