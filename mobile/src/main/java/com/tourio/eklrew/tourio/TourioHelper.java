@@ -26,12 +26,20 @@ import java.util.Map;
 
 //holds constants and static helper methods
 public class TourioHelper {
+    public static final String GOOGLE_MAPS_API_KEY = "AIzaSyCNUZiWpEt2AMQY3iOAzCicZKlLL18Jy0g";
+
     //holds google maps static api stuff
     public static class GoogleMapsStaticApiHelper {
-        public static final String GOOGLE_MAPS_API_KEY = "AIzaSyBYIzHjtA9e_PnCUlVXPTD0WQ6nvJKnPbE";
         public static final String BASE_STATIC_MAPS_API_URL = "https://maps.googleapis.com/maps/api/staticmap?" +
                 "size=400x200&" +
                 "key=" + GOOGLE_MAPS_API_KEY;
+    }
+
+    //holds google maps directions api stuff
+    public static class GoogleMapsDirectionsApiHelper {
+        public static final String BASE_DIRECTIONS_API_URL = "https://maps.googleapis.com/maps/api/directions/json?"
+                + "mode=walking&";
+                //+ "key=" + GOOGLE_MAPS_API_KEY;
     }
 
     //holds URLs for database requests
@@ -57,6 +65,7 @@ public class TourioHelper {
 
         public static final String JSON_STOP_LATITUDE = "Lat";
         public static final String JSON_STOP_LONGITUDE = "Long";
+        public static final String JSON_STOP_PIC_URL = "Pic1";
     }
 
     //holds keys for detail tour JSON parsing

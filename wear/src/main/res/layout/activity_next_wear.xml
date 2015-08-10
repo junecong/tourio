@@ -6,13 +6,7 @@
     android:background="#515151">
     <!--android:background="#FF6344"-->
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_centerVertical="true">
-
     <RelativeLayout
-        android:id="@+id/next_stop_layout_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -25,86 +19,83 @@
             android:text="@string/next_stop"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="15sp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/next_stop_layout_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/next_stop_layout_1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8sp">
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/next_stop_name"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="45dp"
             android:background="#FFFFFF"
             android:text="@string/placeholder_name"
             android:textColor="#FF6344"
             android:maxLines="1"
             android:gravity="center"
             android:textStyle="bold"
-            android:textSize="15sp"/>
+            android:layout_marginTop="10sp"
+            android:layout_below="@id/next_stop_text"
+            android:textSize="18sp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:id="@+id/next_stop_layout_1"
+            android:layout_below="@id/next_stop_name">
+
+            <TextView
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/next_stop_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_description"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:maxLines="3"
+                android:textSize="10sp"
+                android:ellipsize="end"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:layout_margin="10sp"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/next_stop_layout_1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/skip_button"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:background="#FF6344"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="-33dp"
+                android:paddingRight="-50dp"
+                android:textSize="10dp"
+                android:text="@string/skip"
+                android:layout_marginRight="5dp"
+                android:onClick="skipTheStop"/>
+
+            <Button
+                android:id="@+id/go_button"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:textAllCaps="false"
+                android:textSize="10dp"
+                android:text="@string/go"
+                android:background="#FF6344"
+                android:paddingLeft="-50dp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_toEndOf="@id/skip_button"
+                android:onClick="goToNextStop"/>
+        </LinearLayout>
+
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/next_stop_layout_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/next_stop_layout_2"
-        android:layout_marginTop="15sp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="10sp">
-
-        <TextView
-            android:id="@+id/next_stop_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/placeholder_description"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:maxLines="3"
-            android:textSize="9sp"
-            android:ellipsize="end"
-            android:layout_centerHorizontal="true"/>
-
-        <Button
-            android:id="@+id/skip_button"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_marginLeft="-28dp"
-            android:textAllCaps="false"
-            android:background="#FF6344"
-            android:textColor="#FFFFFF"
-            android:paddingRight="-35dp"
-            android:textSize="12dp"
-            android:text="@string/skip"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="5dp"
-            android:layout_below="@id/next_stop_description"
-            android:onClick="skipTheStop"/>
-
-        <Button
-            android:id="@+id/go_button"
-            android:layout_width="125dp"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:layout_marginTop="15dp"
-            android:textSize="12dp"
-            android:text="@string/go"
-            android:background="#FF6344"
-            android:paddingLeft="-10dp"
-            android:layout_centerHorizontal="true"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:layout_toEndOf="@id/skip_button"
-            android:layout_below="@id/next_stop_description"
-            android:onClick="goToNextStop"/>
-    </RelativeLayout>
-</RelativeLayout>
 
 </RelativeLayout>

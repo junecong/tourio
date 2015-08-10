@@ -45,7 +45,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBYIzHjtA9e_PnCUlVXPTD0WQ6nvJKnPbE" />
+            android:value="AIzaSyCNUZiWpEt2AMQY3iOAzCicZKlLL18Jy0g" />
 
         <activity
             android:name=".NavigationBarActivity"

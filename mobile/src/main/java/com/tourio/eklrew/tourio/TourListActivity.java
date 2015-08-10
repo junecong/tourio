@@ -293,16 +293,18 @@ public class TourListActivity extends NavigationBarActivity {
                 JSONArray stopsJsonArray = toursJsonArray.getJSONArray(i + 1);
                 int numStops = stopsJsonArray.length();
                 LatLng[] stopListFromJson = new LatLng[numStops];
+                String[] stopPicListFromJson = new String[numStops];
                 for (int j=0;j<numStops;j++) {
                     JSONObject stopJsonObject = stopsJsonArray.getJSONObject(j);
                     stopListFromJson[j] = new LatLng(
                             stopJsonObject.getDouble(TourioHelper.TourListJsonHelper.JSON_STOP_LATITUDE),
                             stopJsonObject.getDouble(TourioHelper.TourListJsonHelper.JSON_STOP_LONGITUDE)
                     );
+                    stopPicListFromJson[j] = stopJsonObject.getString(TourioHelper.TourListJsonHelper.JSON_STOP_PIC_URL);
                 }
 
                 //tourListFromJson.add(new TourListItem(tourId,tourName,tourDuration,tourRating,stopListFromJson));
-                tourListFromJson.add(new TourListItem(tourId,tourName,tourDuration,tourRating,stopListFromJson,TourioHelper.TourDataHelper.hardCodedStopImages()));
+                tourListFromJson.add(new TourListItem(tourId,tourName,tourDuration,tourRating,stopListFromJson,stopPicListFromJson));
             }
 
             return tourListFromJson;
@@ -362,7 +364,7 @@ public class TourListActivity extends NavigationBarActivity {
             }
 
             return null;
-        }
+        };
 
         @Override
         protected void onPostExecute(ArrayList<TourListItem> result) {
