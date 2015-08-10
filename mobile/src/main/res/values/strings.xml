@@ -52,9 +52,9 @@
     <color name="white">#FFFFFF</color>
     <color name="Transparent">#00000000</color>
     <color name="Transparent40">#20000000</color>
-    <color name="Transparent80">#80000000</color>
+    <color name="Transparent80">#a0000000</color>
     <color name="lightGrey">#eeeeee</color>
 
     <string name="tour_in_session">Your tour is in session! You are free to put your phone
-        away</string>
+        away and look at your watch</string>
 </resources>

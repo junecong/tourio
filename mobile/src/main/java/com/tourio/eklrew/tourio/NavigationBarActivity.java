@@ -25,7 +25,7 @@ public abstract class NavigationBarActivity extends ActionBarActivity {
     public FrameLayout contentFrame;
     public DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    final String[] drawerItemsArray = {"Profile","Browse","Create","$","About"};
+    final String[] drawerItemsArray = {"Browse","Profile","About"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +68,12 @@ public abstract class NavigationBarActivity extends ActionBarActivity {
                 Intent intent = null;
                 Context context = NavigationBarActivity.this;
                 switch(pos) {
-                    case 0: intent = new Intent(context,MyProfileActivity.class); break;
-                    case 1: intent = new Intent(context,TourListActivity.class); break;
-                    case 2: intent = new Intent(context,CreateTourActivity.class); break;
-                    case 3: intent = new Intent(context,CashoutActivity.class); break;
-                    case 4: intent = new Intent(context,AboutActivity.class); break;
+                    case 0: intent = new Intent(context,TourListActivity.class); break;
+                    case 1: intent = new Intent(context,MyProfileActivity.class); break;
+
+//                    case 2: intent = new Intent(context,CreateTourActivity.class); break;
+//                    case 3: intent = new Intent(context,CashoutActivity.class); break;
+                    case 2: intent = new Intent(context,AboutActivity.class); break;
                 }
                 startActivity(intent);
             }

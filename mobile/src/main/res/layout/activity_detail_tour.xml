@@ -175,22 +175,16 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp">
 
-                    <TextView
-                        android:layout_gravity="left"
-                        android:text="Tour Description:"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:textSize="10dp"/>
 
                     <TextView
                         android:id="@+id/tour_description"
                         android:text="@string/tour_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="15dp"
                         android:layout_marginBottom="10dp"
-                        android:textSize="12dp"/>
+                        android:textSize="12dp"
+                        android:typeface="sans"/>
 
                 </LinearLayout>
 

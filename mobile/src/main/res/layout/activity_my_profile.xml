@@ -42,7 +42,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tour_list"
+        android:id="@+id/profile_tour_list"
         android:divider="@android:color/transparent"
-        android:dividerHeight="2dp"/>
+        android:dividerHeight="2dp"
+        android:layout_marginTop="15dp"/>
 </LinearLayout>

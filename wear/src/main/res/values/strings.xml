@@ -25,6 +25,6 @@
     <string name="view_map">View map</string>
     <string name="skip_this_stop">Skip this stop</string>
     <string name="wear_map_long_press_intro">Long click to exit the map.</string>
-
+    <string name="yes">Yes</string>
     <string name="view_directions">View directions</string>
 </resources>

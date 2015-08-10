@@ -18,7 +18,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="sortNearMe"
-            android:background="@color/white"/>
+            android:background="@color/white"
+            android:textColor="@color/Transparent80"/>
         <Button
             android:id="@+id/rating"
             android:text="RATING"
@@ -26,7 +27,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="sortRating"
-            android:background="@color/lightGrey"/>
+            android:background="@color/lightGrey"
+            android:textColor="@color/Transparent80"/>
         <Button
             android:id="@+id/duration"
             android:text="DURATION"
@@ -34,7 +36,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="sortDuration"
-            android:background="@color/lightGrey"/>
+            android:background="@color/lightGrey"
+            android:textColor="@color/Transparent80"/>
     </LinearLayout>
 
     <ListView
@@ -42,5 +45,5 @@
         android:layout_height="match_parent"
         android:id="@+id/tour_list"
         android:divider="@android:color/transparent"
-        android:dividerHeight="2dp"/>
+        android:dividerHeight="15dp"/>
 </LinearLayout>
