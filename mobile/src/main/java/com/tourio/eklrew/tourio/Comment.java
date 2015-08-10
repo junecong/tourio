@@ -18,6 +18,7 @@ public class Comment extends TourioListItem{
     private String text;
     private int rating;
     private GregorianCalendar time;
+    private boolean expanded;
 
     public Comment(User commenter,String text,int rating, GregorianCalendar time) {
         this(commenter,text,rating);
@@ -30,6 +31,7 @@ public class Comment extends TourioListItem{
         this.text = text;
         this.rating=rating;
         setPicUrl(commenter.getPicUrl());
+        this.expanded = false;
     }
 
     public User getCommenter() {
@@ -46,5 +48,13 @@ public class Comment extends TourioListItem{
 
     public GregorianCalendar getTime() {
         return time;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 }

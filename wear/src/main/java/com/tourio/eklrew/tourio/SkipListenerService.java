@@ -72,9 +72,9 @@ public class SkipListenerService extends Service implements MessageApi.MessageLi
         }
 
         if (messagePath.equals(DONE_MESSAGE_PATH)) {
-            Intent tipIntent = new Intent(this,TipActivity.class);
-            tipIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(tipIntent);
+            Intent doneIntent = new Intent(this,TourDoneActivity.class);
+            startActivity(doneIntent);
+            doneIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
     }
 }

@@ -7,38 +7,6 @@
     tools:context="com.tourio.eklrew.tourio.ProfileActivity"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:id="@+id/user"
-        android:src="@drawable/icon"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="30dp"/>
-
-    <TextView
-        android:gravity="center_horizontal"
-        android:textSize="30sp"
-        android:text="June Cong"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_name"/>
-
-    <FrameLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/rating_frame"
-        android:layout_gravity="center_horizontal"
-        android:divider="#ff444444"
-        android:dividerHeight="1dp"/>
-
-
-    <TextView
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/profile_city"
-        android:text="Berkeley, CA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

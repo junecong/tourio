@@ -27,4 +27,8 @@
     <string name="wear_map_long_press_intro">Long click to exit the map.</string>
 
     <string name="view_directions">View directions</string>
+    <string name="title_activity_tour_done">TourDoneActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

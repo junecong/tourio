@@ -80,7 +80,7 @@ public class ProfileTourListAdapter extends BaseAdapter {
 
         TourioHelper.LayoutHelper.setRatingImage(inflater, holder.ratingFrame, (int) (Math.round(tour.getRating())));
 
-        /*
+
         holder.mapView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +98,7 @@ public class ProfileTourListAdapter extends BaseAdapter {
                 context.startActivity(detailIntent);
             }
         });
-        */
+
 
         return tourView;
     }

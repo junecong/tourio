@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,7 @@ public class TourListAdapter extends BaseAdapter {
             holder.ratingFrame = (FrameLayout) tourView.findViewById(R.id.rating_frame);
             holder.leftButton = (Button) tourView.findViewById(R.id.left_button);
             holder.rightButton = (Button) tourView.findViewById(R.id.right_button);
+            holder.titleLayout = (LinearLayout) tourView.findViewById(R.id.tour_title);
 
             tourView.setTag(holder);
         }
@@ -154,6 +156,14 @@ public class TourListAdapter extends BaseAdapter {
                 context.startActivity(detailIntent);
             }
         });
+        holder.titleLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent detailIntent = new Intent(context, DetailTourActivity.class)
+                        .putExtra("tour_id", tour.getTourId());
+                context.startActivity(detailIntent);
+            }
+        });
 
         return tourView;
     }
@@ -165,6 +175,7 @@ public class TourListAdapter extends BaseAdapter {
         public FrameLayout ratingFrame;
         public Button leftButton;
         public Button rightButton;
+        public LinearLayout titleLayout;
     }
 
     public void addAll(List<TourListItem> newTours) {

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
@@ -38,6 +40,8 @@ public class MyProfileActivity extends NavigationBarActivity {
         contentFrame.addView((getLayoutInflater()).inflate(R.layout.activity_my_profile, null));
 
         tourListView = (ListView) findViewById(R.id.profile_tour_list);
+        View header = getLayoutInflater().inflate(R.layout.profile_list_header, null);
+        tourListView.addHeaderView(header);
         tourAdapter = new ProfileTourListAdapter(this,
                 new ArrayList<TourListItem>());
         tourListView.setAdapter(tourAdapter);
@@ -46,8 +50,7 @@ public class MyProfileActivity extends NavigationBarActivity {
 
         (new FetchToursTask()).execute(TourioHelper.CityHelper.CITY_NAME_TO_ID_MAP.get("San Francisco"));
 
-        TourioHelper.LayoutHelper.setRatingImage((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                ratingFrame, 4);
+        TourioHelper.LayoutHelper.setRatingImage(getLayoutInflater(),ratingFrame, 4);
     }
 
     /*

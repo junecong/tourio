@@ -188,9 +188,9 @@ public class TourioHelper {
             return (char) (base + rnd % 26);
         }
 
-        public static String randomString() {
+        public static String randomString(int n) {
             String s = "";
-            for (int i=0;i<100+Math.random()*200;i++) {
+            for (int i=0;i< n +Math.random()*n;i++) {
                 s+=randomChar();
             }
             return s;
@@ -198,9 +198,9 @@ public class TourioHelper {
 
         public static ArrayList<Stop> hardCodedStops() {
             ArrayList<Stop> stops = new ArrayList<Stop>();
-            stops.add(new Stop(1,"Indian Rock Park",randomString(),"",37.892537, -122.272594,"Scenic"));
-            stops.add(new Stop(2,"Ici Ice Cream",randomString(),"",37.857598, -122.253266,"Eating"));
-            stops.add(new Stop(3,"Sather Tower",randomString(),"",37.872320, -122.257791,"Scenic"));
+            stops.add(new Stop(1,"Indian Rock Park",randomString(100),"",37.892537, -122.272594,"Scenic"));
+            stops.add(new Stop(2,"Ici Ice Cream",randomString(100),"",37.857598, -122.253266,"Eating"));
+            stops.add(new Stop(3,"Sather Tower",randomString(100),"",37.872320, -122.257791,"Scenic"));
 
             return stops;
         }

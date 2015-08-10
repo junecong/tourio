@@ -281,7 +281,7 @@ public class DetailTourActivity extends NavigationBarActivity
     }
 
     private void startGPS() {
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" +
+        Uri gmmIntentUri = Uri.parse("google.navigation:mode=w&q=" +
                 currStop.getLatitude() + "," +
                 currStop.getLongitude());
         Log.v("destination name",currStop.getName());
